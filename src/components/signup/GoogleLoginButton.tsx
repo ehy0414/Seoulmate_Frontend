@@ -12,7 +12,7 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
 }) => {
   return (
     <button
-      className="flex relative gap-2 justify-center items-start self-stretch px-2 py-4 mt-96 text-base font-medium text-black border-solid border-[0.5px] border-zinc-900 min-h-[50px] rounded-[100px] hover:bg-gray-50 transition-colors"
+      className="flex relative gap-2 justify-center items-start self-stretch px-2 py-4 mt-96 text-base font-bold text-black border-solid border-[0.5px] border-zinc-900 min-h-[50px] rounded-[100px] hover:bg-gray-50 transition-colors"
       onClick={onClick}
       type="button"
     >

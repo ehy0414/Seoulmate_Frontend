@@ -6,7 +6,7 @@ interface AppTitleProps {
 
 export const AppTitle: React.FC<AppTitleProps> = ({ title = "서울메이트" }) => {
   return (
-    <h1 className="mt-40 text-4xl font-medium text-red-500">
+    <h1 className="mt-40 text-4xl font-yangjin text-red-500">
       {title}
     </h1>
   );
