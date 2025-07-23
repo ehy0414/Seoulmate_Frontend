@@ -12,7 +12,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className="fixed bottom-0 left-[37%] z-50 bg-white px-5 py-4">
+    <div className="fixed mx-14 bottom-0 z-40 w-[380px] bg-white pb-4 pt-4">
       <button
         onClick={onClick}
         disabled={disabled}

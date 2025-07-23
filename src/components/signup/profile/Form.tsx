@@ -3,9 +3,9 @@ import * as React from "react";
 import { FormField } from "./FormField";
 import { DropdownField } from "./DropdownField";
 import { TextAreaField } from "./TextAreaField";
-import { FormHeader } from "./FormHeader";
 import { ProfileImageUpload } from "./ProfileImageUpload";
 import { SubmitButton } from "../SubmitButton";
+import { ProgressBar } from "../ProgressBar";
 
 
 interface FormData {
@@ -53,10 +53,10 @@ export const Form: React.FC = () => {
   return (
     <main className="box-border border border-gray-200 flex overflow-hidden flex-col pt-[300px] pb-[100px] mx-auto w-full bg-white max-w-[480px]">
   
-      <div className="fixed left-[38%] top-0 z-40 bg-white ">
-        <FormHeader currentStep={1} />
+      <header className="fixed mx-14 top-0 z-40 w-[380px] bg-white pb-4">
+        <ProgressBar currentStep={1} />
 
-        <header className="mt-6 mx-5">
+        <div className="mt-6 mx-5">
           <h1 className="text-2xl font-semibold text-zinc-900">
             개인정보를 입력해주세요!
           </h1>
@@ -65,9 +65,9 @@ export const Form: React.FC = () => {
             <br />
             입력하신 정보를 기반으로 프로필이 생성됩니다.
           </p>
-        </header>
+        </div>
         <ProfileImageUpload />
-      </div>
+      </header>
       
 
 
