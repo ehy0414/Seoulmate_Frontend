@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
-import { GoogleLoginButton } from "../components/signup/GoogleLoginButton";
-import { AppTitle } from "../components/signup/AppTitle";
+import { GoogleLoginButton } from "../components/signup/googleLogin/GoogleLoginButton";
+import { AppTitle } from "../components/signup/googleLogin/AppTitle";
 
 interface LoginScreenProps {
   onGoogleLogin?: () => void;
