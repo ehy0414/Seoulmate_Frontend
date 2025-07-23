@@ -56,22 +56,27 @@ export const Form: React.FC = () => {
       <header className="fixed mx-14 top-0 z-40 w-[380px] bg-white pb-4">
         <ProgressBar currentStep={1} />
 
-        <div className="mt-6 mx-5">
-          <h1 className="text-2xl font-semibold text-zinc-900">
-            개인정보를 입력해주세요!
-          </h1>
-          <p className="mt-2 text-xs font-medium text-neutral-400">
-            아래 이름, 생년월일, 국적은 정확한 정보를 기입해주세요!
-            <br />
-            입력하신 정보를 기반으로 프로필이 생성됩니다.
+
+         <div className="absolute text-2xl font-semibold left-0 text-zinc-900 top-[100px] w-full">
+          <div className=" text-2xl font-bold text-zinc-900">
+            <h1>개인정보를 입력해주세요!!</h1>
+          </div>
+
+          <p className="absolute h-3.5 text-xs font-medium left-0 text-neutral-400 top-[40px] w-full">
+            <span className="text-xs text-neutral-400 mt-2">
+              아래 이름, 생년월일, 국적은 정확한 정보를 기입해주세요!
+              <br />
+              입력하신 정보를 기반으로 프로필이 생성됩니다
+            </span>
           </p>
+          <ProfileImageUpload />
         </div>
-        <ProfileImageUpload />
+
+
+        
       </header>
       
-
-
-      <section className="self-center w-full font-medium h-[405px] max-w-[357px]">
+      <section className="self-center w-full font-medium h-[405px] max-w-[357px] mt-6">
         <FormField
           label="성"
           placeholder="성을 입력하세요."
