@@ -51,11 +51,12 @@ export const Form: React.FC = () => {
   const isFormValid = formData.lastName && formData.firstName && formData.birthDate && formData.nationality;
 
   return (
-    <main className="box-border border border-gray-200 flex overflow-hidden flex-col pt-6 pb-2 mx-auto w-full bg-white max-w-[480px]">
-      <div className="flex flex-col px-5 w-full">
+    <main className="box-border border border-gray-200 flex overflow-hidden flex-col pt-[300px] pb-[100px] mx-auto w-full bg-white max-w-[480px]">
+  
+      <div className="fixed left-[38%] top-0 z-40 bg-white ">
         <FormHeader currentStep={1} />
 
-        <header className="self-start mt-14 mx-10">
+        <header className="mt-6 mx-5">
           <h1 className="text-2xl font-semibold text-zinc-900">
             개인정보를 입력해주세요!
           </h1>
@@ -65,9 +66,10 @@ export const Form: React.FC = () => {
             입력하신 정보를 기반으로 프로필이 생성됩니다.
           </p>
         </header>
+        <ProfileImageUpload />
       </div>
+      
 
-      <ProfileImageUpload />
 
       <section className="self-center w-full font-medium h-[405px] max-w-[357px]">
         <FormField
