@@ -13,7 +13,8 @@ export const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
     const navigate:NavigateFunction = useNavigate();
 
     const googleLogin = () => {
-        navigate("http://localhost:8080/oauth2/authorization/google");
+        // navigate("http://localhost:8080/oauth2/authorization/google");
+        navigate("/signUp/profile");
     };
 
     return (

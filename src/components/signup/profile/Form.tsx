@@ -1,11 +1,12 @@
 "use client";
-import * as React from "react";
 import { FormField } from "./FormField";
 import { DropdownField } from "./DropdownField";
 import { TextAreaField } from "./TextAreaField";
 import { ProfileImageUpload } from "./ProfileImageUpload";
 import { SubmitButton } from "../SubmitButton";
 import { ProgressBar } from "../ProgressBar";
+import { useNavigate, type NavigateFunction } from "react-router-dom";
+import { useState } from "react";
 
 
 interface FormData {
@@ -17,7 +18,8 @@ interface FormData {
 }
 
 export const Form: React.FC = () => {
-  const [formData, setFormData] = React.useState<FormData>({
+  const navigate:NavigateFunction = useNavigate();
+  const [formData, setFormData] = useState<FormData>({
     lastName: '',
     firstName: '',
     birthDate: '',
@@ -45,7 +47,7 @@ export const Form: React.FC = () => {
 
   const handleSubmit = () => {
     console.log('Form submitted:', formData);
-    // Handle form submission logic here
+    navigate("/signUp/langTest");
   };
 
   const isFormValid = formData.lastName && formData.firstName && formData.birthDate && formData.nationality;

@@ -2,10 +2,12 @@
 import React, { useState } from 'react';
 import { ProgressBar } from '../components/signup/ProgressBar';
 import { InterestSelector } from '../components/signup/hobby/InterestSelector';
-import { NavigationButtons } from '../components/signup/hobby/NavigationButtons';
+import { NavigationButtons } from '../components/signup/NavigationButtons';
+import { useNavigate, type NavigateFunction } from 'react-router-dom';
 
 export const HobbySelectionPage: React.FC = () => {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+  const navigate:NavigateFunction = useNavigate();
 
   // 취미 최대 10개까지 선택하는 토글
   const handleItemToggle = (item: string) => {
@@ -31,11 +33,15 @@ export const HobbySelectionPage: React.FC = () => {
 
   const handlePrevious = () => {
     console.log('Previous clicked');
+    navigate(-1);
   };
 
   const handleNext = () => {
     if (selectedItems.size >= 3 && selectedItems.size <= 10) {
       console.log('Next clicked with items:', Array.from(selectedItems));
+      navigate("/signUp/school")
+    } else {
+      alert("다시 시도해주세요!");
     }
   };
 
@@ -82,6 +88,7 @@ export const HobbySelectionPage: React.FC = () => {
         selectedCount={selectedItems.size}
         onPrevious={handlePrevious}
         onNext={handleNext}
+        onCount={true}
       />
     </div>
   );
