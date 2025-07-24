@@ -5,12 +5,14 @@ interface NavigationButtonsProps {
   selectedCount: number;
   onPrevious: () => void;
   onNext: () => void;
+  onCount: boolean;
 }
 
 export const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   selectedCount,
   onPrevious,
-  onNext
+  onNext,
+  onCount
 }) => {
   const isNextEnabled = selectedCount >= 3 && selectedCount <= 10;
 
@@ -37,7 +39,7 @@ export const NavigationButtons: React.FC<NavigationButtonsProps> = ({
           isNextEnabled ? 'text-white' : 'text-neutral-400'
         }`}>
           <span className={`text-base ${isNextEnabled ? 'text-white' : 'text-neutral-400'}`}>
-            다음 ({selectedCount}/10)
+            {onCount ? `다음 (${selectedCount}/10)` : "다음"}            
           </span>
         </span>
       </button>
