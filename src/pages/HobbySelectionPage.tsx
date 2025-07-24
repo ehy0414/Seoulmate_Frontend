@@ -40,8 +40,8 @@ export const HobbySelectionPage: React.FC = () => {
   };
 
   return (
-    <div className="border border-gray-200 relative mx-auto my-0 bg-white h-[1650px] w-[480px]">
-      <header className="fixed mx-14 top-0 z-40 w-[380px] bg-white pb-28">
+    <div className="border border-gray-200 relative mx-auto my-0 bg-white h-[1650px] w-[393px]">
+      <header className="fixed mx-4 top-0 z-40 w-[360px] bg-white pb-28">
         <ProgressBar currentStep={3} />
 
         <div className="absolute text-2xl font-semibold left-0 text-zinc-900 top-[100px] w-full">

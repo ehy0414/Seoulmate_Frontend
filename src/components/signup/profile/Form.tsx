@@ -51,15 +51,15 @@ export const Form: React.FC = () => {
   const isFormValid = formData.lastName && formData.firstName && formData.birthDate && formData.nationality;
 
   return (
-    <main className="box-border border border-gray-200 flex overflow-hidden flex-col pt-[300px] pb-[100px] mx-auto w-full bg-white max-w-[480px]">
+    <main className="box-border border border-gray-200 flex overflow-hidden flex-col pt-[300px] pb-[100px] mx-auto w-full bg-white max-w-[393px]">
   
-      <header className="fixed mx-14 top-0 z-40 w-[380px] bg-white pb-4">
+      <header className="fixed mx-4 top-0 z-40 w-[360px] bg-white pb-4">
         <ProgressBar currentStep={1} />
 
 
          <div className="absolute text-2xl font-semibold left-0 text-zinc-900 top-[100px] w-full">
           <div className=" text-2xl font-bold text-zinc-900">
-            <h1>개인정보를 입력해주세요!!</h1>
+            <h1>개인정보를 입력해주세요!</h1>
           </div>
 
           <p className="absolute h-3.5 text-xs font-medium left-0 text-neutral-400 top-[40px] w-full">

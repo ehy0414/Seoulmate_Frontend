@@ -20,9 +20,9 @@ export function SchoolVerifyPage() {
 
   return (
 
-    <main className="box-border border border-gray-200 flex overflow-hidden flex-col pt-[300px] pb-[100px] mx-auto w-full bg-white h-[737px] max-w-[480px]">
+    <main className="box-border border border-gray-200 flex overflow-hidden flex-col pt-[300px] pb-[100px] mx-auto w-full bg-white h-[737px] max-w-[393px]">
         
-        <header className="fixed mx-14 top-0 z-40 w-[380px] bg-white pb-4">
+        <header className="fixed mx-4 top-0 z-40 w-[360px] bg-white pb-4">
                 <ProgressBar currentStep={4} />
         
         

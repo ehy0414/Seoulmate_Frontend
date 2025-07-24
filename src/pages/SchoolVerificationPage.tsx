@@ -3,7 +3,7 @@ import { SchoolVerificationStatus } from '../components/signup/waitVerify/School
 
 export const SchoolVerificationPage: React.FC = () => {
   return (
-    <main className="border border-gray-200 relative mx-auto my-0 bg-white h-[852px] w-[480px]">
+    <main className="border border-gray-200 relative mx-auto my-0 bg-white h-[852px] w-[393px]">
       <SchoolVerificationStatus />
     </main>
   );

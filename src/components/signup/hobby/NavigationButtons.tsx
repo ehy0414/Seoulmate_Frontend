@@ -15,7 +15,7 @@ export const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   const isNextEnabled = selectedCount >= 3 && selectedCount <= 10;
 
   return (
-    <nav className="fixed mx-14 bottom-0 z-40 w-[380px] bg-white pb-4 pt-4 flex gap-10 ">
+    <nav className="fixed mx-4 bottom-0 z-40 w-[360px] bg-white pb-4 pt-4 flex gap-5 ">
       <button
         className="flex relative shrink-0 justify-center items-center rounded-md border border-orange-400 border-solid bg-zinc-50 h-[50px] w-[129px]"
         onClick={onPrevious}
