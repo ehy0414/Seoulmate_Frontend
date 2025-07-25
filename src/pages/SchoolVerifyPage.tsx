@@ -23,9 +23,7 @@ export function SchoolVerifyPage() {
       navigate("/signUp/wait");
     }
   };
-
-  const isFormValid = selectedSchool && selectedFile;
-
+  
   return (
 
     <main className="box-border border border-gray-200 flex overflow-hidden flex-col pt-[300px] pb-[100px] mx-auto w-full bg-white h-[737px] max-w-[393px]">
