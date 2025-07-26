@@ -31,15 +31,26 @@ export const HobbySelectionPage: React.FC = () => {
     });
   };
 
+  // 이전으로 가기 핸들러
   const handlePrevious = () => {
     console.log('Previous clicked');
     navigate(-1);
   };
 
-  const handleNext = () => {
+  // 다음 버튼 핸들러 (서버로 List형식의 hobbies 보냄)
+  const handleNext = async() => {
     if (selectedItems.size >= 3 && selectedItems.size <= 10) {
       console.log('Next clicked with items:', Array.from(selectedItems));
-      navigate("/signUp/school")
+      const data = {
+        hobbies: Array.from(selectedItems)
+      }
+      try {
+        // await axios.post("/signup/select-hobby", data);
+        navigate("/signUp/school");
+      } catch (error) {
+        console.error("전송 실패:", error);
+        alert("전송 중 문제가 발생했습니다.");
+      }
     } else {
       alert("다시 시도해주세요!");
     }

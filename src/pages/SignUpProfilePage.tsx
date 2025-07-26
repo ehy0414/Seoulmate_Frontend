@@ -1,30 +1,35 @@
 "use client";
-import { FormField } from "./FormField";
-import { DropdownField } from "./DropdownField";
-import { TextAreaField } from "./TextAreaField";
-import { ProfileImageUpload } from "./ProfileImageUpload";
-import { SubmitButton } from "../SubmitButton";
-import { ProgressBar } from "../ProgressBar";
 import { useNavigate, type NavigateFunction } from "react-router-dom";
 import { useState } from "react";
+import { ProgressBar } from "../components/signup/ProgressBar";
+import { ProfileImageUpload } from "../components/signup/profile/ProfileImageUpload";
+import { FormField } from "../components/signup/profile/FormField";
+import { DropdownField } from "../components/signup/profile/DropdownField";
+import { TextAreaField } from "../components/signup/profile/TextAreaField";
+import { SubmitButton } from "../components/signup/SubmitButton";
 
 
 interface FormData {
-  lastName: string;
   firstName: string;
-  birthDate: string;
-  nationality: string;
-  introduction: string;
+  lastName: string;
+  DOB: string; //생년월일
+  country: string;
+  bio: string; //자기소개
+  profileImage: string;
 }
 
-export const Form: React.FC = () => {
+export const SignUpProfilePage: React.FC = () => {
   const navigate:NavigateFunction = useNavigate();
+  const [profileFile, setProfileFile] = useState<File | null>(null); // 실제 이미지 파일
+
+  // 서버에 보낼 formData
   const [formData, setFormData] = useState<FormData>({
     lastName: '',
     firstName: '',
-    birthDate: '',
-    nationality: '',
-    introduction: ''
+    DOB: '',
+    country: '',
+    bio: '',
+    profileImage: ''
   });
 
   const nationalityOptions = [
@@ -38,6 +43,7 @@ export const Form: React.FC = () => {
     '기타'
   ];
 
+  // formData 핸들러 (성, 이름, 국가 등등)
   const handleFieldChange = (field: keyof FormData) => (value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -45,12 +51,39 @@ export const Form: React.FC = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    console.log('Form submitted:', formData);
+  // 이미지 핸들러
+  const handleImageChange = (file: File) => {
+    setProfileFile(file);
+    setFormData(prev => ({
+      ...prev,
+      profileImage: URL.createObjectURL(file) // 미리보기 URL 저장
+    }));
+  };
+
+  const handleSubmit = async () => {
+    const data = new FormData();
+
+    data.append("firstName", formData.firstName);
+    data.append("lastName", formData.lastName);
+    data.append("DOB", formData.DOB);
+    data.append("country", formData.country);
+    data.append("bio", formData.bio);
+
+    if (profileFile) {
+      data.append("profileImage", profileFile);
+    }
+
+    // 예시용 콘솔 로그, 실제 서버 전송 코드
+    console.log('FormData values:', [...data.entries()]);
+
+    // 예시용 서버에 보내기
+    // await axios.post("/signup/create-profile", data, { headers: { "Content-Type": "multipart/form-data" } });
+
     navigate("/signUp/langTest");
   };
 
-  const isFormValid = formData.lastName && formData.firstName && formData.birthDate && formData.nationality;
+
+  const isFormValid = formData.lastName && formData.firstName && formData.DOB && formData.country;
 
   return (
     <main className="box-border border border-gray-200 flex overflow-hidden flex-col pt-[300px] pb-[100px] mx-auto w-full bg-white max-w-[393px]">
@@ -71,7 +104,10 @@ export const Form: React.FC = () => {
               입력하신 정보를 기반으로 프로필이 생성됩니다
             </span>
           </p>
-          <ProfileImageUpload />
+          <ProfileImageUpload
+            onImageChange={handleImageChange}
+            previewUrl={formData.profileImage}
+          />
         </div>
 
 
@@ -100,8 +136,8 @@ export const Form: React.FC = () => {
             label="생년월일"
             placeholder="생년월일을 입력하세요."
             type="date"
-            value={formData.birthDate}
-            onChange={handleFieldChange('birthDate')}
+            value={formData.DOB}
+            onChange={handleFieldChange('DOB')}
           />
         </div>
 
@@ -109,8 +145,8 @@ export const Form: React.FC = () => {
           <DropdownField
             label="국적"
             placeholder="국적을 선택해주세요."
-            value={formData.nationality}
-            onChange={handleFieldChange('nationality')}
+            value={formData.country}
+            onChange={handleFieldChange('country')}
             options={nationalityOptions}
           />
         </div>
@@ -119,8 +155,8 @@ export const Form: React.FC = () => {
           <TextAreaField
             label="자기소개"
             placeholder="자기소개를 입력해주세요"
-            value={formData.introduction}
-            onChange={handleFieldChange('introduction')}
+            value={formData.bio}
+            onChange={handleFieldChange('bio')}
             maxLength={120}
           />
         </div>
@@ -136,4 +172,4 @@ export const Form: React.FC = () => {
   );
 };
 
-export default Form;
+export default SignUpProfilePage;

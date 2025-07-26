@@ -12,15 +12,25 @@ export function SchoolVerifyPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const navigate:NavigateFunction = useNavigate();
 
-  const handleNext = () => {
-    // Handle form submission logic here
+  const handleNext = async() => {
     console.log("Selected school:", selectedSchool);
     console.log("Selected file:", selectedFile);
     if((selectedSchool === "") || (selectedFile === null)) {
       alert("모두 입력해주세요.");
     } else {
-      alert("회원가입이 완료되었습니다!");
-      navigate("/signUp/wait");
+      const data = {
+        universityName: selectedSchool,
+        certificate: selectedFile
+      }
+      try {
+        // await axios.post(`/signup/school`, data);
+        alert("회원가입이 완료되었습니다!");
+        navigate("/signUp/wait");
+      } catch (error) {
+        alert(error);
+        console.error(error);
+      }
+      
     }
   };
   

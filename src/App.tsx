@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import SignUpPage from './pages/SignUpPage'
-import SignUpUserPage from './pages/SignUpUserPage'
+import { SignUpProfilePage } from './pages/SignUpProfilePage'
 import HobbySelectionPage from './pages/HobbySelectionPage'
 import { SchoolVerifyPage } from './pages/SchoolVerifyPage'
 import SchoolVerificationPage from './pages/SchoolVerificationPage'
@@ -14,7 +14,7 @@ function App() {
       <Routes>
         {/* 회원가입 페이지 */}
         <Route path='/' element={<SignUpPage />} />
-        <Route path='/signUp/profile' element={<SignUpUserPage />} />
+        <Route path='/signUp/profile' element={<SignUpProfilePage />} />
         <Route path='/signUp/langTest' element={<SignUpLangTestPage />} />
         <Route path='/signUp/hobby' element={<HobbySelectionPage />} />
         <Route path='/signUp/school' element={<SchoolVerifyPage />} />
