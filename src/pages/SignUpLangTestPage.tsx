@@ -27,7 +27,7 @@ const SignUpLangTestPage = () => {
     // 이전 핸들러
     const handlePrevious = () => {
         // -1이 이전 페이지로 돌아가게 함
-        (-1);
+        navigate(-1);
     };
 
   return (
