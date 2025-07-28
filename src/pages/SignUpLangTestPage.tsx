@@ -7,25 +7,28 @@ import AudioRecorder from "../components/signup/langTest/AudioRecorder";
 import { uploadAudio } from "../components/signup/langTest/uploadAudio";
 
 const SignUpLangTestPage = () => {
-  const navigate = useNavigate();
-  const [wavBlob, setWavBlob] = useState<Blob | null>(null);
+    const navigate = useNavigate();
+    const [wavBlob, setWavBlob] = useState<Blob | null>(null);
 
-  const handleNext = async () => {
-    if (wavBlob) {
-        try {
-            await uploadAudio(wavBlob);
-            navigate("/signUp/hobby");
-        } catch (err) {
-            alert("오디오 업로드에 실패했습니다.");
+    // 다음 버튼 핸들러
+    const handleNext = async () => {
+        if (wavBlob) {
+            try {
+                await uploadAudio(wavBlob);
+                navigate("/signUp/hobby");
+            } catch (err) {
+                alert("오디오 업로드에 실패했습니다.");
+            }
+            } else {
+            alert("녹음을 완료해주세요.");
         }
-        } else {
-        alert("녹음을 완료해주세요.");
-    }
-  };
+    };
 
-  const handlePrevious = () => {
-    (-1);
-  };
+    // 이전 핸들러
+    const handlePrevious = () => {
+        // -1이 이전 페이지로 돌아가게 함
+        (-1);
+    };
 
   return (
     <main className="box-border border border-gray-200 flex overflow-hidden flex-col items-center px-6 pt-[150px] pb-2 mx-auto w-full h-screen bg-white max-w-[393px]">
