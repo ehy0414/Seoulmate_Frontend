@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import HomeIcon from '../assets/common/bottom-navbar-home.svg?react';
-import SearchIcon from '../assets/common/bottom-navbar-search.svg?react';
-import FriendIcon from '../assets/common/bottom-navbar-friend.svg?react';
-import ChatIcon from '../assets/common/bottom-navbar-chat.svg?react';
-import ProfileIcon from '../assets/common/bottom-navbar-profile.svg?react';
+import HomeIcon from '../../assets/common/bottom-navbar-home.svg?react';
+import SearchIcon from '../../assets/common/bottom-navbar-search.svg?react';
+import FriendIcon from '../../assets/common/bottom-navbar-friend.svg?react';
+import ChatIcon from '../../assets/common/bottom-navbar-chat.svg?react';
+import ProfileIcon from '../../assets/common/bottom-navbar-profile.svg?react';
 
 const BottomNavBar: React.FC = () => {
     const [activeTab, setActiveTab] = useState('home');
