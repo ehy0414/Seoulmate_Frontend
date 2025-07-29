@@ -1,14 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./index.html", 
-    "./src/**/*.{js,ts,jsx,tsx}"],
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
-      
       // 색상
       colors: {
-        // 높은 숫자일수록 색이 진함
         primary: {
           100: '#FFF0ED', // P10
           200: '#FFE2DB', // P20
@@ -32,48 +31,64 @@ export default {
           100: '#FEF9D6',
           200: '#FEF3AE',
           300: '#FDEA71',
-          400: '#FCE134'
+          400: '#FCE134',
         },
       },
 
       // 폰트
       fontFamily: {
-      yangjin: ['yangjin'],
+        sans: ['Pretendard', 'sans-serif'], // 기본 폰트로 Pretendard-Regular 설정
+        yangjin: ['yangjin', 'sans-serif'], // 기존 yangjin 유지
       },
 
       // 폰트 사이즈
       fontSize: {
-      'xs': ['0.75rem', { lineHeight: '1rem' }], // 0.75rem = 12px
-      'sm': ['0.875rem', { lineHeight: '1.25rem' }],// 0.875rem = 14px
-      'base': ['1rem', { lineHeight: '1.5rem' }], // 1rem = 16px
-      'lg': ['1.125rem', { lineHeight: '1.75rem' }], // 1.125rem = 18px
-      'xl': ['1.25rem', { lineHeight: '1.75rem' }], // 1.25rem = 20px
-      '2xl': ['1.5rem', { lineHeight: '2rem' }], // 1.5rem = 24px
-      '3xl': ['1.875rem', { lineHeight: '2.25rem' }] // 1.875rem = 30px
+        xs: ['0.75rem', { lineHeight: '1rem' }], // 0.75rem = 12px
+        sm: ['0.875rem', { lineHeight: '1.25rem' }], // 0.875rem = 14px
+        base: ['1rem', { lineHeight: '1.5rem' }], // 1rem = 16px
+        lg: ['1.125rem', { lineHeight: '1.75rem' }], // 1.125rem = 18px
+        xl: ['1.25rem', { lineHeight: '1.75rem' }], // 1.25rem = 20px
+        '2xl': ['1.5rem', { lineHeight: '2rem' }], // 1.5rem = 24px
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }], // 1.875rem = 30px
       },
 
       // 글 간격
       spacing: {
         '1': '0.25rem', // 4px
-        '2': '0.5rem',  // 8px
+        '2': '0.5rem', // 8px
         '3': '0.75rem', // 12px
-        '4': '1rem',    // 16px
+        '4': '1rem', // 16px
         '5': '1.25rem', // 20px
-        '6': '1.5rem',  // 24px
-        '8': '2rem',    // 32px
+        '6': '1.5rem', // 24px
+        '8': '2rem', // 32px
         '10': '2.5rem', // 40px
-        '12': '3rem',   // 48px
-        '16': '4rem'    // 64px
+        '12': '3rem', // 48px
+        '15': '3.5rem',
+        '16': '4rem', // 64px
       },
 
       // 모서리 둥근 정도
       borderRadius: {
-        md: '0.75rem',    // 12px
-        lg: '1rem',       // 16px
-        custom: '2rem'    // 커스텀 추가도 가능
+        md: '0.75rem', // 12px
+        lg: '1rem', // 16px
+        custom: '2rem', // 커스텀 추가도 가능
       },
-    }
+    },
   },
-  plugins: [],
-}
-
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          /* Chrome, Safari */
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+          /* IE, Edge */
+          '-ms-overflow-style': 'none',
+          /* Firefox */
+          'scrollbar-width': 'none',
+        },
+      });
+    },
+  ],
+};
