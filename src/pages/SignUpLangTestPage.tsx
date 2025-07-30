@@ -31,7 +31,7 @@ const SignUpLangTestPage = () => {
     };
 
   return (
-    <main className="box-border border border-gray-200 flex overflow-hidden flex-col items-center px-6 pt-[150px] pb-2 mx-auto w-full h-screen bg-white max-w-[393px]">
+    <main className="flex overflow-hidden flex-col items-center px-6 pt-[150px] pb-2 mx-auto w-full h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
         <header className="fixed mx-4 top-0 z-40 w-[360px] bg-white pb-4">
             <ProgressBar currentStep={2} />
             <div className="absolute text-2xl font-semibold left-0 text-zinc-900 top-[100px] w-full">
