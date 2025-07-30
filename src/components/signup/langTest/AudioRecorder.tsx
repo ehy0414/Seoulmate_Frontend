@@ -27,7 +27,7 @@ const AudioRecorder = ({ onWavReady }: AudioRecorderProps) => {
     };
 
     return (
-        <div className="mt-4 p-4 border border-gray-300 w-full text-center">
+        <div className="mt-4 p-4 w-full text-center">
             <button
                 onClick={isRecording ? handleStop : handleStart}
                 className={`px-4 py-2 rounded text-white ${

@@ -78,7 +78,7 @@ export const SignUpProfilePage: React.FC = () => {
   const isFormValid = formData.lastName && formData.firstName && formData.DOB && formData.country;
 
   return (
-    <main className="flex overflow-hidden flex-col pt-[100px] pb-[300px] mx-auto w-full bg-white max-w-[clamp(360px,100vw,430px)]">
+    <main className="flex flex-col items-center px-6 pt-[100px] pb-[300px] mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
       <header className="fixed mx-4 top-0 z-40 w-[360px] h-44 bg-white pb-4">
         <ProgressBar currentStep={1} />
         <div className="absolute text-2xl font-semibold left-0 text-zinc-900 top-[100px] bottom-10 w-full bg-white">
