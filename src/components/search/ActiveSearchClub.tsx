@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import SportsIcon from '../../assets/common/category/category-sports.svg?react';
-import PartyIcon from '../../assets/common/category/category-party.svg?react';
-import LanguageIcon from '../../assets/common/category/category-language.svg?react';
-import ActivityIcon from '../../assets/common/category/category-activity.svg?react';
-import ArtIcon from '../../assets/common/category/category-art.svg?react';
-import HobbyIcon from '../../assets/common/category/category-hobby.svg?react';
-import FoodIcon from '../../assets/common/category/category-food.svg?react';
-import MusicIcon from '../../assets/common/category/category-music.svg?react';
+import SportsIcon from '../../assets/category/category-sports.svg?react';
+import PartyIcon from '../../assets/category/category-party.svg?react';
+import LanguageIcon from '../../assets/category/category-language.svg?react';
+import ActivityIcon from '../../assets/category/category-activity.svg?react';
+import ArtIcon from '../../assets/category/category-art.svg?react';
+import HobbyIcon from '../../assets/category/category-hobby.svg?react';
+import FoodIcon from '../../assets/category/category-food.svg?react';
+import MusicIcon from '../../assets/category/category-music.svg?react';
 
 interface ClubCard {
     id: number;
