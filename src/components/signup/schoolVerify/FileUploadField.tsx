@@ -25,7 +25,7 @@ export function FileUploadField({
   };
 
   return (
-    <div className="flex absolute flex-col gap-2 items-center h-[72px] mx-4 top-[339px] w-[357px]">
+    <div className="flex flex-col gap-2 items-center h-[72px] mx-4 top-[339px] w-[357px]">
       <label
         htmlFor="file-upload"
         className="self-stretch text-sm leading-5 text-zinc-900 max-sm:text-sm"
@@ -57,7 +57,7 @@ export function FileUploadField({
 
       <p
         id="file-upload-description"
-        className="absolute h-3.5 text-xs left-0 text-neutral-400 top-[79px] w-[205px] max-md:w-[90%] max-sm:text-xs max-sm:w-[92%]"
+        className="h-3.5 text-xs left-0 text-neutral-400 top-[79px] w-full"
       >
         재학증명서, 학생증 등으로 인증 가능합니다.
       </p>

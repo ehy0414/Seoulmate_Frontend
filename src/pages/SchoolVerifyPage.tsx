@@ -35,19 +35,17 @@ export function SchoolVerifyPage() {
   };
   
   return (
-
-    <main className="flex overflow-hidden flex-col pt-[300px] pb-[100px] mx-auto w-full bg-white h-[737px] max-w-[clamp(360px,100vw,430px)]">
+    <main className="flex flex-col items-center px-6 pt-[200px] pb-24 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
         
         <header className="fixed mx-4 top-0 z-40 w-[360px] h-44 bg-white pb-4">
           <ProgressBar currentStep={4} />
 
-
-            <div className="absolute text-2xl font-semibold left-0 text-zinc-900 top-[100px] w-full">
+          <div className="absolute text-2xl font-semibold left-0 text-zinc-900 top-[100px] w-full">
             <div className=" text-2xl font-bold text-zinc-900">
               <h1>학교인증</h1>
             </div>
 
-            <p className="absolute h-3.5 text-xs font-medium left-0 text-neutral-400 top-[40px] w-full">
+            <p className=" h-3.5 text-xs font-medium left-0 text-neutral-400 top-[40px] w-full">
               <span className="text-xs text-neutral-400 mt-2">
               인증서를 직접 확인하기 때문에 2-3일 정도 소요됩니다.
               </span>

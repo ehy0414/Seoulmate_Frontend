@@ -95,7 +95,7 @@ export function SchoolDropdown({
 
     return (
         <div    ref={dropdownRef}
-                className="flex absolute flex-col shrink-0 mx-4 gap-2 justify-center items-center rounded-lg h-[70px] top-[249px] w-[357px]">
+                className="flex flex-col mx-auto gap-2 justify-center items-center rounded-lg h-[70px] top-[249px] w-[357px] pb-5">
             <label
                 htmlFor="school-select"
                 className="self-stretch text-sm leading-5 text-zinc-900 max-sm:text-sm"
