@@ -91,7 +91,7 @@ export const SignUpProfilePage: React.FC = () => {
         </div>
       </header>
 
-      <section className="ml-4 w-full font-medium h-[405px] max-w-[357px] mt-6">
+      <section className=" w-full font-medium h-[405px] max-w-[360px] mt-6">
         <ProfileImageUpload onImageChange={handleImageChange} previewUrl={formData.profileImage} />
 
         <FormField label="성" placeholder="성을 입력하세요." value={formData.lastName} onChange={handleFieldChange('lastName')} />
