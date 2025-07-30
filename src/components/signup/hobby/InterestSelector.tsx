@@ -19,8 +19,8 @@ interface InterestSelectorProps {
 
 export const InterestSelector: React.FC<InterestSelectorProps> = ({ selectedItems, onItemToggle }) => {
   return (
-    <main className="flex absolute flex-col justify-end items-center px-5 pt-4 pb-2 h-[1237px] top-[200px] max-w-[clamp(360px,100vw,430px)] max-sm:px-4 max-sm:pt-4 max-sm:pb-2">
-      <div className="flex absolute flex-col gap-10 items-start h-[1212px] left-[18px] top-[17px] w-[357px] max-sm:left-4 max-sm:gap-1.5 max-sm:w-[calc(100%_-_32px)]">
+    <main className="flex absolute w-full flex-col justify-end items-center px-5 pt-4 pb-2 h-[1237px] top-[200px] max-w-[clamp(360px,100vw,430px)] max-sm:px-4 max-sm:pt-4 max-sm:pb-2">
+      <div className="flex absolute gap-10 flex-col items-start h-[1212px] left-[18px] w-[357px] max-sm:left-4 max-sm:w-[calc(100%_-_32px)]">
         {Object.entries(categories).map(([categoryTitle, items]) => (
           <CategorySection
             key={categoryTitle}
