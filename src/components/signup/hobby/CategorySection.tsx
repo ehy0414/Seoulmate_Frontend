@@ -20,7 +20,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       <h3 className="relative self-stretch text-sm font-semibold leading-5 text-black">
         <span className="text-sm font-bold text-black">{title}</span>
       </h3>
-      <div className="flex relative flex-wrap gap-2 content-center items-center self-stretch max-sm:left-4 max-sm:gap-1.5 max-sm:w-[calc(100%_-_32px)]">
+      <div className="flex flex-wrap gap-2 content-center items-center self-start max-sm:left-4 max-sm:w-[calc(100%_-_32px)]">
         {items.map((item) => (
           <SelectableChip
             key={item}
