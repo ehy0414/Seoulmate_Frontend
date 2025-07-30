@@ -13,7 +13,7 @@ const SearchHobby: React.FC = () => {
         <div className=" w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white min-h-screen">
             {/* 검색창 */}
             <div className="px-2.5 py-2.5 flex items-center  gap-[4.07vw]">
-                <img src='/assets/common/back-arrow.svg' />
+                <img src='/src/assets/common/back-arrow.svg' />
                 <input
                     type="text"
                     placeholder="찾고싶은 취미, 유저를 검색하세요"
