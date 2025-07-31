@@ -4,8 +4,8 @@ import SearchIcon from '../../assets/common/bottom-navbar-search.svg?react';
 import ActiveSearchClub from '../../components/search/ActiveSearchClub';
 import ActiveSearchFriend from '../../components/search/ActiveSearchFriend';
 import ActiveSearchResult from '../../components/search/ActiveSearchResult';
-
-
+import BackArrow from '../../assets/common/back-arrow.svg';
+import PlusIcon from '../../assets/common/plus.svg';
 
 const SearchHobby: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'club' | 'friend'>('club');
@@ -15,7 +15,7 @@ const SearchHobby: React.FC = () => {
         <div className=" w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white min-h-screen">
             {/* 검색창 */}
             <div className="px-2.5 py-2.5 flex items-center  gap-[4.07vw]">
-                <img src='/src/assets/common/back-arrow.svg' />
+                <img src={BackArrow} />
                 <input
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
@@ -68,7 +68,7 @@ const SearchHobby: React.FC = () => {
             {/* FAB 플러스 버튼 */}
             <div className="fixed bottom-[78px] right-[18px]">
                 <button className="w-[50px] h-[50px] bg-[#F45F3A] rounded-full flex items-center justify-center shadow-lg">
-                    <img src='/src/assets/common/plus.svg' />
+                    <img src= {PlusIcon} />
                 </button>
             </div>
 
