@@ -6,6 +6,7 @@ import ActiveSearchFriend from '../../components/search/ActiveSearchFriend';
 import ActiveSearchResult from '../../components/search/ActiveSearchResult';
 import BackArrow from '../../assets/common/back-arrow.svg';
 import PlusIcon from '../../assets/common/plus.svg';
+import FloatingActionButton from '../../components/common/FloatingActionButton';
 
 const SearchHobby: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'club' | 'friend'>('club');
@@ -66,11 +67,7 @@ const SearchHobby: React.FC = () => {
             
 
             {/* FAB 플러스 버튼 */}
-            <div className="fixed bottom-[78px] right-[18px]">
-                <button className="w-[50px] h-[50px] bg-[#F45F3A] rounded-full flex items-center justify-center shadow-lg">
-                    <img src= {PlusIcon} />
-                </button>
-            </div>
+            <FloatingActionButton/>
 
             {/* 하단 네비게이션바 */}
             <BottomNavBar />
