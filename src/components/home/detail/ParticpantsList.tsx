@@ -32,7 +32,6 @@ const ParticipantItem: React.FC<{
     </div>
   );
 };
-
 export const ParticipantsList: React.FC<ParticipantsListProps> = ({
   participants,
   title = "참여하는 친구"
@@ -42,46 +41,42 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({
   const openModal = () => setModalVisible(true);
   const closeModal = () => setModalVisible(false);
 
-  const firstRowParticipants = participants.slice(0, 5);
-  const secondRowParticipants = participants.slice(5, 10);
+  // 👉 5개씩 나눠서 행(row) 배열로 만들기
+  const rows: Participant[][] = [];
+  for (let i = 0; i < participants.length; i += 5) {
+    rows.push(participants.slice(i, i + 5));
+  }
 
   return (
     <>
-      <section className="flex relative flex-col gap-3 items-start self-stretch">
-        <div className="flex relative gap-3 items-center self-stretch">
-          <h3 className="relative text-sm font-medium leading-5 text-black">
-            {title}
-          </h3>
+      <section className="flex flex-col gap-3 items-start self-stretch">
+        <div className="flex gap-3 items-center self-stretch">
+          <h3 className="text-sm font-medium leading-5 text-black">{title}</h3>
         </div>
 
-        <div className="flex relative flex-col gap-5 items-start self-stretch p-5 rounded-lg border border-solid bg-zinc-50 border-stone-200">
-          {firstRowParticipants.length > 0 && (
-            <div className="flex relative justify-between items-center self-stretch max-sm:flex-wrap max-sm:gap-2.5">
-              {firstRowParticipants.map((participant) => (
+        <div className="flex flex-col gap-5 p-5 rounded-lg border border-solid bg-zinc-50 border-stone-200 w-full">
+          {rows.map((row, rowIndex) => (
+            <div
+              key={rowIndex}
+              className="flex justify-between items-center self-stretch"
+            >
+              {row.map((participant) => (
                 <ParticipantItem
                   key={participant.id}
                   participant={participant}
                   onClick={openModal}
                 />
               ))}
-            </div>
-          )}
-
-          {secondRowParticipants.length > 0 && (
-            <div className="flex relative gap-8 items-center self-stretch max-sm:flex-wrap max-sm:gap-2.5">
-              {secondRowParticipants.map((participant) => (
-                <ParticipantItem
-                  key={participant.id}
-                  participant={participant}
-                  onClick={openModal}
-                />
+              {/* 빈칸 채우기: 줄이 5명이 안되면 공백 채움 */}
+              {Array.from({ length: 5 - row.length }).map((_, i) => (
+                <div key={i} className="w-[38px]" />
               ))}
             </div>
-          )}
+          ))}
         </div>
       </section>
 
-      {/* 모달 컴포넌트 */}
+      {/* 모달 */}
       <FriendsModal isVisible={isModalVisible} onClose={closeModal} />
     </>
   );

@@ -54,7 +54,8 @@ export const MeetingDetailPage: React.FC<MeetingDetailPageProps> = ({
       id: "7",
       imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/6291d9c5ef5c598f4227f6a632ed45e10b220a66?width=80",
       nickname: "닉네임"
-    }
+    },
+    
   ];
 
   return (

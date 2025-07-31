@@ -15,14 +15,14 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   description
 }) => {
   return (
-    <section className="flex gap-7 items-start self-stretch max-md:gap-5 max-sm:flex-col max-sm:gap-4 max-sm:items-center max-sm:text-center">
+    <section className="flex gap-7 items-start self-stretch">
       <img
         src={profileImage}
         alt=""
         className="border-solid border-[0.5px] border-neutral-400 h-[100px] rounded-[50px] w-[100px]"
       />
-      <div className="flex gap-2 items-start px-0 py-3 flex-[1_0_0] max-md:gap-1.5 max-sm:items-center max-sm:px-0 max-sm:py-2">
-        <div className="flex flex-col gap-2 items-start flex-[1_0_0] max-sm:items-center">
+      <div className="flex gap-2 items-start px-0 py-3 flex-[1_0_0]">
+        <div className="flex flex-col gap-2 items-start flex-[1_0_0]">
           <div className="flex gap-3 items-center max-sm:justify-center">
             <h1 className="text-base font-bold text-black">
               {name}

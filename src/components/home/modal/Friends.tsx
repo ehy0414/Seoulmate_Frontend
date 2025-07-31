@@ -40,8 +40,8 @@ function Friends({
   sendMessageText = "메시지 보내기"
 }: FriendsProps) {
   return (
-    <main className="flex flex-col justify-end items-start h-[688px] w-full max-w-[clamp(360px,100vw,430px)]">
-      <div className="flex relative flex-col gap-6 items-end self-stretch px-5 pt-14 pb-4 bg-white rounded-[24px_24px_0_0] max-md:px-4 max-md:pt-10 max-md:pb-4 max-sm:gap-5 max-sm:px-3 max-sm:pt-8 max-sm:pb-3">
+    <main className="flex flex-col justify-end items-start max-w-[clamp(360px,100vw,430px)]">
+      <div className="flex relative flex-col gap-6 items-end self-stretch px-5 pt-14 pb-4 bg-white rounded-[24px_24px_0_0] overflow-y-auto ">
 
         <div className="flex flex-col gap-5 items-start self-stretch">
           <ProfileHeader
