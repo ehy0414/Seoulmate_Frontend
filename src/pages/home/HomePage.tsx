@@ -10,7 +10,7 @@ import BottomNavBar from '../../components/common/BottomNavBar';
 
 export const HomePage: React.FC = () => {
   return (
-    <main className="flex flex-col items-center px-6 mt-20 mb-12 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
+    <main className="flex flex-col items-center px-6 mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
       <HeaderSeoulmate title="서울메이트" />
 
       <div className="flex left-0 flex-col gap-7 items-center px-0 py-5 top-[203px] w-full max-w-[clamp(360px,100vw,430px)]">

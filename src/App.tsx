@@ -8,6 +8,7 @@ import SchoolVerificationPage from './pages/SchoolVerificationPage'
 import SignUpLangTestPage from './pages/SignUpLangTestPage'
 import SearchHobby from './pages/search/SearchHobby'
 import HomePage from './pages/home/HomePage'
+import MeetingDetailPage from './pages/home/MeetingDetailPage'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
         <Route path='/signUp/wait' element={<SchoolVerificationPage />} />
         <Route path='/search/hobby' element={<SearchHobby />} />
         <Route path='/home' element={<HomePage />} />
+        <Route path='/meeting/:id' element={<MeetingDetailPage />} />
       </Routes>
     </BrowserRouter>
   )
