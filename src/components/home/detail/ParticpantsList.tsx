@@ -1,4 +1,5 @@
 import * as React from "react";
+import { FriendsModal } from "../modal/FriendsModal";
 
 interface Participant {
   id: string;
@@ -11,9 +12,15 @@ interface ParticipantsListProps {
   title?: string;
 }
 
-const ParticipantItem: React.FC<{ participant: Participant }> = ({ participant }) => {
+const ParticipantItem: React.FC<{
+  participant: Participant;
+  onClick?: () => void;
+}> = ({ participant, onClick }) => {
   return (
-    <div className="flex relative flex-col gap-2 justify-center items-center w-[38px] max-sm:min-w-[38px]">
+    <div
+      className="flex relative flex-col gap-2 justify-center items-center w-[38px] max-sm:min-w-[38px] cursor-pointer"
+      onClick={onClick}
+    >
       <img
         src={participant.imageUrl}
         alt={`${participant.nickname} 프로필`}
@@ -30,34 +37,52 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({
   participants,
   title = "참여하는 친구"
 }) => {
+  const [isModalVisible, setModalVisible] = React.useState(false);
+
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
+
   const firstRowParticipants = participants.slice(0, 5);
   const secondRowParticipants = participants.slice(5, 10);
 
   return (
-    <section className="flex relative flex-col gap-3 items-start self-stretch">
-      <div className="flex relative gap-3 items-center self-stretch">
-        <h3 className="relative text-sm font-medium leading-5 text-black">
-          {title}
-        </h3>
-      </div>
+    <>
+      <section className="flex relative flex-col gap-3 items-start self-stretch">
+        <div className="flex relative gap-3 items-center self-stretch">
+          <h3 className="relative text-sm font-medium leading-5 text-black">
+            {title}
+          </h3>
+        </div>
 
-      <div className="flex relative flex-col gap-5 items-start self-stretch p-5 rounded-lg border border-solid bg-zinc-50 border-stone-200">
-        {firstRowParticipants.length > 0 && (
-          <div className="flex relative justify-between items-center self-stretch max-sm:flex-wrap max-sm:gap-2.5">
-            {firstRowParticipants.map((participant) => (
-              <ParticipantItem key={participant.id} participant={participant} />
-            ))}
-          </div>
-        )}
+        <div className="flex relative flex-col gap-5 items-start self-stretch p-5 rounded-lg border border-solid bg-zinc-50 border-stone-200">
+          {firstRowParticipants.length > 0 && (
+            <div className="flex relative justify-between items-center self-stretch max-sm:flex-wrap max-sm:gap-2.5">
+              {firstRowParticipants.map((participant) => (
+                <ParticipantItem
+                  key={participant.id}
+                  participant={participant}
+                  onClick={openModal}
+                />
+              ))}
+            </div>
+          )}
 
-        {secondRowParticipants.length > 0 && (
-          <div className="flex relative gap-8 items-center self-stretch max-sm:flex-wrap max-sm:gap-2.5">
-            {secondRowParticipants.map((participant) => (
-              <ParticipantItem key={participant.id} participant={participant} />
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
+          {secondRowParticipants.length > 0 && (
+            <div className="flex relative gap-8 items-center self-stretch max-sm:flex-wrap max-sm:gap-2.5">
+              {secondRowParticipants.map((participant) => (
+                <ParticipantItem
+                  key={participant.id}
+                  participant={participant}
+                  onClick={openModal}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 모달 컴포넌트 */}
+      <FriendsModal isVisible={isModalVisible} onClose={closeModal} />
+    </>
   );
 };

@@ -16,6 +16,9 @@ export const MeetingDetailPage: React.FC<MeetingDetailPageProps> = ({
   onNotificationClick,
   onJoinClick
 }) => {
+    const [showFriendsModal, setShowFriendsModal] = React.useState(false);
+    const handleOpenFriends = () => setShowFriendsModal(true);
+    const handleCloseFriends = () => setShowFriendsModal(false);
   const participants = [
     {
       id: "1",
