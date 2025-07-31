@@ -3,11 +3,13 @@ import BottomNavBar from '../../components/common/BottomNavBar';
 import SearchIcon from '../../assets/common/bottom-navbar-search.svg?react';
 import ActiveSearchClub from '../../components/search/ActiveSearchClub';
 import ActiveSearchFriend from '../../components/search/ActiveSearchFriend';
+import ActiveSearchResult from '../../components/search/ActiveSearchResult';
 
 
 
 const SearchHobby: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'club' | 'friend'>('club');
+    const [searchValue, setSearchValue] = useState('');
 
     return (
         <div className=" w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white min-h-screen">
@@ -15,6 +17,8 @@ const SearchHobby: React.FC = () => {
             <div className="px-2.5 py-2.5 flex items-center  gap-[4.07vw]">
                 <img src='/src/assets/common/back-arrow.svg' />
                 <input
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
                     type="text"
                     placeholder="찾고싶은 취미, 유저를 검색하세요"
                     className="font-[500] w-full bg-black-100 border border-black-700 rounded-[8px] px-4 py-[13px] text-black-700 text-sm outline-none placeholder:text-black-300"
@@ -52,13 +56,19 @@ const SearchHobby: React.FC = () => {
                     친구
                 </button>
             </div>
-            {activeTab==='club' ? <ActiveSearchClub/> : <ActiveSearchFriend/>}
+            {activeTab === 'club' ? (
+                <ActiveSearchClub />
+            ) : (
+                searchValue.trim() === ''
+                    ? <ActiveSearchFriend />
+                    : <ActiveSearchResult />
+            )}
             
 
             {/* FAB 플러스 버튼 */}
-            <div className="fixed bottom-20 right-4">
-                <button className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-white text-2xl">+</span>
+            <div className="fixed bottom-[78px] right-[18px]">
+                <button className="w-[50px] h-[50px] bg-[#F45F3A] rounded-full flex items-center justify-center shadow-lg">
+                    <img src='/src/assets/common/plus.svg' />
                 </button>
             </div>
 
