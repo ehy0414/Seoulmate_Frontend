@@ -72,7 +72,7 @@ export const SignUpProfilePage: React.FC = () => {
     }
 
     console.log('FormData values:', [...data.entries()]);
-    navigate("/signUp/langTest");
+    navigate("/signUp/langTest", {state: {country: formData.country}});
   };
 
   const isFormValid = formData.lastName && formData.firstName && formData.DOB && formData.country;
