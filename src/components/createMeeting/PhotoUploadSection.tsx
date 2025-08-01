@@ -11,6 +11,12 @@ export const PhotoUploadSection: React.FC<PhotoUploadSectionProps> = ({
 }) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [selectedImage, setSelectedImage] = React.useState<string | null>(null);
+  const selectedImageRef = React.useRef<string | null>(null);
+
+  // selectedImage와 ref를 동기화
+  React.useEffect(() => {
+    selectedImageRef.current = selectedImage;
+  }, [selectedImage]);
 
   const handleClick = () => {
     fileInputRef.current?.click();
@@ -18,19 +24,30 @@ export const PhotoUploadSection: React.FC<PhotoUploadSectionProps> = ({
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
+    
+    // 이미지 변경 시 이전 URL 즉시 해제 (메모리 누수 방지)
+    if (selectedImage) {
+      URL.revokeObjectURL(selectedImage);
+    }
+    
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
+    } else {
+      setSelectedImage(null);
     }
+    
     onPhotoSelect?.(file);
   };
 
-  // 메모리 누수 방지
+  // 컴포넌트 언마운트 시에만 마지막 URL 해제
   React.useEffect(() => {
     return () => {
-      if (selectedImage) URL.revokeObjectURL(selectedImage);
+      if (selectedImageRef.current) {
+        URL.revokeObjectURL(selectedImageRef.current);
+      }
     };
-  }, [selectedImage]);
+  }, []); // 빈 배열로 언마운트 시에만 실행
 
   return (
     <div>

@@ -14,6 +14,7 @@ import {
   ChargeField,
   ParticipantField
 } from "../../components/createMeeting";
+import { useNavigate } from "react-router-dom";
 
 
 interface MeetingData {
@@ -31,6 +32,7 @@ interface MeetingData {
 }
 
 export const CreateMeeting: React.FC = () => {
+  const navigate = useNavigate();
   const [meetingData, setMeetingData] = useState<MeetingData>({
     title: '',
     photo: null,
@@ -51,13 +53,12 @@ export const CreateMeeting: React.FC = () => {
   }, []);
 
   const handleGoBack = () => {
-    // Navigate back logic
-    window.history.back();
+    // React Router를 통한 뒤로가기
+    navigate(-1);
   };
 
   const handleCreateMeeting = () => {
-    // Validate and submit meeting data
-    console.log('Creating meeting:', meetingData);
+    navigate('/create-meeting');
   };
 
   const isFormValid = () => {
