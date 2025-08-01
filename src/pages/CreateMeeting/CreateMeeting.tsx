@@ -53,8 +53,8 @@ export const CreateMeeting: React.FC = () => {
   }, []);
 
   const handleGoBack = () => {
-    // Navigate back logic
-    window.history.back();
+    // React Router를 통한 뒤로가기
+    navigate(-1);
   };
 
   const handleCreateMeeting = () => {
