@@ -9,6 +9,7 @@ import SignUpLangTestPage from './pages/SignUpLangTestPage'
 import SearchHobby from './pages/search/SearchHobby'
 import HomePage from './pages/home/HomePage'
 import MeetingDetailPage from './pages/home/MeetingDetailPage'
+import ClubDetailPage from './pages/home/ClubDetailPage'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
         <Route path='/search/hobby' element={<SearchHobby />} />
         <Route path='/home' element={<HomePage />} />
         <Route path='/meeting/:id' element={<MeetingDetailPage />} />
+        <Route path='/club/:id' element={<ClubDetailPage />} />
       </Routes>
     </BrowserRouter>
   )
