@@ -86,12 +86,12 @@ const FriendRequestModal: React.FC<FriendRequestModalProps> = ({
         aria-describedby="modal-description"
       >
         {/* Modal Content */}
-        <div className="flex relative flex-col gap-3 items-center p-4 mx-auto my-0 bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.15)] w-[286px] max-md:gap-2.5 max-md:p-3.5 max-md:w-[260px] max-sm:gap-2 max-sm:p-3 max-sm:w-60 animate-in fade-in-0 zoom-in-95 duration-200">
+        <div className="flex relative flex-col gap-3 items-center p-4 mx-auto my-0 bg-white rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.15)] w-[286px] animate-in fade-in-0 zoom-in-95 duration-200">
 
           {/* Friend Name Title */}
           <header
             id="modal-title"
-            className="relative self-stretch text-sm font-semibold leading-5 text-center text-black max-md:text-sm max-md:leading-5 max-sm:text-xs max-sm:leading-4"
+            className="relative self-stretch text-sm font-semibold leading-5 text-center text-black"
           >
             {friendName}
           </header>
@@ -105,14 +105,14 @@ const FriendRequestModal: React.FC<FriendRequestModalProps> = ({
           </p>
 
           {/* Action Buttons */}
-          <div className="flex relative gap-3 items-center max-md:gap-2.5 max-sm:flex-col max-sm:gap-2 max-sm:w-full">
+          <div className="flex relative gap-3 items-center ">
             {/* Cancel Button */}
             <button
-              className="flex relative justify-center items-center rounded-lg border border-orange-400 border-solid cursor-pointer bg-zinc-50 h-[38px] w-[123px] max-md:h-9 max-md:w-[110px] max-sm:w-full max-sm:h-[34px] hover:bg-zinc-100 transition-colors"
+              className="flex relative justify-center items-center rounded-lg border border-primary-700 border-solid cursor-pointer bg-zinc-50 h-[38px] w-[123px] hover:bg-primary-100 transition-colors"
               onClick={handleCancel}
               type="button"
             >
-              <span className="relative text-xs font-bold text-red-500 max-md:text-xs max-sm:text-xs">
+              <span className="relative text-xs font-bold text-primary-700 ">
                 취소
               </span>
             </button>

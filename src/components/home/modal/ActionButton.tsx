@@ -32,9 +32,9 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
       </button>
       <button
         onClick={onSendMessage}
-        className="flex shrink-0 justify-center items-center rounded-lg border border-primary-700 border-solid bg-zinc-50 h-[38px] w-[162px]"
+        className="flex shrink-0 justify-center items-center rounded-lg border hover:bg-primary-100 border-primary-700 border-solid bg-zinc-50 h-[38px] w-[162px]"
       >
-        <span className="text-xs font-bold text-primary-700">
+        <span className="text-xs font-bold text-primary-700 ">
           {sendMessageText}
         </span>
       </button>
