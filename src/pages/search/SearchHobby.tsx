@@ -5,7 +5,6 @@ import ActiveSearchClub from '../../components/search/ActiveSearchClub';
 import ActiveSearchFriend from '../../components/search/ActiveSearchFriend';
 import ActiveSearchResult from '../../components/search/ActiveSearchResult';
 import BackArrow from '../../assets/common/back-arrow.svg';
-import PlusIcon from '../../assets/common/plus.svg';
 import FloatingActionButton from '../../components/common/FloatingActionButton';
 
 const SearchHobby: React.FC = () => {
