@@ -7,6 +7,7 @@ import { SchoolVerifyPage } from './pages/SchoolVerifyPage'
 import SchoolVerificationPage from './pages/SchoolVerificationPage'
 import SignUpLangTestPage from './pages/SignUpLangTestPage'
 import SearchHobby from './pages/search/SearchHobby'
+import CreateMeeting from './pages/CreateMeeting/CreateMeeting'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
         <Route path='/signUp/school' element={<SchoolVerifyPage />} />
         <Route path='/signUp/wait' element={<SchoolVerificationPage />} />
         <Route path='/search/hobby' element={<SearchHobby />} />
+        <Route path='/create-meeting' element={<CreateMeeting />} />
       </Routes>
     </BrowserRouter>
   )
