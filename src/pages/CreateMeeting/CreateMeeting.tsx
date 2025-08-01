@@ -14,6 +14,7 @@ import {
   ChargeField,
   ParticipantField
 } from "../../components/createMeeting";
+import { useNavigate } from "react-router-dom";
 
 
 interface MeetingData {
@@ -31,6 +32,7 @@ interface MeetingData {
 }
 
 export const CreateMeeting: React.FC = () => {
+  const navigate = useNavigate();
   const [meetingData, setMeetingData] = useState<MeetingData>({
     title: '',
     photo: null,
@@ -56,8 +58,7 @@ export const CreateMeeting: React.FC = () => {
   };
 
   const handleCreateMeeting = () => {
-    // Validate and submit meeting data
-    console.log('Creating meeting:', meetingData);
+    navigate('/create-meeting');
   };
 
   const isFormValid = () => {
