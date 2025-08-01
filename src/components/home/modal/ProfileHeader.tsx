@@ -27,7 +27,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             <h1 className="text-base font-bold text-black">
               {name}
             </h1>
-            <div className="flex justify-center items-center px-2 py-1 bg-red-500 rounded-[100px]">
+            <div className="flex justify-center items-center px-2 py-1 bg-primary-700 rounded-[100px]">
               <span className="text-xs font-bold text-center text-zinc-50">
                 {badge}
               </span>

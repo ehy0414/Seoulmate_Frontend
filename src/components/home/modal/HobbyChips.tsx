@@ -10,9 +10,9 @@ export const HobbyChips: React.FC<HobbyChipsProps> = ({ hobbies }) => {
       {hobbies.map((hobby, index) => (
         <div
           key={index}
-          className="flex justify-center items-center px-3 py-1.5 bg-red-100 rounded-[100px]"
+          className="flex justify-center items-center px-3 py-1.5 bg-primary-200 rounded-[100px]"
         >
-          <span className="text-xs text-center text-red-500">
+          <span className="text-xs text-center text-primary-700">
             {hobby}
           </span>
         </div>
