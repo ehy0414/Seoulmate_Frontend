@@ -50,7 +50,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
     } else {
       // 5개 이상일 때 토스트 메시지 표시
       setShowToast(true);
-      setTimeout(() => setShowToast(false), 1000); // 2초 후 사라짐
+      setTimeout(() => setShowToast(false), 1000); // 1초 후 사라짐
     }
   };
 
