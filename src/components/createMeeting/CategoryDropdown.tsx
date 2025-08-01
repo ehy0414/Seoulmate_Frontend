@@ -24,6 +24,8 @@ export const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     } else if (newCategories.length < 5) {
       // 최대 5개까지만 추가
       newCategories.push(category);
+    }else{
+      return;
     }
     
     // 쉼표로 연결하여 문자열로 변환
