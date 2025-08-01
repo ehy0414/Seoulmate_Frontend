@@ -1,6 +1,5 @@
 import React from 'react';
 import PlusIcon from '../../assets/common/plus.svg';
-import { useNavigate } from 'react-router-dom';
 
 interface FloatingActionButtonProps {
     onClick?: () => void;
