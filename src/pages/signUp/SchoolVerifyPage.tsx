@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { ProgressBar } from "../components/signup/ProgressBar";
-import { SubmitButton } from "../components/signup/SubmitButton";
-import { SchoolDropdown } from "../components/signup/schoolVerify/SchoolDropdown";
-import { FileUploadField } from "../components/signup/schoolVerify/FileUploadField";
+import { ProgressBar } from "../../components/signup/ProgressBar";
+import { SubmitButton } from "../../components/signup/SubmitButton";
+import { SchoolDropdown } from "../../components/signup/schoolVerify/SchoolDropdown";
+import { FileUploadField } from "../../components/signup/schoolVerify/FileUploadField";
 import { useNavigate, type NavigateFunction } from "react-router-dom";
 
 export function SchoolVerifyPage() {
