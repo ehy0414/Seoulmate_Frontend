@@ -7,6 +7,9 @@ import { SchoolVerifyPage } from './pages/SchoolVerifyPage'
 import SchoolVerificationPage from './pages/SchoolVerificationPage'
 import SignUpLangTestPage from './pages/SignUpLangTestPage'
 import SearchHobby from './pages/search/SearchHobby'
+import HomePage from './pages/home/HomePage'
+import MeetingDetailPage from './pages/home/MeetingDetailPage'
+import ClubDetailPage from './pages/home/ClubDetailPage'
 import CreateMeeting from './pages/CreateMeeting/CreateMeeting'
 
 function App() {
@@ -22,6 +25,9 @@ function App() {
         <Route path='/signUp/school' element={<SchoolVerifyPage />} />
         <Route path='/signUp/wait' element={<SchoolVerificationPage />} />
         <Route path='/search/hobby' element={<SearchHobby />} />
+        <Route path='/home' element={<HomePage />} />
+        <Route path='/meeting/:id' element={<MeetingDetailPage />} />
+        <Route path='/club/:id' element={<ClubDetailPage />} />
         <Route path='/create-meeting' element={<CreateMeeting />} />
       </Routes>
     </BrowserRouter>

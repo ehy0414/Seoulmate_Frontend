@@ -19,12 +19,12 @@ export default {
           800: '#EE4C23', // Pclick
         },
         black: {
-          100: '#FBFBFB',
+          100: '#FBFBFB', // gray/G0
           200: '#E9E6E6',
           300: '#D4D0D0',
-          400: '#AFA9A9',
+          400: '#AFA9A9', // G60
           500: '#7A7272',
-          600: '#4E4646',
+          600: '#4E4646', // gray/G80
           700: '#1A1A1A', // gray/G100
         },
         yellow: {
