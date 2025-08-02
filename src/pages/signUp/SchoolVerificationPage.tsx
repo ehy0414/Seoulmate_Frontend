@@ -1,5 +1,5 @@
 import React from 'react';
-import { SchoolVerificationStatus } from '../components/signup/waitVerify/SchoolVerificationStatus';
+import { SchoolVerificationStatus } from '../../components/signup/waitVerify/SchoolVerificationStatus';
 
 export const SchoolVerificationPage: React.FC = () => {
   return (

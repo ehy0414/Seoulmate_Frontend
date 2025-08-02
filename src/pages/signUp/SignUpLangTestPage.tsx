@@ -1,9 +1,9 @@
 // SignUpLangTestPage.tsx
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ProgressBar } from "../components/signup/ProgressBar";
-import AudioRecorder from "../components/signup/langTest/AudioRecorder";
-import { NavigationButtons } from "../components/signup/langTest/NavigationButtons";
+import { ProgressBar } from "../../components/signup/ProgressBar";
+import AudioRecorder from "../../components/signup/langTest/AudioRecorder";
+import { NavigationButtons } from "../../components/signup/langTest/NavigationButtons";
 
 const SignUpLangTestPage = () => {
     const navigate = useNavigate();
