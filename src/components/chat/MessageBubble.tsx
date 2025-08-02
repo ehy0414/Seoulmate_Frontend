@@ -1,4 +1,3 @@
-// src/components/chat/MessageBubble.tsx
 import React from 'react';
 
 interface Props {
@@ -6,6 +5,7 @@ interface Props {
     sender: 'me' | 'friend';
     text: string;
     time: string;
+    profileImg?: string; 
   };
 }
 
@@ -13,7 +13,21 @@ const MessageBubble: React.FC<Props> = ({ message }) => {
   const isMe = message.sender === 'me';
 
   return (
-    <div className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
+    <div className={`flex items-end ${isMe ? 'justify-end' : 'justify-start'} gap-2`}>
+      {!isMe && (
+        <div className="w-8 h-8 rounded-full overflow-hidden bg-black-400 shrink-0">
+          {message.profileImg ? (
+            <img
+              src={message.profileImg}
+              alt="profile"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-black-400 rounded-full" />
+          )}
+        </div>
+      )}
+
       <div
         className={`max-w-[70%] px-4 py-2 rounded-md text-sm ${
           isMe
@@ -22,9 +36,7 @@ const MessageBubble: React.FC<Props> = ({ message }) => {
         }`}
       >
         <p className="whitespace-pre-wrap break-words">{message.text}</p>
-        <div className={`text-xs text-black-400 text-right mt-1`}>
-          {message.time}
-        </div>
+        <div className="text-xs text-black-400 text-right mt-1">{message.time}</div>
       </div>
     </div>
   );
