@@ -133,9 +133,10 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
         ref={modalRef}
         className="fixed border-2 border-solid bottom-0 w-full max-w-[386px] bg-white rounded-t-[24px] shadow-xl transition-transform duration-300 overflow-hidden"
         style={{
-          height: `${height}vh`,
+          height: `${height === 100 ? '100dvh' : `${height}vh`}`,
           transform: isVisible ? "translateY(0)" : "translateY(100%)"
         }}
+
         onClick={(e) => e.stopPropagation()}
       >
         {/* 상단 드래그 손잡이 (클릭 영역 확장) */}
