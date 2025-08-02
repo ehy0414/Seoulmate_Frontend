@@ -1,17 +1,20 @@
 "use client";
 import * as React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-interface MenuBarProps {
-  activeTab?: "friends" | "requests";
-  onTabChange?: (tab: "friends" | "requests") => void;
-}
+export const MenuBar: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-export const MenuBar: React.FC<MenuBarProps> = ({
-  activeTab = "friends",
-  onTabChange
-}) => {
+  // 현재 경로가 '/friend' 또는 '/friend/request'인지 확인
+  const activeTab = location.pathname === "/friend" ? "friends" : "requests";
+
   const handleTabClick = (tab: "friends" | "requests") => {
-    onTabChange?.(tab);
+    if (tab === "friends") {
+      navigate("/friend");
+    } else {
+      navigate("/friend/request");
+    }
   };
 
   return (
@@ -25,12 +28,10 @@ export const MenuBar: React.FC<MenuBarProps> = ({
         onClick={() => handleTabClick("friends")}
         role="tab"
         aria-selected={activeTab === "friends"}
-        aria-controls="friends-panel"
       >
-        <div className="self-stretch my-auto">
-          친구 목록
-        </div>
+        친구 목록
       </button>
+
       <button
         className={`flex gap-2.5 justify-center items-center self-stretch px-2.5 py-3.5 my-auto font-medium border-solid min-h-[45px] w-[197px] ${
           activeTab === "requests"
@@ -40,11 +41,8 @@ export const MenuBar: React.FC<MenuBarProps> = ({
         onClick={() => handleTabClick("requests")}
         role="tab"
         aria-selected={activeTab === "requests"}
-        aria-controls="requests-panel"
       >
-        <div className="self-stretch my-auto">
-          친구 요청
-        </div>
+        친구 요청
       </button>
     </nav>
   );

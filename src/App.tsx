@@ -12,6 +12,7 @@ import MeetingDetailPage from './pages/home/MeetingDetailPage'
 import ClubDetailPage from './pages/home/ClubDetailPage'
 import CreateMeeting from './pages/CreateMeeting/CreateMeeting'
 import FriendPage from './pages/friend/FriendPage'
+import FriendRequestPage from './pages/friend/FriendRequestPage'
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
         <Route path='/club/:id' element={<ClubDetailPage />} />
         <Route path='/create-meeting' element={<CreateMeeting />} />
         <Route path='/friend' element={<FriendPage />} />
+        <Route path='/friend/request' element={<FriendRequestPage />} />
       </Routes>
     </BrowserRouter>
   )

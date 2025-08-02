@@ -47,10 +47,7 @@ export const FriendPage: React.FC<FriendsListProps> = ({
         <HeaderSeoulmate title="서울메이트" alarm={false} />
       
         <section>
-            <MenuBar
-            activeTab={activeTab}
-            onTabChange={handleTabChange}
-            />
+            <MenuBar />
             <SearchSection
             onBack={handleBack}
             onSearch={handleSearch}
