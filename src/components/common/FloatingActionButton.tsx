@@ -13,7 +13,7 @@ const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({ onClick, cl
                 onClick={onClick}
                 className="w-[50px] h-[50px] bg-[#F45F3A] rounded-full flex items-center justify-center shadow-lg"
             >
-                <img src={PlusIcon} />
+                <img src={PlusIcon} alt='플로팅 버튼' />
             </button>
         </div>
     );
