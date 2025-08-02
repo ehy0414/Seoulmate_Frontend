@@ -1,16 +1,18 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import SignUpPage from './pages/SignUpPage'
-import { SignUpProfilePage } from './pages/SignUpProfilePage'
-import HobbySelectionPage from './pages/HobbySelectionPage'
-import { SchoolVerifyPage } from './pages/SchoolVerifyPage'
-import SchoolVerificationPage from './pages/SchoolVerificationPage'
-import SignUpLangTestPage from './pages/SignUpLangTestPage'
+import SignUpPage from './pages/signUp/SignUpPage'
+import { SignUpProfilePage } from './pages/signUp/SignUpProfilePage'
+import HobbySelectionPage from './pages/signUp/HobbySelectionPage'
+import { SchoolVerifyPage } from './pages/signUp/SchoolVerifyPage'
+import SchoolVerificationPage from './pages/signUp/SchoolVerificationPage'
+import SignUpLangTestPage from './pages/signUp/SignUpLangTestPage'
 import SearchHobby from './pages/search/SearchHobby'
 import HomePage from './pages/home/HomePage'
 import MeetingDetailPage from './pages/home/MeetingDetailPage'
 import ClubDetailPage from './pages/home/ClubDetailPage'
 import CreateMeeting from './pages/CreateMeeting/CreateMeeting'
+import FriendPage from './pages/friend/FriendPage'
+import FriendRequestPage from './pages/friend/FriendRequestPage'
 
 function App() {
 
@@ -29,6 +31,8 @@ function App() {
         <Route path='/meeting/:id' element={<MeetingDetailPage />} />
         <Route path='/club/:id' element={<ClubDetailPage />} />
         <Route path='/create-meeting' element={<CreateMeeting />} />
+        <Route path='/friend' element={<FriendPage />} />
+        <Route path='/friend/request' element={<FriendRequestPage />} />
       </Routes>
     </BrowserRouter>
   )

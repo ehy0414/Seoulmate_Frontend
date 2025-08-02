@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from 'react';
-import { ProgressBar } from '../components/signup/ProgressBar';
-import { InterestSelector } from '../components/signup/hobby/InterestSelector';
-import { NavigationButtons } from '../components/signup/NavigationButtons';
+import { ProgressBar } from '../../components/signup/ProgressBar';
+import { InterestSelector } from '../../components/signup/hobby/InterestSelector';
+import { NavigationButtons } from '../../components/signup/NavigationButtons';
 import { useNavigate, type NavigateFunction } from 'react-router-dom';
 
 export const HobbySelectionPage: React.FC = () => {

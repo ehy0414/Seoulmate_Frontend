@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { ProgressBar } from "../components/signup/ProgressBar";
-import { ProfileImageUpload } from "../components/signup/profile/ProfileImageUpload";
-import { FormField } from "../components/signup/profile/FormField";
-import { DropdownField } from "../components/signup/profile/DropdownField";
-import { TextAreaField } from "../components/signup/profile/TextAreaField";
-import { SubmitButton } from "../components/signup/SubmitButton";
+import { ProgressBar } from "../../components/signup/ProgressBar";
+import { ProfileImageUpload } from "../../components/signup/profile/ProfileImageUpload";
+import { FormField } from "../../components/signup/profile/FormField";
+import { DropdownField } from "../../components/signup/profile/DropdownField";
+import { TextAreaField } from "../../components/signup/profile/TextAreaField";
+import { SubmitButton } from "../../components/signup/SubmitButton";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
