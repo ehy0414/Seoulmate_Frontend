@@ -46,6 +46,25 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
   };
 
   useEffect(() => {
+  if (isVisible) {
+    // 모달이 열렸을 때 body 스크롤 막기
+    document.body.style.overflow = "hidden";
+    document.body.style.touchAction = "none"; // 모바일에서 더 확실히 방지
+  } else {
+    // 모달이 닫히면 다시 허용
+    document.body.style.overflow = "";
+    document.body.style.touchAction = "";
+  }
+
+  return () => {
+    // 컴포넌트 언마운트 시 스크롤 복구
+    document.body.style.overflow = "";
+    document.body.style.touchAction = "";
+  };
+}, [isVisible]);
+
+
+  useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
       if (dragBarRef.current?.contains(e.target as Node)) {
         dragging.current = true;
