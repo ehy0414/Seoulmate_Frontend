@@ -1,5 +1,5 @@
-// src/components/chat/ChatInput.tsx
 import React from 'react';
+import SendIcon from '../../assets/chat/send_icon.png';
 
 interface Props {
   input: string;
@@ -23,7 +23,7 @@ const ChatInput: React.FC<Props> = ({ input, setInput, handleSend, handleKeyPres
         onClick={handleSend}
         className="ml-3 text-primary-700 text-xl"
       >
-        ▶️
+        <img src={SendIcon} alt="Send" className="w-[45px] h-[45px]" />
       </button>
     </div>
   );
