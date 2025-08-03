@@ -51,11 +51,11 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
             <button
               key={day}
               onClick={() => onDateClick(dateStr)}
-              className="relative w-full aspect-square flex items-center justify-center"
+              className="relative w-full h-[60px] mt-[4px] aspect-square flex justify-center border-b border-black"
             >
               <div
                 className={`
-                  w-8 h-8 flex items-center justify-center rounded-full
+                  w-[30px] h-[30px] flex items-center justify-center rounded-full
                   ${isSelected(day) ? 'bg-primary-500 text-white' : ''}
                   ${isToday(day) && !isSelected(day) ? 'bg-black-600 text-white' : ''}
                 `}
@@ -63,7 +63,7 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
                 {day}
               </div>
               {hasSchedule(day) && (
-                <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 rounded-full bg-yellow-400" />
+                <div className="absolute bottom-[11px] left-1/2 transform -translate-x-1/2 w-[6px] h-[6px] rounded-full bg-yellow-400" />
               )}
             </button>
           );
