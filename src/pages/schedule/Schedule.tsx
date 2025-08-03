@@ -3,41 +3,8 @@ import { useState, useEffect } from 'react';
 import CalendarGrid from '../../components/schedule/CalendarGrid';
 import ScheduleList from '../../components/schedule/ScheduleList';
 
-export interface Schedule {
-  id: number;
-  img: string;
-  title: string;
-  place: string;
-  date: string; // YYYY-MM-DD
-  isConfirmed: boolean;
-}
-
-const mockSchedules: Schedule[] = [
-  {
-    id: 1,
-    img: '📸',
-    title: '스터디 모임',
-    place: '스타벅스 강남점',
-    date: '2025-07-23',
-    isConfirmed: true,
-  },
-  {
-    id: 2,
-    img: '🎤',
-    title: '회의',
-    place: 'Zoom',
-    date: '2025-07-23',
-    isConfirmed: false,
-  },
-  {
-    id: 3,
-    img: '🎉',
-    title: '친구 생일파티',
-    place: '홍대 술집',
-    date: '2025-07-12',
-    isConfirmed: true,
-  },
-];
+import { mockSchedules } from '../../mock/schedule/schedules';
+import type { Schedule } from '../../mock/schedule/schedules';
 
 const getTodayDateString = () => new Date().toISOString().split('T')[0];
 
