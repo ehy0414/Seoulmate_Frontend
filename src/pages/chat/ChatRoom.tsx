@@ -56,7 +56,7 @@ const ChatRoom = () => {
 
   return (
     <div className="flex flex-col h-screen bg-white w-[393px]">
-      {/* Header */}
+
       <div className="flex items-center justify-between h-[60px] px-[18px] border-b-[1px] border-black-300">
         <button>
           <img src={backArrowIcon} alt="Back" className="w-[24px] h-[24px]" />
@@ -67,29 +67,23 @@ const ChatRoom = () => {
         </button>
       </div>
 
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-2 space-y-4 scrollbar-hide">
         {Object.entries(groupedMessages).map(([date, msgs]) => (
           <div key={date}>
             <div className="text-center text-sm text-black-400 my-2">{date}</div>
-            {/* {msgs.map((msg, idx) => (
-              <MessageBubble key={idx} message={msg} />
-            ))} */}
-            {msgs.map((msg, idx) => {
-              const prev = idx > 0 ? msgs[idx - 1] : null;
-              const isSameSender = prev && prev.sender === msg.sender;
+              {msgs.map((msg, idx) => {
+                const prev = idx > 0 ? msgs[idx - 1] : null;
+                const isSameSender = prev && prev.sender === msg.sender;
 
-              const marginTop = isSameSender ? 'mt-1' : 'mt-5'; // 4px or 20px
-              return (
-                <MessageBubble key={idx} message={msg} marginTop={marginTop} />
-              );
-            })}
-
+                const marginTop = isSameSender ? 'mt-1' : 'mt-5'; // 4px or 20px
+                return (
+                  <MessageBubble key={idx} message={msg} marginTop={marginTop} />
+                );
+              })}
           </div>
         ))}
       </div>
 
-      {/* Input */}
       <ChatInput
         input={input}
         setInput={setInput}

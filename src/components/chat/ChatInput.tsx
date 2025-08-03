@@ -14,13 +14,13 @@ const ChatInput: React.FC<Props> = ({ input, setInput, handleSend, handleKeyPres
     handleKeyPress(e); 
   };
   return (
-    <div className="border-t border-black-200 px-4 py-3 flex items-center">
+    <div className="flex items-center mx-[16px] my-[18px]">
       <input
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={onKeyDown}
-        className="flex-1 border border-black-300 rounded-full px-4 py-2 text-sm focus:outline-none"
+        className="flex-1 border border-black-700 rounded-[8px] h-[45px] px-[16px] py-[13px] text-sm focus:outline-none"
         placeholder="메시지 보내기"
       />
       <button
