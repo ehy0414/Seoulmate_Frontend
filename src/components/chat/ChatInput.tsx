@@ -13,6 +13,9 @@ const ChatInput: React.FC<Props> = ({ input, setInput, handleSend, handleKeyPres
     if (e.nativeEvent.isComposing) return; 
     handleKeyPress(e); 
   };
+
+  const isEmpty = input.trim() === '';
+
   return (
     <div className="flex items-center mx-[16px] my-[18px]">
       <input
@@ -26,8 +29,9 @@ const ChatInput: React.FC<Props> = ({ input, setInput, handleSend, handleKeyPres
       <button
         onClick={handleSend}
         className="ml-3 text-primary-700 text-xl"
+        disabled={isEmpty}
       >
-        <img src={SendIcon} alt="Send" className="w-[45px] h-[45px]" />
+        <img src={SendIcon} alt="Send" className={`w-[45px] h-[45px] ${isEmpty ? 'grayscale' : ''}`} />
       </button>
     </div>
   );
