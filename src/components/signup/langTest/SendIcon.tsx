@@ -14,7 +14,7 @@ export const SendIcon: React.FC<SendIconProps> = ({ className = "" }) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={`send-icon ${className}`}
-      style={{ width: "24px", height: "24px", flexShrink: 0 }}
+      style={{ width: "45px", height: "24px", flexShrink: 0 }}
     >
       <g clipPath="url(#clip0_635_2948)">
         <path
