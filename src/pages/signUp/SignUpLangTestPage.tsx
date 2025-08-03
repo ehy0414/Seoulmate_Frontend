@@ -9,11 +9,11 @@ import Spinner from "../../components/signup/langTest/Spinner";
 const SignUpLangTestPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    //const country = location.state.country;
+    const country = location.state.country;
 
-    // 테스트용
-    const country = "미국"
-    const [isKorean, setIsKorean] = useState<boolean>(); 
+    // // 테스트용
+    // const country = "미국"
+    const [isKorean, setIsKorean] = useState<boolean>(false); 
     const [score, setScore] = useState<number | null>(null);
     const [isSending, setIsSending] = useState<boolean>(false); // 로딩 상태를 관리하기 위한 상태 추가
     
@@ -21,12 +21,11 @@ const SignUpLangTestPage = () => {
     const isNextEnabled = score !== null;
 
     useEffect(() => {
-        setIsKorean(false);
-        // if(country === "대한민국") {
-        //     setIsKorean(true);
-        // } else {
-        //     setIsKorean(false);
-        // }
+        if(country === "대한민국") {
+            setIsKorean(true);
+        } else {
+            setIsKorean(false);
+        }
     },[country]);
 
     const handleNext = async () => {
@@ -60,22 +59,24 @@ const SignUpLangTestPage = () => {
                 </div>
             )}
             
-            <div className="fixed mx-4 top-0 z-40 w-[360px] bg-white pb-10">
+            <div className="fixed mx-4 top-0 z-40 w-[360px] bg-white pb-44">
                 <ProgressBar currentStep={2} />
-                <div className="absolute text-2xl font-semibold left-0 text-zinc-900 bottom-10 top-[100px] w-full">
+                <div className="absolute text-2xl font-semibold left-0 bg-white text-zinc-900 bottom-10 top-[100px] w-full">
                     <h1 className="text-2xl font-bold text-zinc-900 mb-2">언어레벨 테스트</h1>
                     <p className=" h-3.5 text-xs font-medium left-0 text-neutral-400 w-full">
                         <span className="text-xs text-neutral-400 mt-2">
-                        {isKorean ? `영어 테스트: 영어를 녹음해서 제출해주세요!` : `한국어 테스트: 한국어를 녹음해서 제출해주세요!`}
+                        {isKorean ? (<>영어 테스트를 진행할게요.<br/>마이크 버튼을 누르고 아래 문장을 또박또박 읽어주세요.</>
+                            ) : (<>한국어 테스트를 진행할게요.<br />마이크 버튼을 누르고 아래 문장을 또박또박 읽어주세요.</>)}
                         </span>
                     </p>
                 </div>
             </div>
 
-            <TextContent />
-
-            <AudioRecorder onScoreReady={setScore} setIsSending={setIsSending} />
-
+            <div className="pb-20">
+                <TextContent isKorean={isKorean}/>
+                <AudioRecorder onScoreReady={setScore} setIsSending={setIsSending} />
+            </div>
+            
             <NavigationButtons
                 onPrevious={handlePrevious}
                 onNext={handleNext}
