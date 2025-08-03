@@ -11,58 +11,79 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth(); 
 
-  const startDay = new Date(currentYear, currentMonth, 1).getDay();
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const startOfMonth = new Date(currentYear, currentMonth, 1);
+  const startDay = startOfMonth.getDay(); // 요일: 0(일) ~ 6(토)
+  const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
+  const totalCells = 42; // 6주
+  const calendarDays: { date: Date; isCurrentMonth: boolean }[] = [];
 
-  const getDateString = (d: number) => {
-    const mm = String(currentMonth + 1).padStart(2, '0');
-    const dd = String(d).padStart(2, '0');
-    return `${currentYear}-${mm}-${dd}`;
-  };
+  for (let i = 0; i < totalCells; i++) {
+    const dayOffset = i - startDay + 1;
+    let date: Date;
+    let isCurrentMonth = true;
 
-  const hasSchedule = (d: number) =>
-    schedules.some((s) => s.date === getDateString(d));
+    if (dayOffset <= 0) { // 이전 달
+      date = new Date(currentYear, currentMonth - 1, daysInPrevMonth + dayOffset);
+      isCurrentMonth = false;
+    } else if (dayOffset > daysInCurrentMonth) { // 다음 달
+      date = new Date(currentYear, currentMonth + 1, dayOffset - daysInCurrentMonth);
+      isCurrentMonth = false;
+    } else { // 이번 달
+      date = new Date(currentYear, currentMonth, dayOffset);
+    }
 
-  const isSelected = (d: number) =>
-    selectedDate === getDateString(d);
+    calendarDays.push({ date, isCurrentMonth });
+  }
 
-  const isToday = (d: number) => {
-    const todayStr = today.toISOString().split('T')[0];
-    return todayStr === getDateString(d);
-  };
+  const getDateString = (date: Date) =>
+    date.toISOString().split('T')[0];
+
+  const hasSchedule = (date: Date) =>
+    schedules.some((s) => s.date === getDateString(date));
+
+  const isSelected = (date: Date) =>
+    selectedDate === getDateString(date);
+
+  const isToday = (date: Date) =>
+    today.toISOString().split('T')[0] === getDateString(date);
 
   return (
     <div className="px-4 mt-4">
       <div className="text-center text-xl font-bold">{`${currentYear}. ${currentMonth + 1}.`}</div>
+
       <div className="grid grid-cols-7 text-center mt-2 text-black-400 text-sm">
-        {['월', '화', '수', '목', '금', '토', '일'].map((d) => (
+        {['일', '월', '화', '수', '목', '금', '토'].map((d) => (
           <div key={d}>{d}</div>
         ))}
       </div>
+
       <div className="grid grid-cols-7 text-center text-base mt-2">
-        {Array.from({ length: startDay }).map((_, i) => (
-          <div key={`empty-${i}`} />
-        ))}
-        {Array.from({ length: daysInMonth }).map((_, i) => {
-          const day = i + 1;
-          const dateStr = getDateString(day);
+        {calendarDays.map(({ date, isCurrentMonth }, i) => {
+          const day = date.getDate();
+          const dateStr = getDateString(date);
+          const selected = isSelected(date);
+          const todayMark = isToday(date);
+          const scheduled = hasSchedule(date);
+
           return (
             <button
-              key={day}
+              key={i}
               onClick={() => onDateClick(dateStr)}
               className="relative w-full h-[60px] mt-[4px] aspect-square flex justify-center border-b border-black"
             >
               <div
                 className={`
                   w-[30px] h-[30px] flex items-center justify-center rounded-full
-                  ${isSelected(day) ? 'bg-primary-500 text-white' : ''}
-                  ${isToday(day) && !isSelected(day) ? 'bg-black-600 text-white' : ''}
+                  ${selected ? 'bg-primary-500 text-white' : ''}
+                  ${!selected && todayMark ? 'bg-black-600 text-white' : ''}
+                  ${!selected && !todayMark && !isCurrentMonth ? 'text-black-300' : ''}
                 `}
               >
                 {day}
               </div>
-              {hasSchedule(day) && (
+              {scheduled && (
                 <div className="absolute bottom-[11px] left-1/2 transform -translate-x-1/2 w-[6px] h-[6px] rounded-full bg-yellow-400" />
               )}
             </button>
