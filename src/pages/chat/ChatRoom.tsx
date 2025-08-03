@@ -6,6 +6,7 @@ import MessageBubble from '../../components/chat/MessageBubble';
 import ChatInput from '../../components/chat/ChatInput';
 import notificationIcon from '../../assets/chat/notification-icon.png';
 import { chatMockMessages, type Message } from '../../mock/chat/chatMockData';
+import backArrowIcon from '../../assets/chat/back-arrow-icon.png';
 
 const getFormattedDate = (date: Date) => {
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
@@ -56,7 +57,10 @@ const ChatRoom = () => {
   return (
     <div className="flex flex-col h-screen bg-white w-[393px]">
       {/* Header */}
-      <div className="flex items-center justify-between h-[60px] px-[18px] border-b border-black-200">
+      <div className="flex items-center justify-between h-[60px] px-[18px] border-b-[1px] border-black-300">
+        <button>
+          <img src={backArrowIcon} alt="Back" className="w-[24px] h-[24px]" />
+        </button>
         <div className="text-[16px] font-semibold">{friendName}</div>
         <button>
           <img src={notificationIcon} alt="Notifications" className="w-[24px] h-[24px]" />
