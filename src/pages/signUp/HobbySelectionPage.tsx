@@ -59,7 +59,7 @@ export const HobbySelectionPage: React.FC = () => {
   return (
     <main className="flex flex-col items-center px-6 pt-[200px] pb-24 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
       
-      <header className="fixed mx-4 top-0 z-40 w-[360px] bg-white pb-28">
+      <header className="fixed mx-4 top-0 z-40 w-[360px] bg-white pb-44">
         <ProgressBar currentStep={3} />
 
         <div className="absolute text-2xl font-semibold left-0 text-zinc-900 top-[100px] w-full">
