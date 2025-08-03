@@ -9,14 +9,10 @@ interface Props {
 export default function CalendarGrid({ schedules, selectedDate, onDateClick }: Props) {
   const today = new Date();
   const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth(); // 0-based: 0 = 1월, 6 = 7월
-  // const year = 2025;
-  // const month = 7; // 7월 (0-based index)
-  // const startDay = new Date(year, month, 1).getDay();
-  // const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const currentMonth = today.getMonth(); 
 
-  const startDay = new Date(currentYear, currentMonth, 1).getDay(); // 1일의 요일
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // 말일
+  const startDay = new Date(currentYear, currentMonth, 1).getDay();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
 
   const getDateString = (d: number) => {
@@ -57,16 +53,11 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
               onClick={() => onDateClick(dateStr)}
               className="relative w-full aspect-square flex items-center justify-center"
             >
-              {/* <div
-                className={`w-8 h-8 flex items-center justify-center rounded-full ${
-                  isSelected(day) ? 'bg-primary-500 text-white' : ''
-                }`}
-              > */}
               <div
                 className={`
                   w-8 h-8 flex items-center justify-center rounded-full
                   ${isSelected(day) ? 'bg-primary-500 text-white' : ''}
-                  ${isToday(day) && !isSelected(day) ? 'border border-black-600' : ''}
+                  ${isToday(day) && !isSelected(day) ? 'bg-black-600 text-white' : ''}
                 `}
               >
                 {day}
