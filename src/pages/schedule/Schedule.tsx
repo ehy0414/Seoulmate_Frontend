@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 
-import CalendarHeader from '../../components/schedule/CalendarHeader';
 import CalendarGrid from '../../components/schedule/CalendarGrid';
 import ScheduleList from '../../components/schedule/ScheduleList';
 
@@ -52,7 +51,6 @@ export default function Schedule() {
 
   return (
     <div className="relative min-h-screen bg-white pb-[100px]">
-      <CalendarHeader />
       <CalendarGrid
         schedules={mockSchedules}
         selectedDate={selectedDate}
