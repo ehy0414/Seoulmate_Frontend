@@ -54,10 +54,10 @@ const ChatRoom = () => {
   }, {});
 
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col h-screen bg-white w-[393px]">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-black-200">
-        <div className="text-lg font-semibold">{friendName}</div>
+      <div className="flex items-center justify-between h-[60px] px-[18px] border-b border-black-200">
+        <div className="text-[16px] font-semibold">{friendName}</div>
         <button>
           <img src={notificationIcon} alt="Notifications" className="w-[24px] h-[24px]" />
         </button>
