@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import type { KeyboardEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -48,11 +48,18 @@ const ChatRoom = () => {
     }
   };
 
-  const groupedMessages = messages.reduce<{ [date: string]: Message[] }>((acc, msg) => {
-    if (!acc[msg.date]) acc[msg.date] = [];
-    acc[msg.date].push(msg);
-    return acc;
-  }, {});
+  // const groupedMessages = messages.reduce<{ [date: string]: Message[] }>((acc, msg) => {
+  //   if (!acc[msg.date]) acc[msg.date] = [];
+  //   acc[msg.date].push(msg);
+  //   return acc;
+  // }, {});
+  const groupedMessages = useMemo(() => {
+       return messages.reduce<{ [date: string]: Message[] }>((acc, msg) => {
+       if (!acc[msg.date]) acc[msg.date] = [];
+       acc[msg.date].push(msg);
+       return acc;
+     }, {});
+   }, [messages]);
 
   return (
     <div className="flex flex-col h-screen bg-white w-[393px]">
