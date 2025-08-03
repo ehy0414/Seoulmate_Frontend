@@ -2,6 +2,7 @@ import React from 'react';
 import LanguageIcon from '../../assets/category/category-language.svg?react';
 import ArtIcon from '../../assets/category/category-art.svg?react';
 import Calendar from '../../assets/common/calender.svg?react';
+import { useNavigate } from 'react-router-dom';
 
 interface QuickActionButtonProps {
   type: 'schedule' | 'hobby' | 'language';
@@ -53,12 +54,13 @@ const QuickActionButton: React.FC<QuickActionButtonProps> = ({ type, onClick }) 
 };
 
 const QuickActionButtons: React.FC = () => {
+  const navigate = useNavigate();
   const handleScheduleClick = () => {
     console.log('Schedule clicked');
   };
 
   const handleHobbyClick = () => {
-    console.log('Hobby clicked');
+    navigate('/myPage/hobby');
   };
 
   const handleLanguageClick = () => {
