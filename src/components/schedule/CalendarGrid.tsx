@@ -8,15 +8,21 @@ interface Props {
 
 export default function CalendarGrid({ schedules, selectedDate, onDateClick }: Props) {
   const today = new Date();
-  const year = 2025;
-  const month = 7; // 7월 (0-based index)
-  const startDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth(); // 0-based: 0 = 1월, 6 = 7월
+  // const year = 2025;
+  // const month = 7; // 7월 (0-based index)
+  // const startDay = new Date(year, month, 1).getDay();
+  // const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const startDay = new Date(currentYear, currentMonth, 1).getDay(); // 1일의 요일
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // 말일
+
 
   const getDateString = (d: number) => {
-    const mm = String(month + 1).padStart(2, '0');
+    const mm = String(currentMonth + 1).padStart(2, '0');
     const dd = String(d).padStart(2, '0');
-    return `${year}-${mm}-${dd}`;
+    return `${currentYear}-${mm}-${dd}`;
   };
 
   const hasSchedule = (d: number) =>
@@ -32,7 +38,7 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
 
   return (
     <div className="px-4 mt-4">
-      <div className="text-center text-xl font-bold">{`${year}. ${month + 1}.`}</div>
+      <div className="text-center text-xl font-bold">{`${currentYear}. ${currentMonth + 1}.`}</div>
       <div className="grid grid-cols-7 text-center mt-2 text-black-400 text-sm">
         {['월', '화', '수', '목', '금', '토', '일'].map((d) => (
           <div key={d}>{d}</div>
