@@ -72,9 +72,19 @@ const ChatRoom = () => {
         {Object.entries(groupedMessages).map(([date, msgs]) => (
           <div key={date}>
             <div className="text-center text-sm text-black-400 my-2">{date}</div>
-            {msgs.map((msg, idx) => (
+            {/* {msgs.map((msg, idx) => (
               <MessageBubble key={idx} message={msg} />
-            ))}
+            ))} */}
+            {msgs.map((msg, idx) => {
+              const prev = idx > 0 ? msgs[idx - 1] : null;
+              const isSameSender = prev && prev.sender === msg.sender;
+
+              const marginTop = isSameSender ? 'mt-1' : 'mt-5'; // 4px or 20px
+              return (
+                <MessageBubble key={idx} message={msg} marginTop={marginTop} />
+              );
+            })}
+
           </div>
         ))}
       </div>

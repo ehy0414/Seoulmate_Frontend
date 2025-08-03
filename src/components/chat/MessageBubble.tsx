@@ -7,13 +7,14 @@ interface Props {
     time: string;
     profileImg?: string;
   };
+  marginTop?: string;
 }
 
-const MessageBubble: React.FC<Props> = ({ message }) => {
+const MessageBubble: React.FC<Props> = ({ message, marginTop }) => {
   const isMe = message.sender === 'me';
 
   return (
-    <div className={`flex items-end ${isMe ? 'justify-end' : 'justify-start'} gap-2`}>
+    <div className={`flex items-end ${isMe ? 'justify-end' : 'justify-start'} gap-2 ${marginTop}`}>
       {!isMe && (
         <>
           <div className="w-8 h-8 rounded-full overflow-hidden bg-black-400 shrink-0">
