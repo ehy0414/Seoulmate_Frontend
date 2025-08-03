@@ -9,7 +9,7 @@ interface Props {
 export default function CalendarGrid({ schedules, selectedDate, onDateClick }: Props) {
   const today = new Date();
   const year = 2025;
-  const month = 6; // 7월 (0-based index)
+  const month = 7; // 7월 (0-based index)
   const startDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
@@ -24,6 +24,11 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
 
   const isSelected = (d: number) =>
     selectedDate === getDateString(d);
+
+  const isToday = (d: number) => {
+    const todayStr = today.toISOString().split('T')[0];
+    return todayStr === getDateString(d);
+  };
 
   return (
     <div className="px-4 mt-4">
@@ -46,10 +51,17 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
               onClick={() => onDateClick(dateStr)}
               className="relative w-full aspect-square flex items-center justify-center"
             >
-              <div
+              {/* <div
                 className={`w-8 h-8 flex items-center justify-center rounded-full ${
                   isSelected(day) ? 'bg-primary-500 text-white' : ''
                 }`}
+              > */}
+              <div
+                className={`
+                  w-8 h-8 flex items-center justify-center rounded-full
+                  ${isSelected(day) ? 'bg-primary-500 text-white' : ''}
+                  ${isToday(day) && !isSelected(day) ? 'border border-black-600' : ''}
+                `}
               >
                 {day}
               </div>

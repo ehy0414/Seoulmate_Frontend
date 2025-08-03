@@ -2,9 +2,16 @@ import { useState, useEffect } from 'react';
 
 import CalendarGrid from '../../components/schedule/CalendarGrid';
 import ScheduleList from '../../components/schedule/ScheduleList';
-
 import { mockSchedules } from '../../mock/schedule/schedules';
-import type { Schedule } from '../../mock/schedule/schedules';
+
+export interface Schedule {
+  id: number;
+  img: string;
+  title: string;
+  place: string;
+  date: string; // YYYY-MM-DD
+  isConfirmed: boolean;
+}
 
 const getTodayDateString = () => new Date().toISOString().split('T')[0];
 
