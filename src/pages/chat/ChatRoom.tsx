@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import MessageBubble from '../../components/chat/MessageBubble';
 import ChatInput from '../../components/chat/ChatInput';
+import notificationIcon from '../../assets/chat/notification-icon.png';
 
 interface Message {
   sender: 'me' | 'friend';
@@ -103,9 +104,9 @@ const ChatRoom = () => {
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-black-200">
         <div className="text-lg font-semibold">{friendName}</div>
-        <div>
-          <span className="material-icons">notifications</span>
-        </div>
+        <button>
+          <img src={notificationIcon} alt="Notifications" className="w-[24px] h-[24px]" />
+        </button>
       </div>
 
       {/* Messages */}

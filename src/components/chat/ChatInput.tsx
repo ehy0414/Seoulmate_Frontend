@@ -10,8 +10,8 @@ interface Props {
 
 const ChatInput: React.FC<Props> = ({ input, setInput, handleSend, handleKeyPress }) => {
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.nativeEvent.isComposing) return; // 한글 조합 중이면 무시
-    handleKeyPress(e); // 전달받은 로직 실행
+    if (e.nativeEvent.isComposing) return; 
+    handleKeyPress(e); 
   };
   return (
     <div className="border-t border-black-200 px-4 py-3 flex items-center">
