@@ -16,6 +16,8 @@ import FriendRequestPage from './pages/friend/FriendRequestPage'
 import MyPage from './pages/MyPage/MyPage'
 import MyProfile from './pages/MyPage/MyProfile'
 import MyHobby from './pages/MyPage/MyHobby'
+import ChatRoom from './pages/chat/ChatRoom'
+import Schedule from './pages/schedule/Schedule'
 
 function App() {
 
@@ -39,6 +41,8 @@ function App() {
         <Route path='/myPage' element={<MyPage/>} />
         <Route path='/myPage/profile' element={<MyProfile/>} />
         <Route path='/myPage/hobby' element={<MyHobby/>} />
+        <Route path='/chat' element={<ChatRoom />} />
+        <Route path='/schedule' element={<Schedule />} />
       </Routes>
     </BrowserRouter>
   )

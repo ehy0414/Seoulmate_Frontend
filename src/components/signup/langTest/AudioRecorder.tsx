@@ -1,21 +1,22 @@
-"use client";
-
 import { useState } from "react";
 import { useRecorder } from "../../../hooks/useRecorder";
 import { convertToWav } from "./convertToWav";
 import { SendIcon } from "./SendIcon";
 import { MicrophoneButton } from "./MicrophoneButton";
-import { FaStop, FaCheck  } from "react-icons/fa";
+import { FaStop, FaRedo } from "react-icons/fa";
+import RecordingPlayer from "./RecordingPlayer";
 
-
-type RecorderState = "idle" | "recording" | "readyToSend" | "sending" | "done";
+type RecorderState = "idle" | "recording" | "readyToSend" | "done";
 
 interface AudioRecorderProps {
   onScoreReady: (score: number) => void;
+  setIsSending: (isSending: boolean) => void; // 상위 컴포넌트의 로딩 상태를 변경하는 함수를 받습니다.
 }
 
-const AudioRecorder = ({ onScoreReady }: AudioRecorderProps) => {
+const AudioRecorder = ({ onScoreReady, setIsSending }: AudioRecorderProps) => {
   const { isRecording, startRecording, stopRecording } = useRecorder();
+  
+  // AudioRecorder 컴포넌트의 상태를 관리합니다.
   const [recorderState, setRecorderState] = useState<RecorderState>("idle");
   const [wavBlob, setWavBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -34,75 +35,77 @@ const AudioRecorder = ({ onScoreReady }: AudioRecorderProps) => {
     }
   };
 
+  const handleRestart = () => {
+    setWavBlob(null);
+    setAudioUrl(null);
+    setRecorderState("idle");
+  };
+
   const handleSend = async () => {
     if (!wavBlob) return;
-    setRecorderState("sending");
+    
+    // 전송 시작 시 상위 컴포넌트에 로딩 시작을 알립니다.
+    setIsSending(true);
 
     const formData = new FormData();
     formData.append("file", wavBlob, "recording.wav");
 
     try {
-      // 테스트용 딜레이
-      alert("음성파일이 제출되었습니다. 테스트는 10초가 걸리니 잠시 기다려주세요!");
+      // 실제 API 요청을 시뮬레이션하기 위해 3초의 딜레이를 추가했습니다.
       setTimeout(() => {
         const score = 13;
         onScoreReady(score);
-        setRecorderState("done");
-        setWavBlob(null);
-        setAudioUrl(null);
-
-        // 2초 후 다시 idle로 복귀
-        setTimeout(() => setRecorderState("idle"), 2000);
-    }, 10000);
-
-
-      // 실제 요청이라면 이 부분 사용:
+        setRecorderState("readyToSend");
+        setIsSending(false); // 딜레이 후 로딩 상태를 해제합니다.
+      }, 3000); // 3초 (3000ms) 딜레이
+      
+      // 실제 API 요청 코드 (필요하다면 주석을 해제하고 사용하세요):
       // const response = await fetch("/api/score", { method: "POST", body: formData });
       // const { score } = await response.json();
       // onScoreReady(score);
-      // setTimeout(() => setRecorderState("idle"), 2000);
+      // setRecorderState("readyToSend");
+      // setIsSending(false);
+
     } catch (err) {
-      alert("음성 분석에 실패했습니다.");
-      console.error(err);
+      console.error("음성 분석에 실패했습니다:", err);
       setRecorderState("readyToSend");
+      setIsSending(false);
     }
   };
 
   return (
-    <div className="flex gap-4 items-center m-5 h-40 w-[357px]">
-      <div className="flex items-center px-4 py-0 rounded-lg border bg-zinc-50 border-zinc-900 flex-1 h-[45px]">
-        <p className="text-sm font-medium text-zinc-900 truncate">
-          {audioUrl ? "녹음된 파일.wav" : "음성 파일을 녹음하세요"}
-        </p>
-      </div>
+    <div className="flex flex-col items-center gap-4 mx-auto h-40 w-[357px] relative">
 
-      {recorderState === "sending" ? (
-        <div className="flex justify-center items-center w-[45px] h-[45px]">
-            <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-primary-700" />
-        </div>
-        ) : recorderState === "done" ? (
-        <div className="flex justify-center items-center bg-primary-700 rounded-lg w-[45px] h-[45px]">
-            <FaCheck color="white" size={20} />
-        </div>
-        ) : recorderState === "readyToSend" ? (
-        <button
+      {audioUrl && <RecordingPlayer audioUrl={audioUrl} />}
+
+      {recorderState === "readyToSend" ? (
+        <div className="flex gap-4">
+          <button
+            onClick={handleRestart}
+            className="flex justify-center items-center bg-primary-700 hover:bg-primary-800 rounded-lg h-[45px] w-[45px] transition-colors"
+          >
+            <FaRedo color="white" size={20} />
+          </button>
+
+          <button
             onClick={handleSend}
-            className="flex justify-center items-center bg-primary-700 hover:bg-primary-800 rounded-lg w-[45px] h-[45px] transition-colors"
-        >
+            className="flex justify-center items-center bg-primary-700 hover:bg-primary-800 rounded-lg h-[45px] w-[45px] transition-colors"
+          >
             <SendIcon />
-        </button>
-        ) : (
+          </button>
+        </div>
+      ) : (
         <button
-            onClick={handleMicClick}
-            className="flex justify-center items-center bg-primary-700 hover:bg-primary-800 rounded-lg w-[45px] h-[45px] transition-colors"
+          onClick={handleMicClick}
+          className="flex justify-center mt-10 items-center bg-primary-700 hover:bg-primary-800 rounded-lg h-[45px] w-[45px] transition-colors"
         >
-            {recorderState === "recording" ? (
+          {recorderState === "recording" ? (
             <FaStop color="#fff" size={20} />
-            ) : (
+          ) : (
             <MicrophoneButton />
-            )}
+          )}
         </button>
-        )}
+      )}
     </div>
   );
 };
