@@ -48,11 +48,6 @@ const ChatRoom = () => {
     }
   };
 
-  // const groupedMessages = messages.reduce<{ [date: string]: Message[] }>((acc, msg) => {
-  //   if (!acc[msg.date]) acc[msg.date] = [];
-  //   acc[msg.date].push(msg);
-  //   return acc;
-  // }, {});
   const groupedMessages = useMemo(() => {
        return messages.reduce<{ [date: string]: Message[] }>((acc, msg) => {
        if (!acc[msg.date]) acc[msg.date] = [];
