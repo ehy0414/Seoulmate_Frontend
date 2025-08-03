@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import BottomNavBar from '../../components/common/BottomNavBar';
+import TabMenu from '../../components/common/TabMenu';
 import SearchIcon from '../../assets/common/bottom-navbar-search.svg?react';
 import ActiveSearchClub from '../../components/search/ActiveSearchClub';
 import ActiveSearchFriend from '../../components/search/ActiveSearchFriend';
@@ -8,8 +9,11 @@ import BackArrow from '../../assets/common/back-arrow.svg';
 import FloatingActionButton from '../../components/common/FloatingActionButton';
 
 const SearchHobby: React.FC = () => {
-    const [activeTab, setActiveTab] = useState<'club' | 'friend'>('club');
+    const [activeTab, setActiveTab] = useState('모임');
     const [searchValue, setSearchValue] = useState('');
+
+    const handleFirstTabClick = () => setActiveTab('모임');
+    const handleSecondTabClick = () => setActiveTab('친구');
 
     return (
         <div className=" w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white min-h-screen">
@@ -27,36 +31,15 @@ const SearchHobby: React.FC = () => {
             </div>
 
             {/* 메뉴바 */}
-            <div className="flex relative">
-                {/* 애니메이션되는 하단 선 */}
-                <div 
-                    className={`absolute bottom-0 w-1/2 h-[3px] bg-[#F45F3A] transition-transform duration-300 ease-in-out ${
-                        activeTab === 'friend' ? 'translate-x-full' : 'translate-x-0'
-                    }`}
-                />
-                
-                <button
-                    onClick={() => setActiveTab('club')}
-                    className={`flex-1 py-3 text-center text-sm ${
-                        activeTab === 'club'
-                            ? 'text-black-700 font-[600]'
-                            : 'text-black-600 font-[500] border-b border-gray-200'
-                    }`}
-                >       
-                    모임
-                </button>
-                <button
-                    onClick={() => setActiveTab('friend')}
-                    className={`flex-1 py-3 text-center text-sm ${
-                        activeTab === 'friend'
-                            ? 'text-black-700 font-[600]'
-                            : 'text-black-600 font-[500] border-b border-gray-200'
-                    }`}
-                >
-                    친구
-                </button>
-            </div>
-            {activeTab === 'club' ? (
+            <TabMenu
+                firstTabText="모임"
+                secondTabText="친구"
+                activeTab={activeTab}
+                onFirstTabClick={handleFirstTabClick}
+                onSecondTabClick={handleSecondTabClick}
+            />
+
+            {activeTab === '모임' ? (
                 <ActiveSearchClub />
             ) : (
                 searchValue.trim() === ''
@@ -69,7 +52,7 @@ const SearchHobby: React.FC = () => {
             <FloatingActionButton/>
 
             {/* 하단 네비게이션바 */}
-            <BottomNavBar />
+            <BottomNavBar menu="search"/>
         </div>
     );
 };
