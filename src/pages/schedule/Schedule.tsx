@@ -33,7 +33,7 @@ export default function Schedule() {
       <ScheduleList date={selectedDate} schedules={schedules} />
 
       {/* + 버튼 */}
-      <button className="fixed bottom-6 right-6 bg-primary-700 text-white rounded-full w-14 h-14 text-3xl flex items-center justify-center shadow-lg">
+      <button className="absolute bottom-6 right-6 bg-primary-700 text-white rounded-full w-14 h-14 text-3xl flex items-center justify-center shadow-lg">
         +
       </button>
     </div>
