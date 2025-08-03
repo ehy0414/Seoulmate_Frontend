@@ -15,6 +15,7 @@ import FriendPage from './pages/friend/FriendPage'
 import FriendRequestPage from './pages/friend/FriendRequestPage'
 import MyPage from './pages/MyPage/MyPage'
 import MyProfile from './pages/MyPage/MyProfile'
+import MyHobby from './pages/MyPage/MyHobby'
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
         <Route path='/friend/request' element={<FriendRequestPage />} />
         <Route path='/myPage' element={<MyPage/>} />
         <Route path='/myPage/profile' element={<MyProfile/>} />
+        <Route path='/myPage/hobby' element={<MyHobby/>} />
       </Routes>
     </BrowserRouter>
   )
