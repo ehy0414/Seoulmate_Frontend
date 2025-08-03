@@ -14,6 +14,7 @@ import CreateMeeting from './pages/CreateMeeting/CreateMeeting'
 import FriendPage from './pages/friend/FriendPage'
 import FriendRequestPage from './pages/friend/FriendRequestPage'
 import ChatRoom from './pages/chat/ChatRoom'
+import Schedule from './pages/schedule/Schedule'
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
         <Route path='/friend' element={<FriendPage />} />
         <Route path='/friend/request' element={<FriendRequestPage />} />
         <Route path='/chat' element={<ChatRoom />} />
+        <Route path='/schedule' element={<Schedule />} />
       </Routes>
     </BrowserRouter>
   )
