@@ -1,4 +1,6 @@
 import type { Schedule } from '../../pages/schedule/Schedule';
+import leftArrow from '../../assets/schedule/left-arrow.png';
+import rightArrow from '../../assets/schedule/right-arrow.png';
 
 interface Props {
   schedules: Schedule[];
@@ -51,7 +53,15 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
 
   return (
     <div className="px-4 mt-4">
-      <div className="text-center text-xl font-bold">{`${currentYear}. ${currentMonth + 1}.`}</div>
+      <div className="flex justify-between items-center text-[24px] font-bold px-4 py-4">
+        <button>
+          <img src={leftArrow} alt="Previous Month" className="w-[24px] h-[24px]" />
+        </button>
+        <span>{`${currentYear}. ${currentMonth + 1}.`}</span>
+        <button>
+          <img src={rightArrow} alt="Next Month" className="w-[24px] h-[24px]" />
+        </button>
+      </div>
 
       <div className="grid grid-cols-7 text-center mt-2 text-black-400 text-sm">
         {['일', '월', '화', '수', '목', '금', '토'].map((d) => (
