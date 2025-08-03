@@ -10,7 +10,7 @@ export const ProgressBar: React.FC<ProgressIndicatorProps> = ({
   totalSteps = 4
 }) => {
   return (
-    <nav className="mx-auto flex gap-2 items-center mt-9 text-xs font-medium text-center whitespace-nowrap text-zinc-50">
+    <nav className="fixed top-0 mx-auto flex gap-2 items-center mt-9 text-xs font-medium text-center whitespace-nowrap text-zinc-50">
       {Array.from({ length: totalSteps }, (_, index) => {
         const stepNumber = index + 1;
         const isHighlighted = stepNumber <= currentStep;
