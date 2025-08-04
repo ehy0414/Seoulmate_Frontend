@@ -5,6 +5,7 @@ import ScheduleList from '../../components/schedule/ScheduleList';
 import { mockSchedules } from '../../mock/schedule/schedules';
 import BottomNavBar from '../../components/common/BottomNavBar';
 import TabMenu from '../../components/common/TabMenu';
+import NoAlarmBackHeader from '../../components/common/NoAlarmBackHeader';
 
 export interface Schedule {
   id: number;
@@ -31,6 +32,7 @@ export default function Schedule() {
 
   return (
     <div className="relative min-h-screen bg-white pb-[100px]">
+      <NoAlarmBackHeader title="일정" />
       <TabMenu
         firstTabText={FIRST_TAB}
         secondTabText={SECOND_TAB}
