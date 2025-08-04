@@ -26,7 +26,7 @@ const MyHobby: React.FC = () => {
   };
 
   const handleNotificationClick = () => {
-    console.log('Notification clicked');
+    navigate('/alarm');
   };
 
   const handleHobbySelect = (hobby: string) => {
