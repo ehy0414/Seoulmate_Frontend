@@ -13,7 +13,7 @@ const MyProfile: React.FC = () => {
   };
 
   const handleNotificationClick = () => {
-    console.log('Notification clicked');
+    navigate('/alarm');
   };
 
   const handleEditProfile = () => {
