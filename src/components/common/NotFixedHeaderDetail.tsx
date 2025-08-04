@@ -1,19 +1,31 @@
 "use client";
 import * as React from "react";
+import { useNavigate } from 'react-router-dom';
 
 interface TopBarProps {
   title: string;
   onBackClick?: () => void;
   onNotificationClick?: () => void;
+  showBorder?: boolean;
 }
 
 export const NotFixedHeaderDetail: React.FC<TopBarProps> = ({
   title,
   onBackClick,
-  onNotificationClick
+  onNotificationClick,
+  showBorder = true
 }) => {
+  const navigate = useNavigate();
+
+  const handleNotificationClick = () => {
+    if (onNotificationClick) {
+      onNotificationClick();
+    } else {
+      navigate('/alarm');
+    }
+  };
   return (
-    <header className="top-0 px-[18px] flex z-40 justify-between items-center bg-white border-b border-solid border-b-black-300 h-[60px] w-full max-w-[clamp(360px,100vw,430px)]">
+    <header className={`top-0 px-[18px] flex z-40 justify-between items-center bg-white h-[60px] w-full max-w-[clamp(360px,100vw,430px)] ${showBorder ? 'border-b border-solid border-b-black-300' : ''}`}>
       <button onClick={onBackClick} aria-label="뒤로 가기">
         <div
           dangerouslySetInnerHTML={{
@@ -25,7 +37,7 @@ export const NotFixedHeaderDetail: React.FC<TopBarProps> = ({
         <h1 className="absolute left-1/2 transform -translate-x-1/2 text-base font-bold text-zinc-900">
             {title}
         </h1>
-      <button onClick={onNotificationClick} aria-label="알림">
+      <button onClick={handleNotificationClick} aria-label="알림">
         <div
           dangerouslySetInnerHTML={{
             __html:

@@ -29,7 +29,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ menu }) => {
         // navigate('/friend');
         break;
       case 'chat':
-        // navigate('/chat');
+        navigate('/chat/list');
         break;
       case 'profile':
         navigate('/myPage');
