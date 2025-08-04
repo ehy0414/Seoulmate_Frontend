@@ -4,16 +4,17 @@ import { useNavigate } from 'react-router-dom';
 interface TopBarProps {
   title: string;
   alarm: boolean;
+  showBorder?: boolean;
 }
 
-export const NoFixedHeaderSeoulmate: React.FC<TopBarProps> = ({ title, alarm }) => {
+export const NoFixedHeaderSeoulmate: React.FC<TopBarProps> = ({ title, alarm, showBorder = false }) => {
   const navigate = useNavigate();
 
   const handleAlarmClick = () => {
     navigate('/alarm');
   };
   return (
-    <header className="px-[18px] flex justify-between items-center bg-white h-[60px] w-full max-w-[clamp(360px,100vw,430px)]">
+    <header className={`px-[18px] flex justify-between items-center bg-white h-[60px] w-full max-w-[clamp(360px,100vw,430px)] ${showBorder ? 'border-b border-solid border-b-black-300' : ''}`}>
       <h1 className="text-2xl font-yangjin text-primary-700 cursor-pointer">
         {title}
       </h1>
