@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import CalendarGrid from '../../components/schedule/CalendarGrid';
 import ScheduleList from '../../components/schedule/ScheduleList';
@@ -14,7 +14,7 @@ export interface Schedule {
 }
 
 export default function Schedule() {
-  const todayDate = new Date(); 
+  const todayDate = useMemo(() => new Date(), []);
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -37,10 +37,6 @@ export default function Schedule() {
         date={selectedDate}       
         schedules={schedules}
       />
-
-      <button className="absolute bottom-6 right-6 bg-primary-700 text-white rounded-full w-14 h-14 text-3xl flex items-center justify-center shadow-lg">
-        +
-      </button>
     </div>
   );
 }
