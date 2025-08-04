@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Schedule } from '../../pages/schedule/Schedule';
 import leftArrow from '../../assets/schedule/left-arrow.png';
 import rightArrow from '../../assets/schedule/right-arrow.png';
@@ -12,15 +13,17 @@ interface Props {
 }
 
 export default function CalendarGrid({ schedules, selectedDate, onDateClick, todayDate }: Props) {
-  const currentYear = todayDate.getFullYear();
-  const currentMonth = todayDate.getMonth();
+  const [currentDate, setCurrentDate] = useState<Date>(todayDate);
+
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
 
   const startOfMonth = new Date(currentYear, currentMonth, 1);
   const startDay = startOfMonth.getDay();
   const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
-  const totalCells = 42; 
+  const totalCells = 42;
   const calendarDays: { date: Date; isCurrentMonth: boolean }[] = [];
 
   for (let i = 0; i < totalCells; i++) {
@@ -50,14 +53,22 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick, tod
   const isToday = (date: Date) =>
     getDateString(date) === getDateString(todayDate);
 
+  const goToPrevMonth = () => {
+    setCurrentDate(new Date(currentYear, currentMonth - 1, 1));
+  };
+
+  const goToNextMonth = () => {
+    setCurrentDate(new Date(currentYear, currentMonth + 1, 1));
+  };
+
   return (
     <div className="px-4 mt-4">
       <div className="flex justify-between items-center text-[24px] font-bold px-4 py-4">
-        <button>
+        <button onClick={goToPrevMonth}>
           <img src={leftArrow} alt="Previous Month" className="w-[24px] h-[24px]" />
         </button>
         <span>{`${currentYear}. ${currentMonth + 1}.`}</span>
-        <button>
+        <button onClick={goToNextMonth}>
           <img src={rightArrow} alt="Next Month" className="w-[24px] h-[24px]" />
         </button>
       </div>
@@ -78,7 +89,7 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick, tod
           return (
             <button
               key={i}
-              onClick={() => onDateClick(date)} 
+              onClick={() => onDateClick(date)}
               className="relative w-full h-[60px] mt-[4px] aspect-square flex justify-center border-b border-black"
             >
               <div
