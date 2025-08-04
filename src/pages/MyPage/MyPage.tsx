@@ -7,7 +7,7 @@ const MyPage: React.FC = () => {
   return (
     <div className="w-full max-h-screen bg-white flex flex-col mx-auto">
       {/* Top Bar */}
-      <NoFixedHeaderSeoulmate title="서울메이트" alarm={true} />
+      <NoFixedHeaderSeoulmate title="서울메이트" alarm={true} showBorder={true} />
 
       {/* Profile Section */}
       <ProfileSection
