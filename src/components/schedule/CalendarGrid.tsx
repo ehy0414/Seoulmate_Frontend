@@ -1,24 +1,29 @@
+import { useState } from 'react';
 import type { Schedule } from '../../pages/schedule/Schedule';
 import leftArrow from '../../assets/schedule/left-arrow.png';
 import rightArrow from '../../assets/schedule/right-arrow.png';
 
+import { getDateString } from '../../utils/date';
+
 interface Props {
   schedules: Schedule[];
-  selectedDate: string;
-  onDateClick: (date: string) => void;
+  selectedDate: Date;
+  onDateClick: (date: Date) => void;
+  todayDate: Date;
 }
 
-export default function CalendarGrid({ schedules, selectedDate, onDateClick }: Props) {
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth(); 
+export default function CalendarGrid({ schedules, selectedDate, onDateClick, todayDate }: Props) {
+  const [currentDate, setCurrentDate] = useState<Date>(todayDate);
+
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth();
 
   const startOfMonth = new Date(currentYear, currentMonth, 1);
-  const startDay = startOfMonth.getDay(); // 요일: 0(일) ~ 6(토)
+  const startDay = startOfMonth.getDay();
   const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
-  const totalCells = 42; // 6주
+  const totalCells = 42;
   const calendarDays: { date: Date; isCurrentMonth: boolean }[] = [];
 
   for (let i = 0; i < totalCells; i++) {
@@ -26,39 +31,44 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
     let date: Date;
     let isCurrentMonth = true;
 
-    if (dayOffset <= 0) { // 이전 달
+    if (dayOffset <= 0) {
       date = new Date(currentYear, currentMonth - 1, daysInPrevMonth + dayOffset);
       isCurrentMonth = false;
-    } else if (dayOffset > daysInCurrentMonth) { // 다음 달
+    } else if (dayOffset > daysInCurrentMonth) {
       date = new Date(currentYear, currentMonth + 1, dayOffset - daysInCurrentMonth);
       isCurrentMonth = false;
-    } else { // 이번 달
+    } else {
       date = new Date(currentYear, currentMonth, dayOffset);
     }
 
     calendarDays.push({ date, isCurrentMonth });
   }
 
-  const getDateString = (date: Date) =>
-    date.toISOString().split('T')[0];
-
   const hasSchedule = (date: Date) =>
     schedules.some((s) => s.date === getDateString(date));
 
   const isSelected = (date: Date) =>
-    selectedDate === getDateString(date);
+    getDateString(date) === getDateString(selectedDate);
 
   const isToday = (date: Date) =>
-    today.toISOString().split('T')[0] === getDateString(date);
+    getDateString(date) === getDateString(todayDate);
+
+  const goToPrevMonth = () => {
+    setCurrentDate(new Date(currentYear, currentMonth - 1, 1));
+  };
+
+  const goToNextMonth = () => {
+    setCurrentDate(new Date(currentYear, currentMonth + 1, 1));
+  };
 
   return (
     <div className="px-4 mt-4">
       <div className="flex justify-between items-center text-[24px] font-bold px-4 py-4">
-        <button>
+        <button onClick={goToPrevMonth}>
           <img src={leftArrow} alt="Previous Month" className="w-[24px] h-[24px]" />
         </button>
         <span>{`${currentYear}. ${currentMonth + 1}.`}</span>
-        <button>
+        <button onClick={goToNextMonth}>
           <img src={rightArrow} alt="Next Month" className="w-[24px] h-[24px]" />
         </button>
       </div>
@@ -72,7 +82,6 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
       <div className="grid grid-cols-7 text-center text-base mt-2">
         {calendarDays.map(({ date, isCurrentMonth }, i) => {
           const day = date.getDate();
-          const dateStr = getDateString(date);
           const selected = isSelected(date);
           const todayMark = isToday(date);
           const scheduled = hasSchedule(date);
@@ -80,7 +89,7 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
           return (
             <button
               key={i}
-              onClick={() => onDateClick(dateStr)}
+              onClick={() => onDateClick(date)}
               className="relative w-full h-[60px] mt-[4px] aspect-square flex justify-center border-b border-black"
             >
               <div

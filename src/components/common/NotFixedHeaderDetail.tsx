@@ -49,3 +49,5 @@ export const NotFixedHeaderDetail: React.FC<TopBarProps> = ({
     </header>
   );
 };
+
+export default NotFixedHeaderDetail;
