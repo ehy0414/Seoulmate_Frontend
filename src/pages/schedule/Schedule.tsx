@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import CalendarGrid from '../../components/schedule/CalendarGrid';
 import ScheduleList from '../../components/schedule/ScheduleList';
 import { mockSchedules } from '../../mock/schedule/schedules';
+import BottomNavBar from '../../components/common/BottomNavBar';
 
 export interface Schedule {
   id: number;
@@ -37,6 +38,7 @@ export default function Schedule() {
         date={selectedDate}       
         schedules={schedules}
       />
+      <BottomNavBar menu = 'profile'/>
     </div>
   );
 }

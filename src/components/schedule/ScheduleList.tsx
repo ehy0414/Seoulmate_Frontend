@@ -13,7 +13,7 @@ export default function ScheduleList({ date, schedules }: Props) {
 
   return (
     <div className="px-4 mt-6">
-      <div className="text-base font-semibold mb-4">
+      <div className="text-base mb-4">
         {month}월 {day}일의 일정
       </div>
 
