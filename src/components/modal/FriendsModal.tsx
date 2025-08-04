@@ -17,7 +17,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
   const startHeight = useRef<number>(60);
   const dragging = useRef(false);
 
-  const [height, setHeight] = useState(60);
+  const [height, setHeight] = useState(90);
 
   // 드래그에 따라 높이 업데이트 (실시간 반영)
   const updateHeight = (deltaY: number) => {
@@ -46,22 +46,41 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
   };
 
   useEffect(() => {
-  if (isVisible) {
-    // 모달이 열렸을 때 body 스크롤 막기
-    document.body.style.overflow = "hidden";
-    document.body.style.touchAction = "none"; // 모바일에서 더 확실히 방지
-  } else {
-    // 모달이 닫히면 다시 허용
-    document.body.style.overflow = "";
-    document.body.style.touchAction = "";
-  }
+    if (isVisible) {
+      // 모달이 열렸을 때 body 스크롤 막기
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none"; // 모바일에서 더 확실히 방지
+    } else {
+      // 모달이 닫히면 다시 허용
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    }
 
-  return () => {
-    // 컴포넌트 언마운트 시 스크롤 복구
-    document.body.style.overflow = "";
-    document.body.style.touchAction = "";
-  };
+    return () => {
+      // 컴포넌트 언마운트 시 스크롤 복구
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    };
 }, [isVisible]);
+
+  // 모달창이 닫혔을 때 height값을 다시 90으로 설정 
+  // onClose때 setHeight(90)으로 하면 짧은 순간의 리렌더링돼서 깜빡임 현상을 없애려고 추가
+  useEffect(() => {
+    const modalEl = modalRef.current;
+
+    const handleTransitionEnd = () => {
+      if (!isVisible) {
+        setHeight(90);
+      }
+    };
+
+    modalEl?.addEventListener("transitionend", handleTransitionEnd);
+
+    return () => {
+      modalEl?.removeEventListener("transitionend", handleTransitionEnd);
+    };
+  }, [isVisible]);
+
 
 
   useEffect(() => {

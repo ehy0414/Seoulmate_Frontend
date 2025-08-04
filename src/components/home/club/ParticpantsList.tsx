@@ -1,5 +1,5 @@
-import * as React from "react";
-import { FriendsModal } from "../modal/FriendsModal";
+import { useState } from "react";
+import { FriendsModal } from "../../modal/FriendsModal";
 import { EmptySlot } from "./EmptySlot";
 
 interface Participant {
@@ -43,7 +43,7 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({
   title = "참여하는 사람",
   maxParticipants
 }) => {
-  const [isModalVisible, setModalVisible] = React.useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const openModal = () => setModalVisible(true);
   const closeModal = () => setModalVisible(false);
 

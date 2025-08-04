@@ -1,6 +1,7 @@
 "use client";
-import * as React from "react";
+import { useState } from "react";
 import { UserListItem } from "./UserListItem";
+import { FriendsModal } from "../modal/FriendsModal";
 
 interface User {
   id: string;
@@ -20,6 +21,9 @@ export const UserList: React.FC<UserListProps> = ({ users }) => {
   }));
 
   const userList = users || defaultUsers;
+  const [isModalVisible, setModalVisible] = useState(false);
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
 
   return (
     <section className="w-full whitespace-nowrap h-[595px]" role="list" aria-label="친구 목록">
@@ -28,8 +32,11 @@ export const UserList: React.FC<UserListProps> = ({ users }) => {
           key={user.id}
           name={user.name}
           percentage={user.percentage}
+          onClick={openModal}
         />
       ))}
+
+    <FriendsModal isVisible={isModalVisible} onClose={closeModal} />
     </section>
   );
 };
