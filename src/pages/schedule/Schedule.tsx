@@ -16,6 +16,8 @@ export interface Schedule {
 const getTodayDateString = () => new Date().toISOString().split('T')[0];
 
 export default function Schedule() {
+  const todayDate = new Date(); // 한 번만 생성
+
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString());
   const [schedules, setSchedules] = useState<Schedule[]>([]);
 
@@ -29,8 +31,12 @@ export default function Schedule() {
         schedules={mockSchedules}
         selectedDate={selectedDate}
         onDateClick={setSelectedDate}
+        todayDate={todayDate}
       />
-      <ScheduleList date={selectedDate} schedules={schedules} />
+      <ScheduleList 
+        date={selectedDate} 
+        schedules={schedules} 
+      />
 
       {/* + 버튼 */}
       <button className="absolute bottom-6 right-6 bg-primary-700 text-white rounded-full w-14 h-14 text-3xl flex items-center justify-center shadow-lg">

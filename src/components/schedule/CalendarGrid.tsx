@@ -6,15 +6,15 @@ interface Props {
   schedules: Schedule[];
   selectedDate: string;
   onDateClick: (date: string) => void;
+  todayDate: Date;
 }
 
-export default function CalendarGrid({ schedules, selectedDate, onDateClick }: Props) {
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth(); 
+export default function CalendarGrid({ schedules, selectedDate, onDateClick, todayDate }: Props) {
+  const currentYear = todayDate.getFullYear();
+  const currentMonth = todayDate.getMonth();
 
   const startOfMonth = new Date(currentYear, currentMonth, 1);
-  const startDay = startOfMonth.getDay(); // 요일: 0(일) ~ 6(토)
+  const startDay = startOfMonth.getDay();
   const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
@@ -49,7 +49,7 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick }: P
     selectedDate === getDateString(date);
 
   const isToday = (date: Date) =>
-    today.toISOString().split('T')[0] === getDateString(date);
+    todayDate.toISOString().split('T')[0] === getDateString(date);
 
   return (
     <div className="px-4 mt-4">
