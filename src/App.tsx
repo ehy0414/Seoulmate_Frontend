@@ -33,7 +33,7 @@ function App() {
         <Route path='/signUp/hobby' element={<HobbySelectionPage />} />
         <Route path='/signUp/school' element={<SchoolVerifyPage />} />
         <Route path='/signUp/wait' element={<SchoolVerificationPage />} />
-        <Route path='/search/hobby' element={<SearchHobby />} />
+        <Route path='/search' element={<SearchHobby />} />
         <Route path='/home' element={<HomePage />} />
         <Route path='/meeting/:id' element={<MeetingDetailPage />} />
         <Route path='/club/:id' element={<ClubDetailPage />} />

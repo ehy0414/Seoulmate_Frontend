@@ -56,7 +56,7 @@ const QuickActionButton: React.FC<QuickActionButtonProps> = ({ type, onClick }) 
 const QuickActionButtons: React.FC = () => {
   const navigate = useNavigate();
   const handleScheduleClick = () => {
-    console.log('Schedule clicked');
+    navigate('/schedule')
   };
 
   const handleHobbyClick = () => {
