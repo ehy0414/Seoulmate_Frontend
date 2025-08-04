@@ -18,6 +18,7 @@ import MyProfile from './pages/MyPage/MyProfile'
 import MyHobby from './pages/MyPage/MyHobby'
 import ChatRoom from './pages/chat/ChatRoom'
 import Schedule from './pages/schedule/Schedule'
+import ChatList from './pages/chat/ChatList'
 
 function App() {
 
@@ -43,6 +44,7 @@ function App() {
         <Route path='/myPage/hobby' element={<MyHobby/>} />
         <Route path='/chat' element={<ChatRoom />} />
         <Route path='/schedule' element={<Schedule />} />
+        <Route path='/chat/list' element={<ChatList />} />
       </Routes>
     </BrowserRouter>
   )

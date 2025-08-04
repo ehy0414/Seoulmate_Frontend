@@ -69,8 +69,6 @@ const MyProfile: React.FC = () => {
         </div>
       </div>
 
-      {/* Floating Action Button */}
-      <FloatingActionButton />
 
       {/* Bottom Navigation */}
       <BottomNavBar menu="profile" />
