@@ -9,7 +9,7 @@ import RecordingPlayer from "./RecordingPlayer";
 type RecorderState = "idle" | "recording" | "readyToSend" | "done";
 
 interface AudioRecorderProps {
-  onScoreReady: (score: number) => void;
+  onScoreReady: (score: number | null) => void;
   setIsSending: (isSending: boolean) => void; // 상위 컴포넌트의 로딩 상태를 변경하는 함수를 받습니다.
 }
 
@@ -38,6 +38,7 @@ const AudioRecorder = ({ onScoreReady, setIsSending }: AudioRecorderProps) => {
   const handleRestart = () => {
     setWavBlob(null);
     setAudioUrl(null);
+    onScoreReady(null);
     setRecorderState("idle");
   };
 
