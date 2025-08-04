@@ -1,14 +1,13 @@
 import React from 'react';
 import { ProfileSection, QuickActionButtons, MenuSection } from '../../components/MyPage';
 import BottomNavBar from '../../components/common/BottomNavBar';
-import FloatingActionButton from '../../components/common/FloatingActionButton';
-import { HeaderSeoulmate } from '../../components/common/HeaderSeoulmate';
+import NoFixedHeaderSeoulmate from '../../components/common/NoFixedHeaderSeoulmate';
 
 const MyPage: React.FC = () => {
   return (
-    <div className="w-full max-h-screen bg-white flex flex-col mx-auto pt-[60px]">
+    <div className="w-full max-h-screen bg-white flex flex-col mx-auto">
       {/* Top Bar */}
-      <HeaderSeoulmate title="서울메이트" alarm={true} />
+      <NoFixedHeaderSeoulmate title="서울메이트" alarm={true} />
 
       {/* Profile Section */}
       <ProfileSection
