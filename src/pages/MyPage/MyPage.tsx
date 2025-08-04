@@ -23,9 +23,6 @@ const MyPage: React.FC = () => {
       {/* Menu Section */}
       <MenuSection />
 
-      {/* Floating Action Button */}
-      <FloatingActionButton />
-
       {/* Bottom Navigation */}
       <BottomNavBar menu="profile" />
     </div>
