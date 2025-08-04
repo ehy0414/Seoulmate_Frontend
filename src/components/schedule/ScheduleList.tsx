@@ -2,7 +2,7 @@ import type { Schedule } from "../../pages/schedule/Schedule";
 import ScheduleItem from "../../components/schedule/ScheduleItem";
 
 interface Props {
-  date: string;
+  date: Date;
   schedules: Schedule[];
 }
 

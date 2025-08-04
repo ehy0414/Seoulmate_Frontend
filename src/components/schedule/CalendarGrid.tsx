@@ -4,8 +4,8 @@ import rightArrow from '../../assets/schedule/right-arrow.png';
 
 interface Props {
   schedules: Schedule[];
-  selectedDate: string;
-  onDateClick: (date: string) => void;
+  selectedDate: Date;
+  onDateClick: (date: Date) => void;
   todayDate: Date;
 }
 
@@ -18,7 +18,7 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick, tod
   const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
-  const totalCells = 42; // 6주
+  const totalCells = 42; 
   const calendarDays: { date: Date; isCurrentMonth: boolean }[] = [];
 
   for (let i = 0; i < totalCells; i++) {
@@ -26,30 +26,29 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick, tod
     let date: Date;
     let isCurrentMonth = true;
 
-    if (dayOffset <= 0) { // 이전 달
+    if (dayOffset <= 0) {
       date = new Date(currentYear, currentMonth - 1, daysInPrevMonth + dayOffset);
       isCurrentMonth = false;
-    } else if (dayOffset > daysInCurrentMonth) { // 다음 달
+    } else if (dayOffset > daysInCurrentMonth) {
       date = new Date(currentYear, currentMonth + 1, dayOffset - daysInCurrentMonth);
       isCurrentMonth = false;
-    } else { // 이번 달
+    } else {
       date = new Date(currentYear, currentMonth, dayOffset);
     }
 
     calendarDays.push({ date, isCurrentMonth });
   }
 
-  const getDateString = (date: Date) =>
-    date.toISOString().split('T')[0];
+  const getDateString = (date: Date) => date.toISOString().split('T')[0];
 
   const hasSchedule = (date: Date) =>
     schedules.some((s) => s.date === getDateString(date));
 
   const isSelected = (date: Date) =>
-    selectedDate === getDateString(date);
+    getDateString(date) === getDateString(selectedDate);
 
   const isToday = (date: Date) =>
-    todayDate.toISOString().split('T')[0] === getDateString(date);
+    getDateString(date) === getDateString(todayDate);
 
   return (
     <div className="px-4 mt-4">
@@ -72,7 +71,6 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick, tod
       <div className="grid grid-cols-7 text-center text-base mt-2">
         {calendarDays.map(({ date, isCurrentMonth }, i) => {
           const day = date.getDate();
-          const dateStr = getDateString(date);
           const selected = isSelected(date);
           const todayMark = isToday(date);
           const scheduled = hasSchedule(date);
@@ -80,7 +78,7 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick, tod
           return (
             <button
               key={i}
-              onClick={() => onDateClick(dateStr)}
+              onClick={() => onDateClick(date)} 
               className="relative w-full h-[60px] mt-[4px] aspect-square flex justify-center border-b border-black"
             >
               <div
