@@ -2,6 +2,8 @@ import type { Schedule } from '../../pages/schedule/Schedule';
 import leftArrow from '../../assets/schedule/left-arrow.png';
 import rightArrow from '../../assets/schedule/right-arrow.png';
 
+import { getDateString } from '../../utils/date';
+
 interface Props {
   schedules: Schedule[];
   selectedDate: Date;
@@ -38,8 +40,6 @@ export default function CalendarGrid({ schedules, selectedDate, onDateClick, tod
 
     calendarDays.push({ date, isCurrentMonth });
   }
-
-  const getDateString = (date: Date) => date.toISOString().split('T')[0];
 
   const hasSchedule = (date: Date) =>
     schedules.some((s) => s.date === getDateString(date));
