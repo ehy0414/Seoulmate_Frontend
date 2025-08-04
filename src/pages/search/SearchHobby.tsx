@@ -48,8 +48,6 @@ const SearchHobby: React.FC = () => {
             )}
             
 
-            {/* FAB 플러스 버튼 */}
-            <FloatingActionButton/>
 
             {/* 하단 네비게이션바 */}
             <BottomNavBar menu="search"/>
