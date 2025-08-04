@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import BackArrow from '../../assets/common/back-arrow.svg';
+import NoAlarmBackHeader from '../../components/common/NoAlarmBackHeader';
 import {
   MeetingTitleInput,
   PhotoUploadSection,
@@ -52,11 +52,6 @@ export const CreateMeeting: React.FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleGoBack = () => {
-    // React Router를 통한 뒤로가기
-    navigate(-1);
-  };
-
   const handleCreateMeeting = () => {
     navigate('/create-meeting');
   };
@@ -80,17 +75,7 @@ export const CreateMeeting: React.FC = () => {
   return (
     <div className="flex overflow-hidden flex-col w-full bg-white">
       {/* Header */}
-      <div className="flex items-center px-[18px] w-full bg-white border-b border-solid border-black-300 h-[60px]">
-        <button
-          onClick={handleGoBack}
-          className="flex justify-center items-center w-6 h-6"
-        >
-          <img src={BackArrow} alt="뒤로가기"/>
-        </button>
-        <div className="text-base font-bold text-black-700 mx-auto pr-6">
-          모임 개설
-        </div>
-      </div>
+      <NoAlarmBackHeader title="모임 개설" />
 
       {/* Main content */}
       <div className="self-center w-full h-auto px-[18px] flex flex-col gap-[2.35vh]">

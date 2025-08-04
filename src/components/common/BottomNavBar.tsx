@@ -5,6 +5,7 @@ import SearchIcon from '../../assets/common/bottom-navbar-search.svg?react';
 import FriendIcon from '../../assets/common/bottom-navbar-friend.svg?react';
 import ChatIcon from '../../assets/common/bottom-navbar-chat.svg?react';
 import ProfileIcon from '../../assets/common/bottom-navbar-profile.svg?react';
+import PlusIcon from '../../assets/common/plus.svg';
 
 interface BottomNavBarProps {
   menu: 'home' | 'search' | 'friend' | 'chat' | 'profile';
@@ -28,7 +29,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ menu }) => {
         // navigate('/friend');
         break;
       case 'chat':
-        // navigate('/chat');
+        navigate('/chat/list');
         break;
       case 'profile':
         navigate('/myPage');
@@ -36,8 +37,26 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ menu }) => {
     }
   };
 
+  const handleFloatingButtonClick = () => {
+    navigate('/create-meeting');
+  };
+
     return (
-        <div className="fixed bottom-0 left-0 right-0 w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white shadow-[0_-1px_0_#AFA9A9] rounded-t-lg">
+        <>
+            {/* Floating Action Button */}
+            <div className="fixed bottom-[78px] right-1/2 transform translate-x-[50%] max-w-[430px] w-full">
+                <div className="flex justify-end pr-[18px]">
+                    <button 
+                        onClick={handleFloatingButtonClick}
+                        className="w-[50px] h-[50px] bg-[#F45F3A] rounded-full flex items-center justify-center shadow-lg"
+                    >
+                        <img src={PlusIcon} alt='플로팅 버튼' />
+                    </button>
+                </div>
+            </div>
+            
+            {/* Bottom Navigation Bar */}
+            <div className="fixed bottom-0 left-0 right-0 w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white shadow-[0_-1px_0_#AFA9A9] rounded-t-lg">
             <div className="flex justify-around py-[18px]">
                 <div
                     className="w-6 h-6 flex items-center justify-center cursor-pointer"
@@ -70,7 +89,8 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ menu }) => {
                     <ProfileIcon fill={activeTab === 'profile' ? '#F45F3A' : '#AFA9A9'} width={24} height={24} />
                 </div>
             </div>
-        </div>
+            </div>
+        </>
     );
 };
 

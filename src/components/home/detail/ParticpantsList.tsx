@@ -1,5 +1,5 @@
 import * as React from "react";
-import { FriendsModal } from "../modal/FriendsModal";
+import { FriendsModal } from "../../modal/FriendsModal";
 
 interface Participant {
   id: string;
