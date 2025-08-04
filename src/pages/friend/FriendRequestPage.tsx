@@ -5,6 +5,7 @@ import { MenuBar } from "../../components/friend/MenuBar";
 import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
 import { RequestUserListItem } from "../../components/friend/request/RequestUserListItem";
 import BottomNavBar from "../../components/common/BottomNavBar";
+import { FriendsModal } from "../../components/modal/FriendsModal";
 
 interface FriendRequest {
   id: string;
@@ -29,6 +30,9 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
   onAcceptRequest,
 }) => {
   const [activeTab, setActiveTab] = React.useState<"friends" | "requests">("requests");
+  const [isModalVisible, setModalVisible] = React.useState(false);
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
 
   const handleDeleteRequest = (id: string) => {
     onDeleteRequest?.(id);
@@ -51,8 +55,11 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
                 percentage={request.percentage}
                 onDelete={() => handleDeleteRequest(request.id)}
                 onAccept={() => handleAcceptRequest(request.id)}
+                onClick={openModal}
             />
             ))}
+
+            <FriendsModal isVisible={isModalVisible} onClose={closeModal} />
         </section>
 
         <BottomNavBar />
