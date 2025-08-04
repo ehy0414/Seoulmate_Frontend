@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { KeyboardEvent } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import MessageBubble from '../../components/chat/MessageBubble';
 import ChatInput from '../../components/chat/ChatInput';
@@ -20,6 +20,7 @@ const ChatRoom = () => {
   const friendName = searchParams.get('name') || '알 수 없음';
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     setMessages(chatMockMessages);
@@ -57,7 +58,10 @@ const ChatRoom = () => {
 
   return (
     <div className="flex flex-col h-screen bg-white w-[393px]">
-      <NotFixedHeaderDetail title={friendName}/>
+      <NotFixedHeaderDetail
+        title={friendName}
+        onBackClick={() => navigate(-1)} 
+      />
       <div className="flex-1 overflow-y-auto px-4 py-2 space-y-4 scrollbar-hide">
         {Object.entries(groupedMessages).map(([date, msgs]) => (
           <div key={date}>
