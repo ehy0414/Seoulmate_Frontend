@@ -1,7 +1,6 @@
 import React from 'react';
 import { ProfileSection, QuickActionButtons, MenuSection } from '../../components/MyPage';
 import BottomNavBar from '../../components/common/BottomNavBar';
-import FloatingActionButton from '../../components/common/FloatingActionButton';
 import { HeaderSeoulmate } from '../../components/common/HeaderSeoulmate';
 
 const MyPage: React.FC = () => {
