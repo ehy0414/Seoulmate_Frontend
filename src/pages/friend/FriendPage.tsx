@@ -63,7 +63,7 @@ export const FriendPage: React.FC<FriendsListProps> = ({
             <UserList users={users} />
         </div>
 
-        <BottomNavBar />
+        <BottomNavBar menu='friend'/>
     </main>
   );
 };

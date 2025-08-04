@@ -69,7 +69,7 @@ export const HomePage: React.FC = () => {
           </ScrollableCardList>
         </section>
     
-        <BottomNavBar />
+        <BottomNavBar menu='home'/>
     </div>
 
 

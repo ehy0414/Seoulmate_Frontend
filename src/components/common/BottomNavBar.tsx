@@ -20,13 +20,13 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ menu }) => {
 
     switch (tab) {
       case 'home':
-        // navigate('/');
+        navigate('/home');
         break;
       case 'search':
         navigate('/search/hobby');
         break;
       case 'friend':
-        // navigate('/friend');
+        navigate('/friend');
         break;
       case 'chat':
         // navigate('/chat');

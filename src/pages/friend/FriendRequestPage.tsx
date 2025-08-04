@@ -62,7 +62,7 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
             <FriendsModal isVisible={isModalVisible} onClose={closeModal} />
         </section>
 
-        <BottomNavBar />
+        <BottomNavBar menu='friend'/>
     </main>
   );
 };
