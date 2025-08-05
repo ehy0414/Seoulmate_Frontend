@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import SportsIcon from '../../assets/category/category-sports.svg?react';
 import PartyIcon from '../../assets/category/category-party.svg?react';
@@ -19,7 +20,16 @@ interface ClubCard {
 }
 
 const ActiveSearchClub = () => {
-    const [selectedCategory, setSelectedCategory] = useState('스포츠');
+    const location = useLocation();
+    const initialCategory = location.state || '스포츠';
+    const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+
+    // location.state가 변경되면 카테고리 업데이트
+    useEffect(() => {
+        if (location.state && location.state !== selectedCategory) {
+            setSelectedCategory(location.state);
+        }
+    }, [location.state, selectedCategory]);
 
     const categories = [
         { name: '스포츠', icon: SportsIcon },
