@@ -61,7 +61,7 @@ export const MeetingDetailPage: React.FC<MeetingDetailPageProps> = ({
         href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap"
         rel="stylesheet"
       />
-    <main className="flex flex-col items-center px-6 mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
+    <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
         <HeaderDetail
           title="숭실대 정기모임"
           onBackClick={onBackClick}
@@ -80,7 +80,7 @@ export const MeetingDetailPage: React.FC<MeetingDetailPageProps> = ({
           imageAlt="숭실대 정기모임 이미지"
         />
 
-        <div className=" left-5 top-[580px] w-full ">
+        <div className=" left-5 top-[580px] w-full px-4">
           <ParticipantsList participants={participants} />
         </div>
 

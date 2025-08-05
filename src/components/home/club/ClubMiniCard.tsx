@@ -16,7 +16,7 @@ export const ClubMiniCard: React.FC<ClubMiniCardProps> = ({
   altText = ""
 }) => {
   return (
-    <article className="flex gap-4 items-center p-2 rounded-lg border-solid shadow-sm bg-zinc-50 border-[0.5px] border-black-300 w-[360px] ">
+    <article className="flex gap-4 items-center p-2 rounded-lg border-solid shadow-sm bg-zinc-50 border-[0.5px] border-black-300 w-full ">
       <img
         src={image}
         alt={altText}

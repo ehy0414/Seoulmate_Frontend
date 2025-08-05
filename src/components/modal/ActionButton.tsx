@@ -16,11 +16,11 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
   isDisabled = false,
 }) => {
   return (
-    <div className="flex gap-2 items-center w-full">
+    <div className="flex gap-2 items-center w-full px-1">
       <button
         onClick={onFriendRequest}
         disabled={isDisabled}
-        className={`flex shrink-0 justify-center items-center h-[38px] w-[162px] rounded-lg ${
+        className={`flex shrink-0 justify-center items-center h-[38px] w-1/2 rounded-lg ${
           isFriend
             ? "bg-white border border-gray-300 text-black"
             : "bg-primary-700 text-white"
@@ -32,7 +32,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
       </button>
       <button
         onClick={onSendMessage}
-        className="flex shrink-0 justify-center items-center rounded-lg border hover:bg-primary-100 border-primary-700 border-solid bg-zinc-50 h-[38px] w-[162px]"
+        className="flex shrink-0 justify-center items-center rounded-lg border hover:bg-primary-100 border-primary-700 border-solid bg-zinc-50 h-[38px] w-1/2"
       >
         <span className="text-xs font-bold text-primary-700 ">
           {sendMessageText}

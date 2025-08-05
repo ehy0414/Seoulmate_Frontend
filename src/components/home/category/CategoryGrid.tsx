@@ -38,7 +38,7 @@ const categories = [
 
 export const CategoryGrid: React.FC = () => {
   return (
-    <div className="flex flex-wrap gap-5 min-w-[360px] left-0 justify-start self-stretch bg-white ">
+    <div className="flex flex-wrap gap-5 w-full left-0 justify-start self-stretch bg-white ">
       {categories.map((category, index) => (
         <CategoryIcon
           key={index}
