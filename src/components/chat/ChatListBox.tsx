@@ -49,7 +49,7 @@ const ChatListBox: React.FC<ChatListBoxProps> = ({
                 {/* Info Section */}
                 <div className='flex flex-col justify-center items-end gap-1'>
                     {/* Timestamp */}
-                    <div className='text-black font-light text-xs'>
+                    <div className='text-black font-light text-[8px]'>
                         {timestamp}
                     </div>
                     {/* Notification Badge */}

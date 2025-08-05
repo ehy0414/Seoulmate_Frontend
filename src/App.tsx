@@ -19,6 +19,7 @@ import MyHobby from './pages/MyPage/MyHobby'
 import ChatRoom from './pages/chat/ChatRoom'
 import Schedule from './pages/schedule/Schedule'
 import ChatList from './pages/chat/ChatList'
+import AlarmPage from './pages/alarm/AlarmPage'
 
 function App() {
 
@@ -32,7 +33,7 @@ function App() {
         <Route path='/signUp/hobby' element={<HobbySelectionPage />} />
         <Route path='/signUp/school' element={<SchoolVerifyPage />} />
         <Route path='/signUp/wait' element={<SchoolVerificationPage />} />
-        <Route path='/search/hobby' element={<SearchHobby />} />
+        <Route path='/search' element={<SearchHobby />} />
         <Route path='/home' element={<HomePage />} />
         <Route path='/meeting/:id' element={<MeetingDetailPage />} />
         <Route path='/club/:id' element={<ClubDetailPage />} />
@@ -45,6 +46,7 @@ function App() {
         <Route path='/chat' element={<ChatRoom />} />
         <Route path='/schedule' element={<Schedule />} />
         <Route path='/chat/list' element={<ChatList />} />
+        <Route path='/alarm' element={<AlarmPage />} />
       </Routes>
     </BrowserRouter>
   )

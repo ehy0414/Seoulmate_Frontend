@@ -15,26 +15,18 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ menu }) => {
   const [activeTab, setActiveTab] = useState(menu);
   const navigate = useNavigate();
 
-  const handleTabClick = (tab: 'home' | 'search' | 'friend' | 'chat' | 'profile') => {
-    setActiveTab(tab);
+  const navItems = [
+    { key: 'home', icon: HomeIcon, route: '/home' },
+    { key: 'search', icon: SearchIcon, route: '/search' },
+    { key: 'friend', icon: FriendIcon, route: '/friend' },
+    { key: 'chat', icon: ChatIcon, route: '/chat/list' },
+    { key: 'profile', icon: ProfileIcon, route: '/myPage' },
+  ] as const;
 
-    switch (tab) {
-      case 'home':
-        navigate('/home');
-        break;
-      case 'search':
-        navigate('/search/hobby');
-        break;
-      case 'friend':
-        navigate('/friend');
-        break;
-      case 'chat':
-        // navigate('/chat');
-        break;
-      case 'profile':
-        navigate('/myPage');
-        break;
-    }
+
+  const handleTabClick = (tab: 'home' | 'search' | 'friend' | 'chat' | 'profile', route: string) => {
+    setActiveTab(tab);
+    navigate(route);
   };
 
   const handleFloatingButtonClick = () => {
@@ -44,7 +36,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ menu }) => {
     return (
         <>
             {/* Floating Action Button */}
-            <div className="fixed bottom-[78px] right-1/2 transform translate-x-[50%] max-w-[430px] w-full">
+            <div className="fixed bottom-[78px] left-1/2 transform -translate-x-1/2 w-full max-w-[430px]">
                 <div className="flex justify-end pr-[18px]">
                     <button 
                         onClick={handleFloatingButtonClick}
@@ -56,38 +48,24 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ menu }) => {
             </div>
             
             {/* Bottom Navigation Bar */}
-            <div className="fixed bottom-0 left-0 right-0 w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white shadow-[0_-1px_0_#AFA9A9] rounded-t-lg">
+            <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[430px] bg-white shadow-[0_-1px_0_#AFA9A9] rounded-t-lg">
             <div className="flex justify-around py-[18px]">
-                <div
-                    className="w-6 h-6 flex items-center justify-center cursor-pointer"
-                    onClick={() => handleTabClick('home')}
-                >
-                    <HomeIcon fill={activeTab === 'home' ? '#F45F3A' : '#AFA9A9'} width={24} height={24} />
-                </div>
-                <div
-                    className="w-6 h-6 flex items-center justify-center cursor-pointer"
-                    onClick={() => handleTabClick('search')}
-                >
-                    <SearchIcon fill={activeTab === 'search' ? '#F45F3A' : '#AFA9A9'} width={24} height={24} />
-                </div>
-                <div
-                    className="w-6 h-6 flex items-center justify-center cursor-pointer"
-                    onClick={() => handleTabClick('friend')}
-                >
-                    <FriendIcon fill={activeTab === 'friend' ? '#F45F3A' : '#AFA9A9'} width={24} height={24} />
-                </div>
-                <div
-                    className="w-6 h-6 flex items-center justify-center cursor-pointer"
-                    onClick={() => handleTabClick('chat')}
-                >
-                    <ChatIcon fill={activeTab === 'chat' ? '#F45F3A' : '#AFA9A9'} width={24} height={24} />
-                </div>
-                <div
-                    className="w-6 h-6 flex items-center justify-center cursor-pointer"
-                    onClick={() => handleTabClick('profile')}
-                >
-                    <ProfileIcon fill={activeTab === 'profile' ? '#F45F3A' : '#AFA9A9'} width={24} height={24} />
-                </div>
+                {navItems.map((item) => {
+                    const IconComponent = item.icon;
+                    return (
+                        <div
+                            key={item.key}
+                            className="w-6 h-6 flex items-center justify-center cursor-pointer"
+                            onClick={() => handleTabClick(item.key, item.route)}
+                        >
+                            <IconComponent 
+                                fill={activeTab === item.key ? '#F45F3A' : '#AFA9A9'} 
+                                width={24} 
+                                height={24} 
+                            />
+                        </div>
+                    );
+                })}
             </div>
             </div>
         </>

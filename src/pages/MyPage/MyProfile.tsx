@@ -1,20 +1,9 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { NotFixedHeaderDetail } from '../../components/common/NotFixedHeaderDetail';
 import BottomNavBar from '../../components/common/BottomNavBar';
-import FloatingActionButton from '../../components/common/FloatingActionButton';
 import { ProfileSection, HobbyChips, InfoCard } from '../../components/MyProfile';
 
 const MyProfile: React.FC = () => {
-  const navigate = useNavigate();
-
-  const handleBackClick = () => {
-    navigate(-1);
-  };
-
-  const handleNotificationClick = () => {
-    console.log('Notification clicked');
-  };
 
   const handleEditProfile = () => {
     console.log('Edit profile clicked');
@@ -44,8 +33,6 @@ const MyProfile: React.FC = () => {
       {/* Header */}
       <NotFixedHeaderDetail
         title="내 프로필"
-        onBackClick={handleBackClick}
-        onNotificationClick={handleNotificationClick}
       />
 
       {/* Main Content */}

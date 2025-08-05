@@ -56,7 +56,7 @@ const QuickActionButton: React.FC<QuickActionButtonProps> = ({ type, onClick }) 
 const QuickActionButtons: React.FC = () => {
   const navigate = useNavigate();
   const handleScheduleClick = () => {
-    console.log('Schedule clicked');
+    navigate('/schedule')
   };
 
   const handleHobbyClick = () => {
@@ -68,7 +68,7 @@ const QuickActionButtons: React.FC = () => {
   };
 
   return (
-    <div className="flex w-full px-[18px] py-4 items-center gap-8 border-b-[3px] border-[#F3F2F2] h-28">
+    <div className="flex w-full px-[18px] py-4 items-center justify-between border-b-[3px] border-[#F3F2F2] h-28">
       <QuickActionButton type="schedule" onClick={handleScheduleClick} />
       <QuickActionButton type="hobby" onClick={handleHobbyClick} />
       <QuickActionButton type="language" onClick={handleLanguageClick} />
