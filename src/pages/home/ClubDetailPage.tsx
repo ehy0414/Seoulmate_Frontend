@@ -6,6 +6,7 @@ import { MeetingInfo } from "../../components/home/club/MeetingInfo";
 import image1 from "../../components/home/club/image.png";
 import image2 from "../../components/home/club/image2.png";
 import { ParticipantsList } from "../../components/home/club/ParticpantsList";
+import { useNavigate } from "react-router-dom";
 
 interface MeetingDetailPageProps {
   onBackClick?: () => void;
@@ -43,6 +44,8 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({
     
   ];
 
+  const navigate = useNavigate();
+
   return (
     <>
       <link
@@ -52,7 +55,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({
     <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
         <HeaderDetail
           title="한국어 기초 클래스"
-          onBackClick={onBackClick}
+          onBackClick={() => {navigate(-1)}}
           onNotificationClick={onNotificationClick}
         />
 

@@ -4,19 +4,9 @@ import { HeaderDetail } from "../../components/common/HeaderDetail";
 import { MeetingInfo } from "../../components/home/detail/MeetingInfo";
 import { ParticipantsList } from "../../components/home/detail/ParticpantsList";
 import { ActionButton } from "../../components/home/ActionButton";
+import { useNavigate } from "react-router-dom";
 
-interface MeetingDetailPageProps {
-  onBackClick?: () => void;
-  onNotificationClick?: () => void;
-  onJoinClick?: () => void;
-}
-
-export const MeetingDetailPage: React.FC<MeetingDetailPageProps> = ({
-  onBackClick,
-  onNotificationClick,
-  onJoinClick
-}) => {
-  const participants = [
+const participants = [
     {
       id: "1",
       imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/b13f698dcdd227584cf0fcf49accd676a1fdc9ff?width=80",
@@ -55,6 +45,9 @@ export const MeetingDetailPage: React.FC<MeetingDetailPageProps> = ({
     
   ];
 
+export const MeetingDetailPage = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       <link
@@ -64,8 +57,8 @@ export const MeetingDetailPage: React.FC<MeetingDetailPageProps> = ({
     <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
         <HeaderDetail
           title="숭실대 정기모임"
-          onBackClick={onBackClick}
-          onNotificationClick={onNotificationClick}
+          onBackClick={() => navigate(-1)}
+          onNotificationClick={() => navigate("")}
         />
 
         <MeetingInfo
@@ -86,7 +79,7 @@ export const MeetingDetailPage: React.FC<MeetingDetailPageProps> = ({
 
         <ActionButton
           text="참여하기"
-          onClick={onJoinClick}
+          onClick={() => navigate("")}
         />
       </main>
     </>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ClubCardProps {
   image: string;
@@ -7,6 +8,7 @@ interface ClubCardProps {
   date: string;
   badge?: string;
   altText?: string;
+  id: number;
 }
 
 export const ClubCard: React.FC<ClubCardProps> = ({
@@ -15,10 +17,13 @@ export const ClubCard: React.FC<ClubCardProps> = ({
   place,
   date,
   badge,
-  altText = ""
+  altText = "",
+  id
 }) => {
+  const navigate = useNavigate();
   return (
-    <article className="w-[176px] flex flex-col shrink-0 gap-3 justify-center items-start p-2 rounded-lg border-solid shadow-sm bg-zinc-50 border-[0.5px] border-black-300">
+    <article className="w-[176px] flex flex-col shrink-0 gap-3 justify-center items-start p-2 rounded-lg border-solid shadow-sm bg-zinc-50 border-[0.5px] border-black-300 cursor-pointer"
+              onClick={()=> {navigate(`/club/${id}`)}}>
       <img
         src={image}
         alt={altText}

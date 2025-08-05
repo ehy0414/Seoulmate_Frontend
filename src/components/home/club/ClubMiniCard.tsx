@@ -6,6 +6,7 @@ interface ClubMiniCardProps {
   place: string;
   date: string;
   altText?: string;
+  onClick: () => void;
 }
 
 export const ClubMiniCard: React.FC<ClubMiniCardProps> = ({
@@ -13,10 +14,12 @@ export const ClubMiniCard: React.FC<ClubMiniCardProps> = ({
   title,
   place,
   date,
-  altText = ""
+  altText = "",
+  onClick
 }) => {
   return (
-    <article className="flex gap-4 items-center p-2 rounded-lg border-solid shadow-sm bg-zinc-50 border-[0.5px] border-black-300 w-full ">
+    <article  className="flex gap-4 items-center p-2 rounded-lg border-solid shadow-sm bg-zinc-50 border-[0.5px] border-black-300 w-full cursor-pointer"
+              onClick={onClick}>
       <img
         src={image}
         alt={altText}
