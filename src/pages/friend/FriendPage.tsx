@@ -43,10 +43,10 @@ export const FriendPage: React.FC<FriendsListProps> = ({
   };
 
   return (
-    <main className="flex flex-col items-center px-6 mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
+    <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
         <HeaderSeoulmate title="서울메이트" alarm={false} />
       
-        <section>
+        <section className="w-full">
             <MenuBar />
             <SearchSection
             onBack={handleBack}
@@ -58,12 +58,12 @@ export const FriendPage: React.FC<FriendsListProps> = ({
             role="tabpanel"
             id={activeTab === "friends" ? "friends-panel" : "requests-panel"}
             aria-labelledby={activeTab === "friends" ? "friends-tab" : "requests-tab"}
-            className="mb-[22.5rem]"
+            className="mb-[23rem] w-full"
         >
             <UserList users={users} />
         </div>
 
-        <BottomNavBar />
+        <BottomNavBar menu='friend'/>
     </main>
   );
 };

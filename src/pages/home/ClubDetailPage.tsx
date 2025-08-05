@@ -6,6 +6,7 @@ import { MeetingInfo } from "../../components/home/club/MeetingInfo";
 import image1 from "../../components/home/club/image.png";
 import image2 from "../../components/home/club/image2.png";
 import { ParticipantsList } from "../../components/home/club/ParticpantsList";
+import { useNavigate } from "react-router-dom";
 
 interface MeetingDetailPageProps {
   onBackClick?: () => void;
@@ -43,16 +44,18 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({
     
   ];
 
+  const navigate = useNavigate();
+
   return (
     <>
       <link
         href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap"
         rel="stylesheet"
       />
-    <main className="flex flex-col items-center px-6 mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
+    <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
         <HeaderDetail
           title="한국어 기초 클래스"
-          onBackClick={onBackClick}
+          onBackClick={() => {navigate(-1)}}
           onNotificationClick={onNotificationClick}
         />
 
@@ -72,7 +75,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({
             ]}          
         />
 
-        <div className=" left-5 top-[580px] w-full ">
+        <div className=" top-[580px] w-full px-4">
           <ParticipantsList 
             participants={participants} 
             maxParticipants={10} // 예: 최대 10명

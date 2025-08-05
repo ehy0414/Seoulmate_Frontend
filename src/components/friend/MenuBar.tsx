@@ -20,7 +20,7 @@ export const MenuBar: React.FC = () => {
   return (
     <nav className="flex items-center w-full text-sm leading-none bg-white" role="tablist">
       <button
-        className={`flex gap-2.5 justify-center items-center self-stretch px-2.5 py-3.5 my-auto font-semibold border-solid min-h-[45px] w-[197px] ${
+        className={`flex gap-2.5 justify-center items-center self-stretch py-3.5 my-auto font-semibold border-solid min-h-[45px] w-1/2 ${
           activeTab === "friends"
             ? "border-b-[3px] border-b-red-500 text-zinc-900"
             : "border-b-[0.5px] border-b-neutral-400 text-stone-700 font-medium"
@@ -33,7 +33,7 @@ export const MenuBar: React.FC = () => {
       </button>
 
       <button
-        className={`flex gap-2.5 justify-center items-center self-stretch px-2.5 py-3.5 my-auto font-medium border-solid min-h-[45px] w-[197px] ${
+        className={`flex gap-2.5 justify-center items-center self-stretch py-3.5 my-auto font-medium border-solid min-h-[45px] w-1/2 ${
           activeTab === "requests"
             ? "border-b-[3px] border-b-red-500 text-zinc-900 font-semibold"
             : "border-b-[0.5px] border-b-neutral-400 text-stone-700"
