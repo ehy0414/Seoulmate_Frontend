@@ -1,5 +1,6 @@
 import React from 'react';
 import { CategoryIcon } from './CategoryIcon';
+import { useNavigate } from 'react-router-dom';
 
 const categories = [
   {
@@ -37,13 +38,16 @@ const categories = [
 ];
 
 export const CategoryGrid: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex flex-wrap gap-5 min-w-[360px] left-0 justify-start self-stretch bg-white ">
+    <div className="flex flex-wrap gap-5 w-full left-0 justify-start self-stretch bg-white ">
       {categories.map((category, index) => (
         <CategoryIcon
           key={index}
           iconSvg={category.iconSvg}
           label={category.label}
+          onClick={() => navigate('/search', { state: { category: category.label } })}
         />
       ))}
     </div>

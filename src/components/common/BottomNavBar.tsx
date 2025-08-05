@@ -23,6 +23,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ menu }) => {
     { key: 'profile', icon: ProfileIcon, route: '/myPage' },
   ] as const;
 
+
   const handleTabClick = (tab: 'home' | 'search' | 'friend' | 'chat' | 'profile', route: string) => {
     setActiveTab(tab);
     navigate(route);

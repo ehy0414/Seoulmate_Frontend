@@ -68,9 +68,8 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({
   }
 
   return (
-    <>
-      <section className="flex flex-col gap-3 items-start self-stretch">
-        <div className="flex gap-3 items-center self-stretch">
+      <section className="flex flex-col gap-3 items-start self-stretch w-full">
+        <div className="flex gap-3 items-center self-stretch w-full">
           <h3 className="text-sm font-medium leading-5 text-black">{title}</h3>
           <p className="text-xs font-bold leading-5 text-primary-700">({filledSlots}/{slotComponents.length})</p>
         </div>
@@ -86,10 +85,11 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({
             </div>
           ))}
         </div>
+
+        {/* 모달 */}
+        <FriendsModal isVisible={isModalVisible} onClose={closeModal} />
       </section>
 
-      {/* 모달 */}
-      <FriendsModal isVisible={isModalVisible} onClose={closeModal} />
-    </>
+      
   );
 };

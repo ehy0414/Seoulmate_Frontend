@@ -20,7 +20,7 @@ export const MeetingInfo: React.FC<MeetingInfoProps> = ({
   imageAlt = ""
 }) => {
   return (
-    <section className="flex left-0 flex-col shrink-0 items-center mt-1 bg-white w-full  max-w-[clamp(360px,100vw,430px)]">
+    <section className="flex left-0 flex-col shrink-0 items-center mt-1 bg-white w-full max-w-[clamp(360px,100vw,430px)]">
       <div className="flex relative flex-col justify-center items-end w-full">
         <img
           src={imageUrl}
@@ -29,11 +29,11 @@ export const MeetingInfo: React.FC<MeetingInfoProps> = ({
         />
       </div>
 
-      <header className="flex justify-between items-center w-full pt-3 text-2xl font-semibold">
+      <header className="flex justify-between items-center w-full pt-3 px-4 text-2xl font-semibold">
         <h1 className="self-stretch my-auto">{title}</h1>
       </header>
 
-      <section className="mt-5 w-full text-xs font-medium">
+      <section className="mt-5 w-full text-xs font-medium px-4">
         <div className="flex gap-2 items-center w-full whitespace-nowrap">
           <img
             src="https://api.builder.io/api/v1/image/assets/TEMP/a5c028220ed289be0288c8644ffad73ecfd1e484?placeholderIfAbsent=true&apiKey=7adddd5587f24b91884c2915be4df62c"

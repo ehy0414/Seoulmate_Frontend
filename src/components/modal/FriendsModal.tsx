@@ -150,12 +150,13 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
     >
       <div
         ref={modalRef}
-        className="fixed border-2 border-solid bottom-0 w-full max-w-[386px] bg-white rounded-t-[24px] shadow-xl transition-transform duration-300 overflow-hidden"
+        className="fixed bottom-0 left-1/2 border-2 border-solid bg-white rounded-t-[24px] shadow-xl transition-transform duration-300 overflow-hidden"
         style={{
-          height: `${height === 100 ? '100dvh' : `${height}vh`}`,
-          transform: isVisible ? "translateY(0)" : "translateY(100%)"
+          width: "full",
+          maxWidth: "clamp(360px, 100vw, 430px)",
+          height: height === 100 ? "100dvh" : `${height}vh`,
+          transform: `${isVisible ? "translate(-50%, 0)" : "translate(-50%, 100%)"}`
         }}
-
         onClick={(e) => e.stopPropagation()}
       >
         {/* 상단 드래그 손잡이 (클릭 영역 확장) */}
@@ -165,7 +166,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
           // 배경은 투명하지만 클릭 영역 확장
           style={{ backgroundColor: "transparent" }}
         >
-          <div className="w-[50px] h-1 bg-stone-300 rounded-xl mx-auto mt-[14px]" />
+          <div className="w-[50px] h-1 bg-stone-300 rounded-xl mt-[14px]" />
         </div>
 
         {/* 모달 콘텐츠 */}
