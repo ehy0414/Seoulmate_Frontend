@@ -76,9 +76,18 @@ const AlarmPage = () => {
             profileImage: undefined
         }
     ];
+    
+    const handleNotificationClick = () => {
+        // 알람 페이지에서는 알람 버튼 클릭 시 아무 동작 안 함
+    };
+
     return (
         <div className='flex flex-col h-screen bg-white'>
-            <NotFixedHeaderDetail title='알람' showBorder={false} />
+            <NotFixedHeaderDetail 
+                title='알람' 
+                showBorder={false} 
+                onNotificationClick={handleNotificationClick}
+            />
             <TabMenu
                 firstTabText="모임"
                 secondTabText="친구"
