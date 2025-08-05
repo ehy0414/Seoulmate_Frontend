@@ -7,11 +7,12 @@ import ActiveSearchFriend from '../../components/search/ActiveSearchFriend';
 import ActiveSearchResult from '../../components/search/ActiveSearchResult';
 import BackArrow from '../../assets/common/back-arrow.svg';
 import FloatingActionButton from '../../components/common/FloatingActionButton';
+import { useNavigate } from 'react-router-dom';
 
 const SearchHobby: React.FC = () => {
     const [activeTab, setActiveTab] = useState('모임');
     const [searchValue, setSearchValue] = useState('');
-
+    const navigate = useNavigate();
     const handleFirstTabClick = () => setActiveTab('모임');
     const handleSecondTabClick = () => setActiveTab('친구');
 
@@ -19,7 +20,7 @@ const SearchHobby: React.FC = () => {
         <div className=" w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white min-h-screen">
             {/* 검색창 */}
             <div className="px-2.5 py-2.5 flex items-center  gap-[4.07vw]">
-                <img src={BackArrow} />
+                <img src={BackArrow} onClick={()=>navigate(-1)} />
                 <input
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
