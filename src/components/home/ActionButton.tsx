@@ -13,7 +13,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
   disabled = false
 }) => {
   return (
-    <div className="flex fixed bottom-0 w-full max-w-[clamp(360px,100vw,430px)] mx-auto flex-col gap-2 px-6 py-4 bg-white">
+    <div className="flex fixed bottom-0 w-full px-4 max-w-[clamp(360px,100vw,430px)] mx-auto flex-col gap-2 py-4 bg-white">
       <button
         onClick={onClick}
         disabled={disabled}

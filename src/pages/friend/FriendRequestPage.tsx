@@ -43,11 +43,11 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
   };
 
   return (
-    <main className="flex flex-col items-center px-6 mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
+    <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
         <HeaderSeoulmate title="서울메이트" alarm={false} />      
             
         <MenuBar />
-        <section className="flex flex-col items-start h-60 w-[393px] max-md:w-full">
+        <section className="flex flex-col items-start h-60 w-full">
             {requests.map((request) => (
             <RequestUserListItem
                 key={request.id}
@@ -62,7 +62,7 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
             <FriendsModal isVisible={isModalVisible} onClose={closeModal} />
         </section>
 
-        <BottomNavBar />
+        <BottomNavBar menu='friend'/>
     </main>
   );
 };
