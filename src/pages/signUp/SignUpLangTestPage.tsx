@@ -12,7 +12,7 @@ const SignUpLangTestPage = () => {
     const country = location.state.country;
 
     // // 테스트용
-    // const country = "미국"
+    //const country = "미국"
     const [isKorean, setIsKorean] = useState<boolean>(false); 
     const [score, setScore] = useState<number | null>(null);
     const [isSending, setIsSending] = useState<boolean>(false); // 로딩 상태를 관리하기 위한 상태 추가
@@ -59,15 +59,18 @@ const SignUpLangTestPage = () => {
                 </div>
             )}
             
-            <div className="fixed mx-4 top-0 z-40 w-[360px] bg-white pb-44">
+            <div className="fixed mx-4 top-0 z-40 w-[360px] bg-white pb-52">
                 <ProgressBar currentStep={2} />
                 <div className="absolute text-2xl font-semibold left-0 bg-white text-zinc-900 bottom-10 top-[100px] w-full">
                     <h1 className="text-2xl font-bold text-zinc-900 mb-2">언어레벨 테스트</h1>
                     <p className=" h-3.5 text-xs font-medium left-0 text-neutral-400 w-full">
-                        <span className="text-xs text-neutral-400 mt-2">
+                        <p className="text-xs text-neutral-400 mt-2">
                         {isKorean ? (<>영어 테스트를 진행할게요.<br/>마이크 버튼을 누르고 아래 문장을 또박또박 읽어주세요.</>
                             ) : (<>한국어 테스트를 진행할게요.<br />마이크 버튼을 누르고 아래 문장을 또박또박 읽어주세요.</>)}
-                        </span>
+                        </p>
+                        <p className="text-primary-700 text-xs mt-2">
+                            1분 이내로 말해야 해요.
+                        </p>
                     </p>
                 </div>
             </div>
