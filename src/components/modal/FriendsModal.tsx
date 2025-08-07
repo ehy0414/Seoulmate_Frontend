@@ -150,7 +150,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
     >
       <div
         ref={modalRef}
-        className="fixed bottom-0 left-1/2 border-2 border-solid bg-white rounded-t-[24px] shadow-xl transition-transform duration-300 overflow-hidden"
+        className="fixed bottom-0 left-1/2 w-full border-2 border-solid bg-white rounded-t-[24px] shadow-xl transition-transform duration-300 overflow-hidden"
         style={{
           width: "full",
           maxWidth: "clamp(360px, 100vw, 430px)",
