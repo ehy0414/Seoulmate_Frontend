@@ -5,11 +5,13 @@ import BackArrow from '../../assets/common/back-arrow.svg';
 interface NoAlarmBackHeaderProps {
   title: string;
   onBackClick?: () => void;
+  showBorder?: boolean;
 }
 
 const NoAlarmBackHeader: React.FC<NoAlarmBackHeaderProps> = ({ 
   title, 
-  onBackClick 
+  onBackClick,
+  showBorder = true 
 }) => {
   const navigate = useNavigate();
 
@@ -22,7 +24,9 @@ const NoAlarmBackHeader: React.FC<NoAlarmBackHeaderProps> = ({
   };
 
   return (
-    <div className="flex items-center px-[18px] w-full bg-white border-b border-solid border-black-300 h-[60px]">
+    <div className={`flex items-center px-[18px] w-full bg-white h-[60px] ${
+      showBorder ? 'border-b border-solid border-black-300' : ''
+    }`}>
       <button
         onClick={handleBackClick}
         className="flex justify-center items-center w-6 h-6"

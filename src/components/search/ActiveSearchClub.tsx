@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import SportsIcon from '../../assets/category/category-sports.svg?react';
 import PartyIcon from '../../assets/category/category-party.svg?react';
@@ -19,7 +20,32 @@ interface ClubCard {
 }
 
 const ActiveSearchClub = () => {
-    const [selectedCategory, setSelectedCategory] = useState('스포츠');
+    const location = useLocation();
+    const initialCategory = location.state?.category || '스포츠';
+    const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+    const categoryRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+    const hasProcessedLocationState = useRef(false);
+
+    // location.state가 변경되면 카테고리 업데이트 (초기 로딩 시에만)
+    useEffect(() => {
+        const newCategory = location.state?.category;
+        if (newCategory && !hasProcessedLocationState.current) {
+            setSelectedCategory(newCategory);
+            hasProcessedLocationState.current = true;
+        }
+    }, [location.state]);
+
+    // 선택된 카테고리가 변경되면 해당 카테고리로 스크롤
+    useEffect(() => {
+        const selectedButton = categoryRefs.current[selectedCategory];
+        if (selectedButton) {
+            selectedButton.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
+    }, [selectedCategory]);
 
     const categories = [
         { name: '스포츠', icon: SportsIcon },
@@ -91,6 +117,9 @@ const ActiveSearchClub = () => {
                     {categories.map((category) => (
                         <motion.button
                             key={category.name}
+                            ref={(el) => {
+                                categoryRefs.current[category.name] = el;
+                            }}
                             onClick={() => setSelectedCategory(category.name)}
                             className={`snap-start flex flex-col items-center justify-center w-[74px] h-[74px] rounded-[20px] border-[0.5px] flex-shrink-0 ${
                                 selectedCategory === category.name

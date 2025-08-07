@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TopLine from '../../assets/common/modal-top-button.svg?react';
 interface CategoryModalProps {
@@ -26,19 +26,115 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
   selectedCategories
 }) => {
   const [showToast, setShowToast] = useState(false);
+  const [height, setHeight] = useState(90);
+  
+  const modalRef = useRef<HTMLDivElement>(null);
+  const dragBarRef = useRef<HTMLDivElement>(null);
+  const startY = useRef<number | null>(null);
+  const startHeight = useRef<number>(90);
+  const dragging = useRef(false);
 
-  // 모달이 열릴 때 body 스크롤 방지
+  // 드래그에 따라 높이 업데이트 (실시간 반영)
+  const updateHeight = (deltaY: number) => {
+    const sensitivity = 1;
+    const newHeight = Math.min(
+      Math.max(30, startHeight.current - (deltaY * sensitivity * 100) / window.innerHeight),
+      100
+    );
+    setHeight(newHeight);
+  };
+
+  // 드래그 종료 시점 처리: 높이에 따라 닫기 또는 자동 조절
+  const finishDrag = useCallback(() => {
+    dragging.current = false;
+    startY.current = null;
+
+    if (height < 40) {
+      // 1/3 이하이면 모달 닫기
+      onClose();
+    } else if (height > 70) {
+      // 2/3 이상이면 90%로 고정
+      setHeight(90);
+    } else {
+      // 그 외는 현재 높이 유지
+    }
+  }, [height, onClose]);
+
+  // 모달이 열릴 때 body 스크롤 방지 및 모달 높이 초기화
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none'; // 모바일에서 더 확실히 방지
+      setHeight(90); // 모달이 열릴 때마다 높이를 90%로 초기화
     } else {
       document.body.style.overflow = 'unset';
+      document.body.style.touchAction = '';
     }
 
     return () => {
       document.body.style.overflow = 'unset';
+      document.body.style.touchAction = '';
     };
   }, [isOpen]);
+
+  // 드래그 이벤트 리스너
+  useEffect(() => {
+    const handleTouchStart = (e: TouchEvent) => {
+      if (dragBarRef.current?.contains(e.target as Node)) {
+        dragging.current = true;
+        startY.current = e.touches[0].clientY;
+        startHeight.current = height;
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!dragging.current || startY.current === null) return;
+      const deltaY = e.touches[0].clientY - startY.current;
+      updateHeight(deltaY);
+    };
+
+    const handleTouchEnd = () => {
+      if (!dragging.current) return;
+      finishDrag();
+    };
+
+    const handleMouseDown = (e: MouseEvent) => {
+      if (dragBarRef.current?.contains(e.target as Node)) {
+        dragging.current = true;
+        startY.current = e.clientY;
+        startHeight.current = height;
+      }
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!dragging.current || startY.current === null) return;
+      const deltaY = e.clientY - startY.current;
+      updateHeight(deltaY);
+    };
+
+    const handleMouseUp = () => {
+      if (!dragging.current) return;
+      finishDrag();
+    };
+
+    document.addEventListener("touchstart", handleTouchStart);
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener("touchend", handleTouchEnd);
+
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+
+      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [height, onClose, finishDrag]);
 
   const handleSelect = (category: string) => {
     if (selectedCategories.includes(category)) {
@@ -77,20 +173,33 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
           
           {/* 모달 콘텐츠 */}
           <motion.div
-            className="relative bg-white rounded-t-lg w-full h-[90vh] overflow-hidden mx-auto max-w-md" // 상단 둥글게, 중앙 정렬
+            ref={modalRef}
+            className="relative bg-white rounded-t-lg w-full overflow-hidden mx-auto max-w-md" // 상단 둥글게, 중앙 정렬
+            style={{
+              height: `${height === 100 ? '100vh' : `${height}vh`}`,
+            }}
             initial={{ y: "100%" }} // 아래에서 시작
             animate={{ y: 0 }} // 위로 슬라이드
             exit={{ y: "100%" }} // 아래로 슬라이드 아웃
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
+            {/* 드래그 핸들 영역 (확장된 클릭 영역) */}
+            {/* <div
+              ref={dragBarRef}
+              className="absolute top-[10px] left-1/2 w-[70px] h-[30px] -translate-x-1/2 cursor-pointer z-20"
+              style={{ backgroundColor: "transparent" }}
+            >
+              <div className="w-[50px] h-1 bg-stone-300 rounded-xl mx-auto mt-[14px]" />
+            </div> */}
+
             {/* 고정된 Top Button */}
-            <div className="sticky top-0 bg-white z-10">
+            <div ref={dragBarRef} className="sticky top-0 bg-white z-10">
               <div className="flex h-[33px] justify-center items-center" onClick={onClose}>
                 <TopLine/>
               </div>
             </div>
             {/* 카테고리 리스트 */}
-            <div className="px-[18px] pb-5 overflow-y-auto h-[calc(90vh-65px)]">
+            <div className="px-[18px] pb-5 overflow-y-auto" style={{ height: `calc(${height}vh - 33px)` }}>
               <div className="space-y-[4.69vh] pt-[4.58vh]">
                 {Object.entries(categories).map(([categoryTitle, items]) => (
                   <div key={categoryTitle}>
