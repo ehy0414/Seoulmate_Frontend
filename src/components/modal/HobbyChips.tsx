@@ -6,7 +6,7 @@ interface HobbyChipsProps {
 
 export const HobbyChips: React.FC<HobbyChipsProps> = ({ hobbies }) => {
   return (
-    <section className="flex flex-wrap gap-2 content-center items-center self-stretch max-sm:justify-center">
+    <section className="flex flex-wrap w-[360px] gap-2 content-center items-center self-stretch">
       {hobbies.map((hobby, index) => (
         <div
           key={index}

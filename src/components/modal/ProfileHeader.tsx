@@ -32,6 +32,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
                 {badge}
               </span>
             </div>
+
+            <div>
+              <img src="" alt="국기 사진" className="h-4"/>
+            </div>
+            
           </div>
           <p className="self-stretch text-sm leading-5 text-black">
             {description}
