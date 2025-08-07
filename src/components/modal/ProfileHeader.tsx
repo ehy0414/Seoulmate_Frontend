@@ -4,15 +4,15 @@ import { MenuIcon } from "./MenuIcon";
 interface ProfileHeaderProps {
   profileImage: string;
   name: string;
-  badge: string;
   description: string;
+  flagSrc?: string | null;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   profileImage,
   name,
-  badge,
-  description
+  description,
+  flagSrc
 }) => {
   return (
     <section className="flex gap-7 items-start self-stretch">
@@ -27,11 +27,19 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             <h1 className="text-base font-bold text-black">
               {name}
             </h1>
-            <div className="flex justify-center items-center px-2 py-1 bg-primary-700 rounded-[100px]">
-              <span className="text-xs font-bold text-center text-zinc-50">
-                {badge}
-              </span>
-            </div>
+
+            {flagSrc ? (
+              <img
+                src={flagSrc}
+                alt={`${name}의 국기`}
+                className="w-6 h-4 object-cover rounded-sm"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none"; // 또는 대체 이미지 표시
+                }}
+              />
+            ) : null}
+
+            
           </div>
           <p className="self-stretch text-sm leading-5 text-black">
             {description}
