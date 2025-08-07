@@ -32,7 +32,7 @@ export default function Schedule() {
 
   return (
     <div className="relative min-h-screen bg-white pb-[100px]">
-      <NoAlarmBackHeader title="일정" />
+      <NoAlarmBackHeader title="일정" showBorder={false} />
       <TabMenu
         firstTabText={FIRST_TAB}
         secondTabText={SECOND_TAB}
