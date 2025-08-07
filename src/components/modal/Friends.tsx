@@ -19,12 +19,12 @@ interface FriendsProps {
   onSendMessage?: () => void;
   friendRequestText?: string;
   sendMessageText?: string;
+  country?: string;
 }
 
 function Friends({
   profileImage = "https://api.builder.io/api/v1/image/assets/TEMP/cd641a41ab04e92021e52ca7eff297a2f684bfba?width=200",
   name = "name",
-  badge = "nn%",
   description = "자기소개",
   hobbies = [
     "취미명", "취미명", "취미명", "취미명", "취미명",
@@ -36,9 +36,8 @@ function Friends({
     { label: "영어 구사 레벨", value: "B1" },
     { label: "한국어 구사 레벨", value: "C2" }
   ],
-  onFriendRequest,
+  country ="DE",
   onSendMessage,
-  friendRequestText = "친구 신청",
   sendMessageText = "메시지 보내기"
 }: FriendsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,6 +45,21 @@ function Friends({
   const [isPending, setIsPending] = useState(false);       // 친구 요청 보낸 상태
   const [isFriend, setIsFriend] = useState(false); // 친구인지 여부
 
+  // Vite 기반 국가 이미지 가져오기
+  const countryFlags = import.meta.glob('../../assets/country/*.gif', {
+    eager: true,
+    import: 'default',
+  });
+
+  // 국기 이미지 URL 얻기 함수
+  const getCountryFlag = (code: string): string | null => {
+  const flag = countryFlags[`../../assets/country/${code}.gif`];
+    return typeof flag === 'string' ? flag : (flag as string | undefined) ?? null;
+  };
+
+
+  // 결과적으로 string | null 반환됨
+  const flagSrc = getCountryFlag(country);
 
   const handleFriendRequest = async () => {
     try {
@@ -93,8 +107,8 @@ function Friends({
           <ProfileHeader
             profileImage={profileImage}
             name={name}
-            badge={badge}
             description={description}
+            flagSrc={flagSrc ?? ""}
           />
 
           <HobbyChips hobbies={hobbies} />
