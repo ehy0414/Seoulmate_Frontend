@@ -6,6 +6,7 @@ interface ChatListBoxProps {
   timestamp?: string;
   unreadCount?: string;
   profileImage?: string;
+  onClick?: () => void;
 }
 
 const ChatListBox: React.FC<ChatListBoxProps> = ({
@@ -13,10 +14,14 @@ const ChatListBox: React.FC<ChatListBoxProps> = ({
   lastMessage = "마지막 채팅 내용",
   timestamp = "07/30 14:08",
   unreadCount = "nn",
-  profileImage
+  profileImage,
+  onClick
 }) => {
     return (
-        <div className='flex w-full px-[18px] py-4 items-center gap-5 border-b-[0.5px] border-black-400 h-[82px]'>
+        <div 
+            className='flex w-full px-[18px] py-4 items-center gap-5 border-b-[0.5px] border-black-400 h-[82px] cursor-pointer hover:bg-gray-50 transition-colors'
+            onClick={onClick}
+        >
             {/* Profile Image */}
             <div className='w-[50px] h-[50px] flex-shrink-0 rounded-full bg-black-200 flex items-center justify-center overflow-hidden'>
                 {profileImage ? (
