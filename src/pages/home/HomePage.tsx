@@ -16,7 +16,6 @@ const recommendedClubs = [
     title: "페인팅 모임",
     place: "학식당 옆 잔디밭",
     date: "7/8 12:00",
-    badge: "91%",
     altText: ""
   },
   {
@@ -25,7 +24,6 @@ const recommendedClubs = [
     title: "피아노 독학 모임",
     place: "정문 건너 자유레슨실",
     date: "7/12 15:00",
-    badge: "nn%",
     altText: ""
   },
   {
@@ -34,7 +32,6 @@ const recommendedClubs = [
     title: "페인팅 모임",
     place: "학식당 옆 잔디밭",
     date: "7/8 12:00",
-    badge: "91%",
     altText: ""
   }
 ];
@@ -42,7 +39,7 @@ const recommendedClubs = [
 // 한국어 클래스 데이터
 const koreanClasses = [
   {
-    id: 1,
+    id: 3,
     image: "https://api.builder.io/api/v1/image/assets/TEMP/c470bd21cab6825806f1d59b81d84febb47dcfa2?width=320",
     title: "한국어 기초 클래스",
     place: "창신관 102호",
@@ -50,7 +47,7 @@ const koreanClasses = [
     altText: ""
   },
   {
-    id: 2,
+    id: 4,
     image: "https://api.builder.io/api/v1/image/assets/TEMP/344c6a924c437317e8a762e0972dbf9e9d225456?width=320",
     title: "실생활 한국어 회화",
     place: "월당관 3502호",
@@ -58,7 +55,7 @@ const koreanClasses = [
     altText: ""
   },
   {
-    id: 1,
+    id: 3,
     image: "https://api.builder.io/api/v1/image/assets/TEMP/c470bd21cab6825806f1d59b81d84febb47dcfa2?width=320",
     title: "한국어 기초 클래스",
     place: "창신관 102호",
@@ -95,7 +92,6 @@ export const HomePage: React.FC = () => {
                   title={club.title}
                   place={club.place}
                   date={club.date}
-                  badge={club.badge}
                   altText={club.altText}
                   id={club.id}
                 />

@@ -6,7 +6,8 @@ import { MeetingInfo } from "../../components/home/club/MeetingInfo";
 import image1 from "../../components/home/club/image.png";
 import image2 from "../../components/home/club/image2.png";
 import { ParticipantsList } from "../../components/home/club/ParticpantsList";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { clubData } from "../../mock/club/mockClubData"; // mock 데이터
 
 interface MeetingDetailPageProps {
   onBackClick?: () => void;
@@ -14,10 +15,18 @@ interface MeetingDetailPageProps {
   onJoinClick?: () => void;
 }
 
+interface club {
+    id: number;
+    title: string;
+    hobby: string;
+    location: string;
+    datetime: string;
+    price: string;
+    description: string;
+    imageUrls: string[];
+} 
+
 export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({
-  onBackClick,
-  onNotificationClick,
-  onJoinClick
 }) => {
   const participants = [
     {
@@ -45,6 +54,18 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({
   ];
 
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  // 문자열로 넘어오는 id를 숫자로 변환
+  const club = clubData.find((item) => item.id === Number(id));
+
+  if (!club) {
+  return (
+    <main className="flex items-center justify-center min-h-screen">
+      <p className="text-gray-500">존재하지 않는 클럽입니다.</p>
+    </main>
+  );
+}
 
   return (
     <>
@@ -54,39 +75,32 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({
       />
     <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
         <HeaderDetail
-          title="한국어 기초 클래스"
-          onBackClick={() => {navigate(-1)}}
-          onNotificationClick={onNotificationClick}
-        />
+        title={club.title}
+        onBackClick={() => navigate(-1)}
+      />
 
-        <MeetingInfo
-            title="한국어 기초 클래스"
-            hobby="취미명"
-            location="스타벅스 숭실대점"
-            datetime="7/28 18:00"
-            price="20,000원"
-            description="한국어 기초 클래스입니다.
-                        이번 주는 스타벅스 숭실대점에서 만나요!
-                        한국어를 편하게 알려드릴게요!."
-            imageUrls={[
-                image1,
-                "https://api.builder.io/api/v1/image/assets/TEMP/69fcfc725ba28ecd840a947076aa7d0a62038622?width=786",
-                image2,
-            ]}          
-        />
+      <MeetingInfo
+        title={club.title}
+        hobby={club.hobby}
+        location={club.location}
+        datetime={club.datetime}
+        price={club.price}
+        description={club.description}
+        imageUrls={club.imageUrls}
+      />
 
-        <div className=" top-[580px] w-full px-4">
-          <ParticipantsList 
-            participants={participants} 
-            maxParticipants={10} // 예: 최대 10명
-            />
-        </div>
-
-        <ActionButton
-          text="참여하기"
-          onClick={onJoinClick}
-          disabled={participants.length >= 10}
+      <div className="top-[580px] w-full px-4">
+        <ParticipantsList 
+          participants={participants} 
+          maxParticipants={10}
         />
+      </div>
+
+      <ActionButton
+        text="참여하기"
+        onClick={() => console.log("참여 클릭")}
+        disabled={participants.length >= 10}
+      />
       </main>
     </>
   );
