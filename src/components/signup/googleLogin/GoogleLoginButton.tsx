@@ -12,39 +12,39 @@ const CustomGoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
 }) => {
   const navigate: NavigateFunction = useNavigate();
 
-  const login = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      console.log("Token response:", tokenResponse);
+  // const login = useGoogleLogin({
+  //   onSuccess: async (tokenResponse) => {
+  //     console.log("Token response:", tokenResponse);
 
-      const accessToken = tokenResponse.access_token;
+  //     const accessToken = tokenResponse.access_token;
 
-      try {
-        const res = await fetch("/api/auth/google", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ accessToken }),
-        });
+  //     try {
+  //       const res = await fetch("/api/auth/google", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ accessToken }),
+  //       });
 
-        if (!res.ok) {
-          throw new Error("Failed to authenticate");
-        }
+  //       if (!res.ok) {
+  //         throw new Error("Failed to authenticate");
+  //       }
 
-        navigate("/signUp/profile");
-      } catch (error) {
-        console.error("Error during login:", error);
-      }
-    },
-    onError: () => {
-      console.error("Login Failed");
-    },
-  });
+  //       navigate("/signUp/profile");
+  //     } catch (error) {
+  //       console.error("Error during login:", error);
+  //     }
+  //   },
+  //   onError: () => {
+  //     console.error("Login Failed");
+  //   },
+  // });
 
   return (
     <button
       className="flex relative gap-2 justify-center items-start self-stretch px-2 py-4 mt-96 text-base font-bold text-black border-solid border-[0.5px] border-zinc-900 min-h-[50px] rounded-[100px] hover:bg-gray-50 transition-colors"
-      onClick={() => login()}
+      onClick={() => navigate("signUp/profile")}
       type="button"
     >
       <span className="z-0 my-auto">{text}</span>

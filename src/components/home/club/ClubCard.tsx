@@ -6,7 +6,6 @@ interface ClubCardProps {
   title: string;
   place: string;
   date: string;
-  badge?: string;
   altText?: string;
   id: number;
 }
@@ -16,7 +15,6 @@ export const ClubCard: React.FC<ClubCardProps> = ({
   title,
   place,
   date,
-  badge,
   altText = "",
   id
 }) => {
@@ -43,13 +41,6 @@ export const ClubCard: React.FC<ClubCardProps> = ({
                 {date}
               </time>
             </div>
-            {badge && (
-              <div className="flex justify-center items-center px-2 py-1 bg-red-500 rounded-[100px]">
-                <span className="text-xs font-bold text-center text-zinc-50">
-                  {badge}
-                </span>
-              </div>
-            )}
           </div>
         </div>
       </div>
