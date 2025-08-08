@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NoFixedHeaderSeoulmate from '../../components/common/NoFixedHeaderSeoulmate';
 import TabMenu from '../../components/common/TabMenu';
 import BottomNavBar from '../../components/common/BottomNavBar';
@@ -6,6 +7,7 @@ import ChatListBox from '../../components/chat/ChatListBox';
 
 const ChatList = () => {
     const [activeTab, setActiveTab] = useState('그룹 채팅');
+    const navigate = useNavigate();
 
     const handleGroupChatClick = () => {
         setActiveTab('그룹 채팅');
@@ -13,6 +15,11 @@ const ChatList = () => {
 
     const handlePersonalChatClick = () => {
         setActiveTab('개인 채팅');
+    };
+
+    // 채팅방으로 이동하는 함수
+    const handleChatRoomClick = (chatName: string) => {
+        navigate(`/chat?name=${encodeURIComponent(chatName)}`);
     };
 
     // 임시 그룹 채팅 데이터
@@ -59,6 +66,7 @@ const ChatList = () => {
                                 lastMessage={chat.lastMessage}
                                 timestamp={chat.timestamp}
                                 unreadCount={chat.unreadCount}
+                                onClick={() => handleChatRoomClick(chat.name)}
                             />
                         ))}
                     </div>
@@ -71,6 +79,7 @@ const ChatList = () => {
                                 lastMessage={chat.lastMessage}
                                 timestamp={chat.timestamp}
                                 unreadCount={chat.unreadCount}
+                                onClick={() => handleChatRoomClick(chat.name)}
                             />
                         ))}
                     </div>
