@@ -14,15 +14,18 @@ const QuickActionButton: React.FC<QuickActionButtonProps> = ({ type, onClick }) 
     switch (type) {
       case 'schedule':
         return (
-          <Calendar/>
+          <Calendar 
+            fill='#4C8ACD' 
+            style={{ color: '#4C8ACD' }}
+          />
         );
       case 'hobby':
         return (
-          <ArtIcon fill='#FCE134'/>
+          <ArtIcon fill='#4C8ACD'/>
         );
       case 'language':
         return (
-          <LanguageIcon fill='#FCE134'/>
+          <LanguageIcon fill='#4C8ACD'/>
         );
     }
   };
