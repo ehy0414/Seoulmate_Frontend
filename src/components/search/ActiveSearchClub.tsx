@@ -123,7 +123,7 @@ const ActiveSearchClub = () => {
                             onClick={() => setSelectedCategory(category.name)}
                             className={`snap-start flex flex-col items-center justify-center w-[74px] h-[74px] rounded-[20px] border-[0.5px] flex-shrink-0 ${
                                 selectedCategory === category.name
-                                    ? 'bg-yellow-100 border-gray-700'
+                                    ? 'bg-[#FFE2DB] border-gray-700'
                                     : 'bg-black-100 border-black-400'
                             }`}
                             initial={false}
