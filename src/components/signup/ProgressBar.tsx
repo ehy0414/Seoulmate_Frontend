@@ -29,8 +29,8 @@ export const ProgressBar: React.FC<ProgressIndicatorProps> = ({
             {/* Connector */}
             {stepNumber < totalSteps && (
               stepNumber < currentStep
-                    ? <div className="relative top-0 left-0 shrink-0 bg-slate-300 h-[3px] w-[72px]" />
-                    : <div className="relative top-0 left-0 shrink-0 bg-stone-300 h-[3px] w-[72px]" />
+                    ? <div className="relative top-0 left-0 shrink-0 bg-[#B7D0EB] h-[3px] w-[72px]" />
+                    : <div className="relative top-0 left-0 shrink-0 bg-black-200 h-[3px] w-[72px]" />
               
             )}
           </React.Fragment>
