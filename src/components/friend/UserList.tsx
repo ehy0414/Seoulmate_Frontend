@@ -6,7 +6,6 @@ import { FriendsModal } from "../modal/FriendsModal";
 interface User {
   id: string;
   name: string;
-  percentage: string;
 }
 
 interface UserListProps {
@@ -17,7 +16,6 @@ export const UserList: React.FC<UserListProps> = ({ users }) => {
   const defaultUsers: User[] = Array.from({ length: 16 }, (_, index) => ({
     id: `user-${index}`,
     name: "name",
-    percentage: "nn%"
   }));
 
   const userList = users || defaultUsers;
@@ -31,7 +29,6 @@ export const UserList: React.FC<UserListProps> = ({ users }) => {
         <UserListItem
           key={user.id}
           name={user.name}
-          percentage={user.percentage}
           onClick={openModal}
         />
       ))}

@@ -10,7 +10,6 @@ import { FriendsModal } from "../../components/modal/FriendsModal";
 interface FriendRequest {
   id: string;
   name: string;
-  percentage: string;
 }
 
 interface FriendRequestListProps {
@@ -21,10 +20,10 @@ interface FriendRequestListProps {
 
 export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
   requests = [
-    { id: "1", name: "name", percentage: "nn%" },
-    { id: "2", name: "name", percentage: "nn%" },
-    { id: "3", name: "name", percentage: "nn%" },
-    { id: "4", name: "name", percentage: "nn%" },
+    { id: "1", name: "name" },
+    { id: "2", name: "name" },
+    { id: "3", name: "name" },
+    { id: "4", name: "name" },
   ],
   onDeleteRequest,
   onAcceptRequest,
@@ -52,7 +51,6 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
             <RequestUserListItem
                 key={request.id}
                 name={request.name}
-                percentage={request.percentage}
                 onDelete={() => handleDeleteRequest(request.id)}
                 onAccept={() => handleAcceptRequest(request.id)}
                 onClick={openModal}
