@@ -20,7 +20,7 @@ export const ProgressBar: React.FC<ProgressIndicatorProps> = ({
             {/* Step Circle */}
             <div
               className={`flex flex-col justify-center items-center self-stretch my-auto w-6 h-6 rounded-3xl min-h-6 ${
-                isHighlighted ? "bg-yellow-300" : "bg-stone-300"
+                isHighlighted ? "bg-[#4C8ACD]" : "bg-stone-300"
               }`}
             >
               <span className="text-zinc-50">{stepNumber}</span>
@@ -28,15 +28,10 @@ export const ProgressBar: React.FC<ProgressIndicatorProps> = ({
 
             {/* Connector */}
             {stepNumber < totalSteps && (
-              <img
-                src={
-                  stepNumber < currentStep
-                    ? "https://api.builder.io/api/v1/image/assets/TEMP/beb091b81f1e69fbab7640755b927cb017543602?placeholderIfAbsent=true&apiKey=7adddd5587f24b91884c2915be4df62c"
-                    : "https://api.builder.io/api/v1/image/assets/TEMP/b40b1b28d633ea1766955b1d37f3ac1277e0c09a?placeholderIfAbsent=true&apiKey=7adddd5587f24b91884c2915be4df62c"
-                }
-                className={`object-contain shrink-0 self-stretch my-auto rounded-xl aspect-[23.81] w-[72px]`}
-                alt="Progress connector"
-              />
+              stepNumber < currentStep
+                    ? <div className="relative top-0 left-0 shrink-0 bg-[#B7D0EB] h-[3px] w-[72px]" />
+                    : <div className="relative top-0 left-0 shrink-0 bg-black-200 h-[3px] w-[72px]" />
+              
             )}
           </React.Fragment>
         );
