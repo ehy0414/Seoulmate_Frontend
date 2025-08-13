@@ -5,7 +5,6 @@ import { RequestActionButton } from "./RequestActionButton";
 
 interface UserListItemProps {
   name: string;
-  percentage: string;
   onDelete?: () => void;
   onAccept?: () => void;
   onClick: () => void;
@@ -13,7 +12,6 @@ interface UserListItemProps {
 
 export const RequestUserListItem: React.FC<UserListItemProps> = ({
   name,
-  percentage,
   onDelete,
   onAccept,
   onClick
@@ -28,11 +26,6 @@ export const RequestUserListItem: React.FC<UserListItemProps> = ({
             <h3 className="overflow-hidden self-stretch text-base font-medium text-ellipsis text-zinc-900">
               {name}
             </h3>
-          </div>
-          <div className="flex justify-center items-center px-2 py-1 bg-primary-700 rounded-[100px]">
-            <span className="text-xs font-semibold text-center text-zinc-50">
-              {percentage}
-            </span>
           </div>
         </div>
         <div className="flex gap-4 items-center max-sm:gap-3">
