@@ -46,7 +46,7 @@ export const FriendPage: React.FC<FriendsListProps> = ({
     <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
         <HeaderSeoulmate title="서울메이트" alarm={false} />
       
-        <section className="w-full">
+        <section className="w-[460px] fixed">
             <MenuBar />
             <SearchSection
             onBack={handleBack}

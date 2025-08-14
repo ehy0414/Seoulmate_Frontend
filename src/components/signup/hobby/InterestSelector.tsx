@@ -19,7 +19,7 @@ interface InterestSelectorProps {
 
 export const InterestSelector: React.FC<InterestSelectorProps> = ({ selectedItems, onItemToggle }) => {
   return (
-    <main className="relative flex flex-col items-center w-full px-5 pt-4 pb-2 max-w-[430px] mx-auto">
+    <main className="relative flex flex-col items-center w-full px-3 pt-12 pb-2 max-w-[430px] mx-auto">
   <div className="flex flex-col gap-10 w-full">
     {Object.entries(categories).map(([categoryTitle, items]) => (
       <CategorySection
