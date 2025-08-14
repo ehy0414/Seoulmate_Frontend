@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import SportsIcon from '../../assets/category/category-sports.svg?react';
 import PartyIcon from '../../assets/category/category-party.svg?react';
@@ -24,6 +24,7 @@ interface ActiveSearchClubProps {
 
 const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
     const location = useLocation();
+    const navigate = useNavigate();
     const initialCategory = location.state?.category || '스포츠';
     const [selectedCategory, setSelectedCategory] = useState(initialCategory);
     const categoryRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
@@ -111,7 +112,10 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
             {/* 카테고리 필터 */}
             <div className={`sticky z-10 bg-white ${searchValue.trim() !== '' ? 'top-[112.4px]' : 'top-0'}`}>
                 <div className='flex flex-col justify-center items-end self-stretch w-full h-[50px] px-[18px] py-[10px] border-b-[0.5px] border-[#AFA9A9] bg-white'>
-                    <button className='px-4 py-2 w-[77px] h-[30px] bg-black-100 border border-black-600 rounded-[100px] text-[#4E4646] text-[12px] font-medium leading-normal flex items-center'>
+                    <button 
+                        onClick={() => navigate('/filter')}
+                        className='px-4 py-2 w-[77px] h-[30px] bg-black-100 border border-black-600 rounded-[100px] text-[#4E4646] text-[12px] font-medium leading-normal flex items-center'
+                    >
                         언어필터
                     </button>
                 </div>
