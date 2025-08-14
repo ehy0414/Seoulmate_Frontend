@@ -17,7 +17,7 @@ const getFormattedTime = (date: Date) => {
 
 const ChatRoom = () => {
   const [searchParams] = useSearchParams();
-  const friendName = searchParams.get('name') || '알 수 없음';
+  const friendName = searchParams.get('name') || '알 수 없는 사용자';
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const navigate = useNavigate(); 
@@ -62,7 +62,7 @@ const ChatRoom = () => {
         title={friendName}
         onBackClick={() => navigate(-1)} 
       />
-      <div className="flex-1 overflow-y-auto px-4 py-2 space-y-4 scrollbar-hide">
+      <div className="flex-1 overflow-y-auto px-4 py-2 space-y-4 scrollbar-hide flex flex-col justify-end">
         {Object.entries(groupedMessages).map(([date, msgs]) => (
           <div key={date}>
             <div className="text-center text-sm text-black-400 my-2">{date}</div>
