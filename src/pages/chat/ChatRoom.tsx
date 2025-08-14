@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
@@ -25,6 +25,33 @@ const ChatRoom = () => {
   useEffect(() => {
     setMessages(chatMockMessages);
   }, []);
+
+  // 스크롤 핸들링을 위한 ref
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isPinnedRef = useRef(true); // 현재 하단에 가까운지 상태 저장
+
+  // 하단에 가까운지 판단 (여유 60px 임계값)
+  const isNearBottom = () => {
+    const el = containerRef.current;
+    if (!el) return true;
+    const distance = el.scrollHeight - el.clientHeight - el.scrollTop;
+    return distance <= 60;
+  };
+
+  // 스크롤 핸들러: 유저가 스크롤을 올렸는지/내렸는지에 따라 pinned 상태 업데이트
+  const handleScroll = () => {
+    isPinnedRef.current = isNearBottom();
+  };
+
+  // 새 메시지가 생기면, 유저가 하단 근처일 때만 맨 아래로 스크롤
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    if (isPinnedRef.current) {
+      el.scrollTop = el.scrollHeight; // 맨 아래로 고정
+    }
+  }, [messages]);
+
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -62,8 +89,13 @@ const ChatRoom = () => {
         title={friendName}
         onBackClick={() => navigate(-1)} 
       />
-      <div className="h-[1000px] overflow-y-auto px-4 py-2 space-y-4 scrollbar-hide">
-          {Object.entries(groupedMessages).map(([date, msgs]) => (
+      <div
+        ref={containerRef}
+        onScroll={handleScroll}
+        className="h-[1000px] overflow-y-auto scrollbar-hide px-4 py-2 space-y-4 flex flex-col"
+      >        
+        <div className="mt-auto" />
+        {Object.entries(groupedMessages).map(([date, msgs]) => (
             <div key={date}>
               <div className="text-center text-sm text-black-400 my-2">{date}</div>
                 {msgs.map((msg, idx) => {
