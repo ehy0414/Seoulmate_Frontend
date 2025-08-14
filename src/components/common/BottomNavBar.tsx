@@ -48,7 +48,7 @@ const BottomNavBar: React.FC<BottomNavBarProps> = ({ menu }) => {
             </div>
             
             {/* Bottom Navigation Bar */}
-            <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[430px] bg-white shadow-[0_-1px_0_#AFA9A9] rounded-t-lg">
+            <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[430px] bg-white outline outline-1 outline-[#AFA9A9] outline-offset-0 rounded-t-lg">
             <div className="flex justify-around py-[18px]">
                 {navItems.map((item) => {
                     const IconComponent = item.icon;

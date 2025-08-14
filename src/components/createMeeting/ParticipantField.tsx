@@ -22,24 +22,39 @@ export const ParticipantField: React.FC<ParticipantFieldProps> = ({
         {/* 최소 인원 입력 */}
         <div className="flex items-center px-4 w-full rounded-[8px] border bg-black-100 border-black-700 min-h-[45px]">
           <input
-            type="number"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             value={minParticipants ?? ''}
             onChange={(e) => {
               const inputValue = e.target.value;
-              if (inputValue === '') {
+              // 숫자가 아닌 문자 제거
+              const numericValue = inputValue.replace(/[^0-9]/g, '');
+              
+              if (numericValue === '') {
                 onMinChange?.(null);
               } else {
-                const numValue = Number(inputValue);
+                const numValue = Number(numericValue);
                 // 1 이상의 양의 정수만 허용
-                if (numValue >= 1 && Number.isInteger(numValue)) {
+                if (numValue >= 1) {
                   onMinChange?.(numValue);
                 }
               }
             }}
             onKeyDown={(e) => {
-              // 음수, 소수점, e, + 등의 입력 방지
-              if (e.key === '-' || e.key === '.' || e.key === 'e' || e.key === 'E' || e.key === '+') {
+              // 숫자, 백스페이스, 삭제, 탭, 화살표 키만 허용
+              const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+              if (!/^[0-9]$/.test(e.key) && !allowedKeys.includes(e.key)) {
                 e.preventDefault();
+              }
+            }}
+            onPaste={(e) => {
+              // 붙여넣기 시 숫자만 허용
+              e.preventDefault();
+              const pastedText = e.clipboardData.getData('text');
+              const numericText = pastedText.replace(/[^0-9]/g, '');
+              if (numericText && Number(numericText) >= 1) {
+                onMinChange?.(Number(numericText));
               }
             }}
             placeholder="최소인원"
@@ -53,24 +68,39 @@ export const ParticipantField: React.FC<ParticipantFieldProps> = ({
         {/* 최대 인원 입력 */}
         <div className="flex items-center px-4 w-full rounded-[8px] border bg-black-100 border-black-700 min-h-[45px]">
           <input
-            type="number"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             value={maxParticipants ?? ''}
             onChange={(e) => {
               const inputValue = e.target.value;
-              if (inputValue === '') {
+              // 숫자가 아닌 문자 제거
+              const numericValue = inputValue.replace(/[^0-9]/g, '');
+              
+              if (numericValue === '') {
                 onMaxChange?.(null);
               } else {
-                const numValue = Number(inputValue);
+                const numValue = Number(numericValue);
                 // 1 이상의 양의 정수만 허용
-                if (numValue >= 1 && Number.isInteger(numValue)) {
+                if (numValue >= 1) {
                   onMaxChange?.(numValue);
                 }
               }
             }}
             onKeyDown={(e) => {
-              // 음수, 소수점, e, + 등의 입력 방지
-              if (e.key === '-' || e.key === '.' || e.key === 'e' || e.key === 'E' || e.key === '+') {
+              // 숫자, 백스페이스, 삭제, 탭, 화살표 키만 허용
+              const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+              if (!/^[0-9]$/.test(e.key) && !allowedKeys.includes(e.key)) {
                 e.preventDefault();
+              }
+            }}
+            onPaste={(e) => {
+              // 붙여넣기 시 숫자만 허용
+              e.preventDefault();
+              const pastedText = e.clipboardData.getData('text');
+              const numericText = pastedText.replace(/[^0-9]/g, '');
+              if (numericText && Number(numericText) >= 1) {
+                onMaxChange?.(Number(numericText));
               }
             }}
             placeholder="최대인원"
