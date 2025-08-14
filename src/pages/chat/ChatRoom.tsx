@@ -104,7 +104,7 @@ const ChatRoom = () => {
 
                   const marginTop = isSameSender ? 'mt-1' : 'mt-5'; // 4px or 20px
                   return (
-                    <MessageBubble key={idx} message={msg} marginTop={marginTop} />
+                    <MessageBubble key={`${date}-${msg.time}-${idx}`} message={msg} marginTop={marginTop} />
                   );
                 })}
             </div>
