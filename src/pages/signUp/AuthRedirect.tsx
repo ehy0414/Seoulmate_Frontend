@@ -1,4 +1,3 @@
-// pages/AuthRedirect.tsx
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/axios";
@@ -7,7 +6,7 @@ export default function AuthRedirect() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        api.get("/signup/profile-info", { withCredentials: true })
+        api.get("/signup/profile-info")
             .then(res => {
             const data = res.data.data; // 바로 꺼내기
             console.log("API data:", data);
