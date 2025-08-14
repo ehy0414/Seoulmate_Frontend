@@ -56,9 +56,9 @@ export const PhotoUploadSection: React.FC<PhotoUploadSectionProps> = ({
       </div>
       <button
         onClick={handleClick}
-        className={`relative flex items-center mt-2 w-[60px] h-[45px] ${!selectedImage ? 'bg-black-100' : ''}`}
+        className={`relative flex items-center mt-2 w-[60px] h-[45px] `}
       >
-        <div className={`relative w-[45px] h-[45px] rounded-[8px] overflow-hidden ${!selectedImage ? 'border border-black-700' : ''}`}>
+        <div className={`relative w-[45px] h-[45px] rounded-[8px] overflow-hidden ${!selectedImage ? 'border border-black-700' : 'bg-black-100'}`}>
           {selectedImage && (
             <motion.img
               key={selectedImage} // key를 추가하여 이미지가 바뀔 때마다 새로운 컴포넌트로 인식

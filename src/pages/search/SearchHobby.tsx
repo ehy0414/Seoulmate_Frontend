@@ -19,7 +19,7 @@ const SearchHobby: React.FC = () => {
     return (
         <div className=" w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white min-h-screen">
             {/* 검색창 */}
-            <div className="px-2.5 py-2.5 flex items-center  gap-[4.07vw]">
+            <div className={`px-2.5 py-2.5 flex items-center gap-[4.07vw] ${searchValue.trim() !== '' ? 'sticky top-0 z-20 bg-white' : ''}`}>
                 <img src={BackArrow} onClick={()=>navigate(-1)} />
                 <input
                     value={searchValue}
@@ -32,16 +32,18 @@ const SearchHobby: React.FC = () => {
             </div>
 
             {/* 메뉴바 */}
-            <TabMenu
-                firstTabText="모임"
-                secondTabText="친구"
-                activeTab={activeTab}
-                onFirstTabClick={handleFirstTabClick}
-                onSecondTabClick={handleSecondTabClick}
-            />
+            <div className={`${searchValue.trim() !== '' ? 'sticky top-[67.6px] z-10 bg-white' : ''}`}>
+                <TabMenu
+                    firstTabText="모임"
+                    secondTabText="친구"
+                    activeTab={activeTab}
+                    onFirstTabClick={handleFirstTabClick}
+                    onSecondTabClick={handleSecondTabClick}
+                />
+            </div>
 
             {activeTab === '모임' ? (
-                <ActiveSearchClub />
+                <ActiveSearchClub searchValue={searchValue} />
             ) : (
                 searchValue.trim() === ''
                     ? <ActiveSearchFriend />

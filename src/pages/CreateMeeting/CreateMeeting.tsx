@@ -98,15 +98,16 @@ export const CreateMeeting: React.FC = () => {
           onChange={(value) => setMeetingData(prev => ({ ...prev, category: value }))}
         />
 
+        <DateField
+          value={meetingData.date}
+          onChange={(value) => setMeetingData(prev => ({ ...prev, date: value }))}
+        />
+        
         <TimeField
           value={meetingData.time}
           onChange={(value) => setMeetingData(prev => ({ ...prev, time: value }))}
         />
 
-        <DateField
-          value={meetingData.date}
-          onChange={(value) => setMeetingData(prev => ({ ...prev, date: value }))}
-        />
 
         <LocationField
           value={meetingData.location}
