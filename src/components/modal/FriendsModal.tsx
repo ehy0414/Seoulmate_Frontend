@@ -122,14 +122,14 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
   return (
     <div
       // 👉 여기에 inset-0 클래스를 추가하여 화면 전체를 덮도록 수정
-      className={`fixed z-50 inset-0 bg-black-700 bg-opacity-30 transition-opacity duration-300 ${
+      className={`fixed z-40 inset-0 bg-black-700 bg-opacity-30 transition-opacity duration-300 ${
         isVisible ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
       }`}
       onClick={onClose}
     >
       <div
         ref={modalRef}
-        className="fixed bottom-0 left-1/2 w-full border-2 border-solid bg-white rounded-t-[24px] shadow-xl transition-transform duration-300 overflow-hidden"
+        className="fixed bottom-0 left-1/2 w-full bg-white rounded-t-[24px] shadow-xl transition-transform duration-300 overflow-hidden"
         style={{
           width: "full",
           maxWidth: "clamp(360px, 100vw, 430px)",
