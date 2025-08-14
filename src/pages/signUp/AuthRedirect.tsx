@@ -18,7 +18,7 @@ export default function AuthRedirect() {
             if (res.data.code === "SIGNUP 200") {
                 // 회원가입 안 된 경우
                 navigate("/signUp/profile", { state: data });
-            } 
+            }
             else if (data.univVerification === "SUBMITTED") {
                 // 학교 인증 진행 중
                 navigate("/signUp/wait", { state: data });

@@ -109,9 +109,9 @@ export const HomePage: React.FC = () => {
         <section className="flex flex-col gap-5 items-start self-stretch py-0 w-full">
           <SectionHeader title="한국어 클래스" />
           <ScrollableCardList>
-            {koreanClasses.map((klass) => (
+            {koreanClasses.map((klass, index) => (
               <ClubCard
-                key={klass.id}
+                key={index}
                 image={klass.image}
                 title={klass.title}
                 place={klass.place}

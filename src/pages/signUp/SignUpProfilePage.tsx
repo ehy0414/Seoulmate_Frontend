@@ -11,6 +11,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import api from "../../services/axios";
 
 interface FormData {
   firstName: string;
@@ -36,8 +37,38 @@ export const SignUpProfilePage: React.FC = () => {
   });
 
   const nationalityOptions = [
-    '대한민국', '미국', '일본', '중국', '영국', '독일', '프랑스', '기타'
-  ];
+  '대한민국',
+  '네덜란드',
+  '네팔',
+  '노르웨이',
+  '독일',
+  '러시아',
+  '몽골',
+  '미국',
+  '방글라데시',
+  '베트남',
+  '벨기에',
+  '스웨덴',
+  '스위스',
+  '스페인',
+  '영국',
+  '오스트리아',
+  '우즈베키스탄',
+  '이탈리아',
+  '인도',
+  '인도네시아',
+  '일본',
+  '중국',
+  '카자흐스탄',
+  '캐나다',
+  '태국',
+  '파키스탄',
+  '프랑스',
+  '필리핀',
+  '호주',
+  '기타'
+];
+
 
   const handleFieldChange = (field: keyof FormData) => (value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -71,11 +102,22 @@ export const SignUpProfilePage: React.FC = () => {
       data.append("profileImage", profileFile);
     }
 
+    try {
+      const res = await api.post("/signup/create-profile", data, {
+        withCredentials: true, // 세션 쿠키 포함
+      });
+      if (res.status === 200) {
+        navigate("/signUp/langTest", { state: { country: formData.country } });
+      }
+    } catch (error) {
+      console.error("Error submitting profile data:", error);
+    }
+
     console.log('FormData values:', [...data.entries()]);
-    navigate("/signUp/langTest", {state: {country: formData.country}});
+    // navigate("/signUp/langTest", {state: {country: formData.country}});
   };
 
-  const isFormValid = formData.lastName && formData.firstName && formData.DOB && formData.country;
+  const isFormValid = profileFile &&formData.lastName && formData.firstName && formData.DOB && formData.country;
 
   return (
     <main className="flex flex-col items-center px-6 pt-[100px] pb-[300px] mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
