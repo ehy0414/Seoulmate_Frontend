@@ -92,7 +92,7 @@ const ChatRoom = () => {
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className="h-[1000px] overflow-y-auto scrollbar-hide px-4 py-2 space-y-4 flex flex-col"
+        className="flex-1 min-h-0 overflow-y-auto scrollbar-hide px-4 py-2 space-y-4 flex flex-col"
       >        
         <div className="mt-auto" />
         {Object.entries(groupedMessages).map(([date, msgs]) => (
