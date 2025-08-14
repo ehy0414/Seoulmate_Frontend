@@ -19,10 +19,11 @@ export const TimeField: React.FC<TimeFieldProps> = ({
           type="time"
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
-          className="self-stretch my-auto text-black-700 bg-transparent border-none outline-none w-full cursor-pointer"
+          className="self-stretch my-auto text-black-700 bg-transparent border-none outline-none w-full cursor-pointer text-left"
           style={{
             colorScheme: 'light',
             color: value ? '#1a1a1a' : 'transparent',
+            textAlign: 'left',
           }}
         />
         {/* Placeholder가 값이 없을 때만 표시 */}
