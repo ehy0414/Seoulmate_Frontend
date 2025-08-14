@@ -20,6 +20,7 @@ import ChatRoom from './pages/chat/ChatRoom'
 import Schedule from './pages/schedule/Schedule'
 import ChatList from './pages/chat/ChatList'
 import AlarmPage from './pages/alarm/AlarmPage'
+import FilterPage from './pages/search/FilterPage'
 
 function App() {
 
@@ -47,6 +48,7 @@ function App() {
         <Route path='/schedule' element={<Schedule />} />
         <Route path='/chat/list' element={<ChatList />} />
         <Route path='/alarm' element={<AlarmPage />} />
+        <Route path='/filter' element={<FilterPage />} />
       </Routes>
     </BrowserRouter>
   )
