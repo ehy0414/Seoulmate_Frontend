@@ -6,7 +6,6 @@ import ActiveSearchClub from '../../components/search/ActiveSearchClub';
 import ActiveSearchFriend from '../../components/search/ActiveSearchFriend';
 import ActiveSearchResult from '../../components/search/ActiveSearchResult';
 import BackArrow from '../../assets/common/back-arrow.svg';
-import FloatingActionButton from '../../components/common/FloatingActionButton';
 import { useNavigate } from 'react-router-dom';
 
 const SearchHobby: React.FC = () => {
@@ -19,7 +18,7 @@ const SearchHobby: React.FC = () => {
     return (
         <div className=" w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white min-h-screen">
             {/* 검색창 */}
-            <div className={`px-2.5 py-2.5 flex items-center gap-[4.07vw] ${searchValue.trim() !== '' ? 'sticky top-0 z-20 bg-white' : ''}`}>
+            <div className={`px-2.5 py-2.5 flex items-center gap-[16px] ${searchValue.trim() !== '' ? 'sticky top-0 z-20 bg-white' : ''}`}>
                 <img src={BackArrow} onClick={()=>navigate(-1)} />
                 <input
                     value={searchValue}
