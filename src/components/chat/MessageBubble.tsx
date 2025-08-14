@@ -29,7 +29,7 @@ const MessageBubble: React.FC<Props> = ({ message, marginTop }) => {
             )}
           </div>
 
-          <div className="max-w-[70%] px-4 py-2 rounded-md text-sm bg-[#F3F2F2] text-black-700 rounded-br-none">
+          <div className="max-w-[70%] px-4 py-2 rounded-md text-sm bg-[#F3F2F2] text-black-700 rounded-bl-none">
             <p className="whitespace-pre-wrap break-words">{message.text}</p>
           </div>
 
@@ -42,7 +42,7 @@ const MessageBubble: React.FC<Props> = ({ message, marginTop }) => {
         <>
           <div className="text-xs text-black-400 mb-[4px]">{message.time}</div>
 
-          <div className="max-w-[70%] px-4 py-2 rounded-md text-sm bg-primary-700 text-white rounded-bl-none">
+          <div className="max-w-[70%] px-4 py-2 rounded-md text-sm bg-primary-700 text-white rounded-br-none">
             <p className="whitespace-pre-wrap break-words">{message.text}</p>
           </div>
         </>
