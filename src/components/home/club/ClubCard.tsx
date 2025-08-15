@@ -8,6 +8,7 @@ interface ClubCardProps {
   date: string;
   altText?: string;
   id: number;
+  onClick?: () => void;
 }
 
 export const ClubCard: React.FC<ClubCardProps> = ({
@@ -16,12 +17,12 @@ export const ClubCard: React.FC<ClubCardProps> = ({
   place,
   date,
   altText = "",
-  id
+  id,
+  onClick
 }) => {
-  const navigate = useNavigate();
   return (
     <article className="w-[176px] flex flex-col shrink-0 gap-3 justify-center items-start p-2 rounded-lg border-solid shadow-sm bg-zinc-50 border-[0.5px] border-black-300 cursor-pointer"
-              onClick={()=> {navigate(`/club/${id}`)}}>
+              onClick={onClick}>
       <img
         src={image}
         alt={altText}
