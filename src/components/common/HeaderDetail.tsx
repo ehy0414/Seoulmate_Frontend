@@ -6,16 +6,18 @@ interface TopBarProps {
   onBackClick?: () => void;
   onNotificationClick?: () => void;
   alarm?: boolean;
+  showBorder?: boolean;
 }
 
 export const HeaderDetail: React.FC<TopBarProps> = ({
   title,
   onBackClick,
   onNotificationClick,
-  alarm = true
+  alarm = true,
+  showBorder = true
 }) => {
   return (
-    <header className="fixed top-0 px-4 flex z-40 justify-between items-center bg-white border-b border-solid border-b-stone-300 h-[60px] w-full max-w-[clamp(360px,100vw,430px)]">
+    <header className={`fixed top-0 px-4 flex z-40 justify-between items-center bg-white h-[60px] w-full max-w-[clamp(360px,100vw,430px)] ${showBorder ? 'border-b border-solid border-b-stone-300' : ''}`}>
       <button onClick={onBackClick} aria-label="뒤로 가기">
         <div
           dangerouslySetInnerHTML={{
