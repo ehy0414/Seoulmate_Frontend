@@ -20,6 +20,7 @@ import ChatRoom from './pages/chat/ChatRoom'
 import Schedule from './pages/schedule/Schedule'
 import ChatList from './pages/chat/ChatList'
 import AlarmPage from './pages/alarm/AlarmPage'
+import ClassDetailPage from './pages/home/ClassDetailPage'
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
         <Route path='/home' element={<HomePage />} />
         <Route path='/meeting/:id' element={<MeetingDetailPage />} />
         <Route path='/club/:id' element={<ClubDetailPage />} />
+        <Route path='/class/:id' element={<ClassDetailPage />} />
         <Route path='/create-meeting' element={<CreateMeeting />} />
         <Route path='/friend' element={<FriendPage />} />
         <Route path='/friend/request' element={<FriendRequestPage />} />

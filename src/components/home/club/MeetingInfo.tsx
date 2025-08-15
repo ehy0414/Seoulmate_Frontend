@@ -9,6 +9,8 @@ interface MeetingInfoProps {
   price: string;
   description: string;
   imageUrls: string[]; // 여러 장의 이미지
+  extraContent?: React.ReactNode;
+  type: "club" | "class";
 }
 
 export const MeetingInfo: React.FC<MeetingInfoProps> = ({
@@ -19,6 +21,8 @@ export const MeetingInfo: React.FC<MeetingInfoProps> = ({
   price,
   description,
   imageUrls,
+  extraContent,
+  type
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -49,6 +53,8 @@ export const MeetingInfo: React.FC<MeetingInfoProps> = ({
             />
           ))}
         </div>
+                
+      {extraContent}
 
       {/* 미팅 정보 */}
       <header className="flex justify-between px-4 items-center w-full pt-3 text-2xl font-semibold">
@@ -83,6 +89,18 @@ export const MeetingInfo: React.FC<MeetingInfoProps> = ({
           />
           <span>{price}</span>
         </div>
+
+        {/* 🔹 클럽일 때만 표시 */}
+        {type === "club" && (
+          <div className="flex gap-2 items-center mt-2 w-full whitespace-nowrap">
+            <img
+              src="https://api.builder.io/api/v1/image/assets/TEMP/1f380f88963d7d3c628a95b7768457514738de77"
+              alt="Language info icon"
+              className="object-contain w-6 aspect-square"
+            />
+            <p>한국어 90, 영어 45</p>
+          </div>
+        )}
 
         <hr className="mt-5" />
 

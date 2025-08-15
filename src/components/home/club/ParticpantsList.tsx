@@ -12,6 +12,7 @@ interface ParticipantsListProps {
   participants: Participant[];
   title?: string;
   maxParticipants: number; // 추가
+  type: "club" | "class";
 }
 
 
@@ -41,7 +42,8 @@ const ParticipantItem: React.FC<{
 export const ParticipantsList: React.FC<ParticipantsListProps> = ({
   participants,
   title = "참여하는 사람",
-  maxParticipants
+  maxParticipants,
+  type
 }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const openModal = () => setModalVisible(true);
@@ -68,7 +70,7 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({
   }
 
   return (
-      <section className="flex flex-col gap-3 items-start self-stretch w-full">
+      <section className="flex flex-col gap-3 items-start self-stretch w-full pb-10">
         <div className="flex gap-3 items-center self-stretch w-full">
           <h3 className="text-sm font-medium leading-5 text-black">{title}</h3>
           <p className="text-xs font-bold leading-5 text-primary-700">({filledSlots}/{slotComponents.length})</p>
@@ -85,6 +87,11 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({
             </div>
           ))}
         </div>
+
+        {/* 🔹 클럽일 때만 표시 */}
+        {type === "club" && (
+          <p className="text-xs font-bold text-primary-700">8명 이상 참여해야 모임이 열려요.</p>
+        )}
 
         {/* 모달 */}
         <FriendsModal isVisible={isModalVisible} onClose={closeModal} />
