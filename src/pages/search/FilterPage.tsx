@@ -59,10 +59,10 @@ const FilterPage: React.FC = () => {
       </div>
       
       {/* 적용하기 버튼 */}
-      <div className="px-[18px] py-[20px] bg-white">
+      <div className="px-[18px] py-[16px] bg-white">
         <button
           onClick={handleApplyFilter}
-          className="w-full h-[52px] bg-[#F45F3A] text-white text-lg font-semibold rounded-[12px] hover:bg-[#E54A2E] transition-colors"
+          className="w-full h-[50px] bg-[#FF6E49] text-black-100 text-base font-medium rounded-[8px]"
         >
           적용하기
         </button>
