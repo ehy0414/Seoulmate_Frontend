@@ -132,7 +132,10 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                                 <button
                                     key={index}
                                     onClick={() => navigate('/filter')}
-                                    className='px-4 py-2 bg-[#FFE2DB] border border-[#F45F3A] rounded-[100px] text-[#F45F3A] text-[12px] font-medium leading-normal flex items-center justify-center'
+                                    className='px-4 py-2 bg-[#FFE2DB] rounded-[100px] text-[#F45F3A] text-[12px] font-semibold leading-[14px] flex items-center justify-center'
+                                    style={{
+                                        boxShadow: 'inset 0 0 0 1px #F45F3A'
+                                    }}
                                 >
                                     {text}
                                 </button>
