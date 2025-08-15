@@ -23,6 +23,7 @@ export const DateField: React.FC<DateFieldProps> = ({
           style={{
             colorScheme: 'light',
             color: value ? '#1a1a1a' : 'transparent',
+            textAlign: 'left',
           }}
         />
         {/* Placeholder가 값이 없을 때만 표시 */}
