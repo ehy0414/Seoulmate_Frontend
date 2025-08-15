@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BottomNavBar from '../../components/common/BottomNavBar';
 import TabMenu from '../../components/common/TabMenu';
 import SearchIcon from '../../assets/common/bottom-navbar-search.svg?react';
@@ -15,6 +15,11 @@ const SearchHobby: React.FC = () => {
     const handleFirstTabClick = () => setActiveTab('모임');
     const handleSecondTabClick = () => setActiveTab('친구');
 
+    // 페이지 진입 시 최상단으로 스크롤
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <div className=" w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white min-h-screen">
             {/* 검색창 */}
@@ -24,7 +29,7 @@ const SearchHobby: React.FC = () => {
                     value={searchValue}
                     onChange={(e) => setSearchValue(e.target.value)}
                     type="text"
-                    placeholder="찾고싶은 취미, 유저를 검색하세요"
+                    placeholder="찾고싶은 모임, 유저를 검색하세요"
                     className="font-[500] w-full bg-black-100 border border-black-700 rounded-[8px] px-4 py-[13px] text-black-700 text-sm outline-none placeholder:text-black-300"
                 />
                 <SearchIcon fill='#1a1a1a' className='w-6 h-6 flex-shrink-0' />
