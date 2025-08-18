@@ -26,7 +26,7 @@ export const TimeField: React.FC<TimeFieldProps> = ({ value = '', onChange }) =>
           dateFormat="HH:mm"
           timeFormat="HH:mm"
           placeholderText="모임 시간을 선택하세요."
-          className="self-stretch my-auto text-black-700 bg-transparent border-none outline-none w-full cursor-pointer text-left text-black-300"
+          customInput={<input className="self-stretch my-auto text-black-700 bg-transparent border-none outline-none w-full cursor-pointer text-left placeholder:text-[#D4D0D0]" />}
         />
       </div>
     </div>
