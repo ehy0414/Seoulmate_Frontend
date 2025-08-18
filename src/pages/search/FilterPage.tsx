@@ -43,7 +43,7 @@ const FilterPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-white flex flex-col" style={{ height: '100vh' }}>
+    <div className="bg-white flex flex-col" style={{ height: '100dvh' }}>
       <HeaderDetail title="필터" alarm={false} onBackClick={handleBackClick} />
       <div className="mt-[60px] bg-white px-[18px] py-[20px] flex flex-col gap-10 flex-1">
         <LevelSlider
