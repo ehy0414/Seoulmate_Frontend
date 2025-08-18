@@ -13,7 +13,7 @@ const CustomGoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
     //window.location.href = "http://localhost:8080/oauth2/authorization/google";
 
     // 배포 환경 - 백엔드에서 처리하는 방식으로 채택한 것 같습니다.
-    window.location.href = "http://3.26.3.167:8080/oauth2/authorization/google";
+    window.location.href = `${import.meta.env.VITE_BACKEND_URL}/oauth2/authorization/google`;
   };
 
   return (

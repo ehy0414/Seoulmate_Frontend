@@ -9,10 +9,9 @@ export default function AuthRedirect() {
         api.get("/signup/profile-info")
             .then(res => {
             const data = res.data.data; // 바로 꺼내기
-            console.log("API data:", data);
-            console.log(res.data);
-            console.log(res.data.data);
-            console.log(res.data.sessionId);
+            console.log("API data:", res.data);
+            console.log(res)
+            localStorage.setItem("sessionId", data.sessionId);
 
             if (res.data.code === "SIGNUP 200") {
                 // 회원가입 안 된 경우
