@@ -60,7 +60,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
     const modalEl = modalRef.current;
     const handleTransitionEnd = () => {
       if (!isVisible) {
-        setHeight(90);
+        setHeight(70);
       }
     };
     modalEl?.addEventListener("transitionend", handleTransitionEnd);
@@ -88,6 +88,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
     };
     const handleMouseDown = (e: MouseEvent) => {
       if (dragBarRef.current?.contains(e.target as Node)) {
+        e.preventDefault();
         dragging.current = true;
         startY.current = e.clientY;
         startHeight.current = height;
@@ -95,11 +96,13 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
     };
     const handleMouseMove = (e: MouseEvent) => {
       if (!dragging.current || startY.current === null) return;
+      e.preventDefault();
       const deltaY = e.clientY - startY.current;
       updateHeight(deltaY);
     };
-    const handleMouseUp = () => {
+    const handleMouseUp = (e: MouseEvent) => {
       if (!dragging.current) return;
+      e.preventDefault();
       finishDrag();
     };
     document.addEventListener("touchstart", handleTouchStart);
@@ -133,7 +136,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
         style={{
           width: "full",
           maxWidth: "clamp(360px, 100vw, 430px)",
-          height: height === 100 ? "100dvh" : `${height}dvh`,
+          height: height === 100 ? "100dvh" : `${height}vh`,
           transform: `${isVisible ? "translate(-50%, 0)" : "translate(-50%, 100%)"}`
         }}
         onClick={(e) => e.stopPropagation()}
@@ -141,14 +144,16 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
         {/* 상단 드래그 손잡이 (클릭 영역 확장) */}
         <div
           ref={dragBarRef}
-          className="absolute top-[10px] left-1/2 h-[30px] w-full -translate-x-1/2 cursor-grab z-10"
-          style={{ backgroundColor: "transparent" }}
+          className="absolute top-0 left-0 w-full h-[50px] bg-white rounded-t-[24px] cursor-pointer z-20 flex justify-center items-center"
         >
-          <div className="w-[50px] h-1 bg-stone-300 rounded-xl mx-auto mt-[14px]" />
+          <div className="w-[50px] h-1 bg-stone-300 rounded-xl" />
         </div>
 
+
         {/* 모달 콘텐츠 */}
-        <Friends />
+        <div className="h-full overflow-y-auto scrollbar-hide px-2 pb-6">
+          <Friends />
+        </div>
       </div>
     </div>
   );
