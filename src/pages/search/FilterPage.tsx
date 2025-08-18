@@ -59,10 +59,18 @@ const FilterPage: React.FC = () => {
       </div>
       
       {/* 적용하기 버튼 */}
-      <div className="px-[18px] py-[16px] bg-white">
+      <div className="px-[18px] py-[16px] bg-white flex gap-[17px] w-full">
         <button
           onClick={handleApplyFilter}
-          className="w-full h-[50px] bg-[#FF6E49] text-black-100 text-base font-medium rounded-[8px]"
+          style={{ flexGrow: 129, flexBasis: 0 }}
+          className="h-[50px] bg-transparent border border-primary-600 text-primary-700 text-base font-medium rounded-[8px]"
+        >
+          초기화
+        </button>
+        <button
+          onClick={handleApplyFilter}
+          style={{ flexGrow: 211, flexBasis: 0 }}
+          className="h-[50px] bg-[#FF6E49] text-black-100 text-base font-medium rounded-[8px]"
         >
           적용하기
         </button>
