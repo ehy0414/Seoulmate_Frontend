@@ -143,7 +143,7 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                         </div>
                     )}
                 </div>
-                <div className="px-[18px] py-5 bg-white overflow-visible">
+                <div className="px-[18px] py-5 bg-white">
                     <div className="flex space-x-3 overflow-x-auto snap-x snap-proximity scrollbar-hide">
                         {categories.map((category) => (
                             <motion.button
@@ -157,6 +157,7 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                                         ? 'bg-[#FFE2DB] border-gray-700'
                                         : 'bg-black-100 border-black-400'
                                 }`}
+                                style={{backfaceVisibility:'hidden'}}
                                 initial={false}
                                 animate={{
                                     opacity: selectedCategory === category.name ? 1 : 0.7
