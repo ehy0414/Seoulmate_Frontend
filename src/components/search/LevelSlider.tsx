@@ -189,7 +189,8 @@ const LevelSlider: React.FC<LevelSliderProps> = ({
             className="absolute top-1/2 h-1 bg-blue-500 rounded-full transform -translate-y-1/2 pointer-events-none"
             style={{
               left: `${4 + (level[0] / 100) * (100 - 8)}%`,
-              width: `${((level[1] - level[0]) / 100) * (100 - 8)}%`
+              width: `${((level[1] - level[0]) / 100) * (100 - 8)}%`,
+              transition: 'left 0.15s cubic-bezier(0.4,0,0.2,1), width 0.15s cubic-bezier(0.4,0,0.2,1)'
             }}
           ></div>
           
@@ -198,7 +199,8 @@ const LevelSlider: React.FC<LevelSliderProps> = ({
             className="absolute top-1/2 w-[30px] h-[30px] bg-white border rounded-full cursor-pointer transform -translate-y-1/2 -translate-x-1/2 pointer-events-none shadow-md hover:shadow-lg transition-shadow"
             style={{ 
               left: `${4 + (level[0] / 100) * (100 - 8)}%`,
-              borderColor: 'rgba(122, 114, 114, 1)'
+              borderColor: 'rgba(122, 114, 114, 1)',
+              transition: 'left 0.15s cubic-bezier(0.4,0,0.2,1)'
             }}
           ></div>
           
@@ -207,7 +209,8 @@ const LevelSlider: React.FC<LevelSliderProps> = ({
             className="absolute top-1/2 w-[30px] h-[30px] bg-white border rounded-full cursor-pointer transform -translate-y-1/2 -translate-x-1/2 pointer-events-none shadow-md hover:shadow-lg transition-shadow"
             style={{ 
               left: `${4 + (level[1] / 100) * (100 - 8)}%`,
-              borderColor: 'rgba(122, 114, 114, 1)'
+              borderColor: 'rgba(122, 114, 114, 1)',
+              transition: 'left 0.15s cubic-bezier(0.4,0,0.2,1)'
             }}
           ></div>
           

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { isDefaultFilter } from '../../utils/filterUtils';
 import { useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 import LevelSlider from '../../components/search/LevelSlider';
 import { HeaderDetail } from '../../components/common/HeaderDetail';
 import { filterAtom } from '../../store/filterAtom';
 import type { FilterState } from '../../store/filterAtom';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const FilterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -58,25 +60,37 @@ const FilterPage: React.FC = () => {
         />
       </div>
       
-      {/* 적용하기 버튼 */}
-      <div className="px-[18px] py-[16px] bg-white flex gap-[17px] w-full">
-        <button
-          onClick={() => setFilter({
-            koreanLevel: [0, 100],
-            englishLevel: [0, 100]
-          })}
-          style={{ flexGrow: 129, flexBasis: 0 }}
-          className="h-[50px] bg-transparent border border-primary-600 text-primary-700 text-base font-medium rounded-[8px]"
-        >
-          초기화
-        </button>
-        <button
-          onClick={handleApplyFilter}
-          style={{ flexGrow: 211, flexBasis: 0 }}
-          className="h-[50px] bg-[#FF6E49] text-black-100 text-base font-medium rounded-[8px]"
-        >
-          적용하기
-        </button>
+      {/* 적용하기 버튼 영역 */}
+      <div className={`px-[18px] py-[16px] bg-white flex ${!isDefaultFilter(filter) ? 'gap-[17px]' : ''} w-full`}>
+        <AnimatePresence mode="wait">
+          {!isDefaultFilter(filter) && (
+            <motion.button
+              key="reset"
+              initial={{ opacity: 0, x: 0 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => setFilter({ koreanLevel: [0, 100], englishLevel: [0, 100] })}
+              style={{ width: 129 }}
+              className="h-[50px] bg-transparent border border-primary-600 text-primary-700 text-base font-medium rounded-[8px]"
+            >
+              초기화
+            </motion.button>
+          )}
+          <motion.button
+            key={isDefaultFilter(filter) ? 'apply-full' : 'apply'}
+            layout
+            initial={{ opacity: 0, x: 0 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            onClick={handleApplyFilter}
+            className={`h-[50px] bg-[#FF6E49] text-black-100 text-base font-medium rounded-[8px] ${isDefaultFilter(filter) ? 'w-full' : ''}`}
+            style={!isDefaultFilter(filter) ? { width: 211 } : {}}
+          >
+            적용하기
+          </motion.button>
+        </AnimatePresence>
       </div>
     </div>
   );
