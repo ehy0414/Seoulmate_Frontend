@@ -36,7 +36,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
 
     if (height < 40) {
       onClose();
-    } else if (height > 70) {
+    } else if (height > 75) {
       setHeight(100);
     }
   };
@@ -133,7 +133,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
         style={{
           width: "full",
           maxWidth: "clamp(360px, 100vw, 430px)",
-          height: height === 100 ? "100dvh" : `${height}vh`,
+          height: height === 100 ? "100dvh" : `${height}dvh`,
           transform: `${isVisible ? "translate(-50%, 0)" : "translate(-50%, 100%)"}`
         }}
         onClick={(e) => e.stopPropagation()}
