@@ -144,7 +144,7 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                     )}
                 </div>
                 <div className="px-[18px] py-5 bg-white">
-                    <div className="flex space-x-3 overflow-x-auto snap-x snap-proximity scrollbar-hide" style={{transform:'translate3d(0, 0, 0)'}}>
+                    <div className="flex space-x-3 overflow-x-auto snap-x snap-proximity scrollbar-hide">
                         {categories.map((category) => (
                             <motion.button
                                 key={category.name}
@@ -154,8 +154,8 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                                 onClick={() => setSelectedCategory(category.name)}
                                 className={`snap-start flex flex-col items-center justify-center w-[74px] h-[74px] rounded-[20px] border-[0.5px] flex-shrink-0 ${
                                     selectedCategory === category.name
-                                        ? 'bg-[#FFE2DB] border-gray-700'
-                                        : 'bg-black-100 border-black-400'
+                                        ? 'bg-[#FFE2DB] shadow-[inset_0_0_0_0.5px_#4E4646]'
+                                        : 'bg-black-100 shadow-[inset_0_0_0_0.5px_#AFA9A9]'
                                 }`}
                                 style={{backfaceVisibility:'hidden'}}
                                 initial={false}
