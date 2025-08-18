@@ -42,19 +42,31 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
   };
 
   useEffect(() => {
+    const preventScroll = (e: TouchEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        e.preventDefault(); // 모달 바깥쪽 스크롤 차단
+      }
+    };
+
     if (isVisible) {
       document.body.style.overflow = "hidden";
-      document.body.style.touchAction = "none";
+      document.body.style.width = "100%";
+
+      document.addEventListener("touchmove", preventScroll, { passive: false });
     } else {
       document.body.style.overflow = "";
-      document.body.style.touchAction = "";
+      document.body.style.width = "";
+      document.removeEventListener("touchmove", preventScroll);
     }
 
     return () => {
       document.body.style.overflow = "";
-      document.body.style.touchAction = "";
+      document.body.style.position = "";
+      document.body.style.width = "";
+      document.removeEventListener("touchmove", preventScroll);
     };
   }, [isVisible]);
+
 
   useEffect(() => {
     const modalEl = modalRef.current;
