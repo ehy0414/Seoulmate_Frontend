@@ -119,7 +119,7 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                         언어필터
                     </button>
                 </div>
-                <div className="px-[18px] py-5 bg-white">
+                <div className="px-[18px] py-5 bg-white overflow-visible">
                     <div className="flex space-x-3 overflow-x-auto snap-x snap-proximity scrollbar-hide">
                         {categories.map((category) => (
                             <motion.button
