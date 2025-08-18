@@ -144,7 +144,7 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                     )}
                 </div>
                 <div className="px-[18px] py-5 bg-white">
-                    <div className="flex space-x-3 overflow-x-auto snap-x snap-proximity scrollbar-hide">
+                    <div className="flex space-x-3 overflow-x-auto overflow-y-visible snap-x snap-proximity scrollbar-hide">
                         {categories.map((category) => (
                             <motion.button
                                 key={category.name}
