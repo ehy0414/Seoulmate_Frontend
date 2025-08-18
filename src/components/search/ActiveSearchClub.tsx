@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAtomValue } from 'jotai';
 import { motion, AnimatePresence } from 'framer-motion';
 import SportsIcon from '../../assets/category/category-sports.svg?react';
 import PartyIcon from '../../assets/category/category-party.svg?react';
@@ -9,6 +10,8 @@ import ArtIcon from '../../assets/category/category-art.svg?react';
 import HobbyIcon from '../../assets/category/category-hobby.svg?react';
 import FoodIcon from '../../assets/category/category-food.svg?react';
 import MusicIcon from '../../assets/category/category-music.svg?react';
+import { filterAtom } from '../../store/filterAtom';
+import { isDefaultFilter, generateFilterText } from '../../utils/filterUtils';
 
 interface ClubCard {
     id: number;
@@ -25,6 +28,10 @@ interface ActiveSearchClubProps {
 const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
     const location = useLocation();
     const navigate = useNavigate();
+    const filter = useAtomValue(filterAtom);
+    const isDefaultFilterValue = isDefaultFilter(filter);
+    const filterTexts = generateFilterText(filter);
+    
     const initialCategory = location.state?.category || '스포츠';
     const [selectedCategory, setSelectedCategory] = useState(initialCategory);
     const categoryRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
@@ -111,13 +118,30 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
         <div>
             {/* 카테고리 필터 */}
             <div className={`sticky z-10 bg-white ${searchValue.trim() !== '' ? 'top-[112.4px]' : 'top-0'}`}>
-                <div className='flex flex-col justify-center items-end self-stretch w-full h-[50px] px-[18px] py-[10px] border-b-[0.5px] border-[#AFA9A9] bg-white'>
-                    <button 
-                        onClick={() => navigate('/filter')}
-                        className='px-4 py-2 w-[77px] h-[30px] bg-black-100 border border-black-600 rounded-[100px] text-[#4E4646] text-[12px] font-medium leading-normal flex items-center'
-                    >
-                        언어필터
-                    </button>
+                <div className='flex flex-col justify-center items-end self-stretch w-full min-h-[50px] px-[18px] py-[10px] border-b-[0.5px] border-[#AFA9A9] bg-white'>
+                    {isDefaultFilterValue ? (
+                        <button 
+                            onClick={() => navigate('/filter')}
+                            className='px-4 py-2 w-[77px] h-[30px] bg-black-100 border border-black-600 rounded-[100px] text-[#4E4646] text-[12px] font-medium leading-normal flex items-center justify-center'
+                        >
+                            언어필터
+                        </button>
+                    ) : (
+                        <div className="flex flex-wrap gap-2 items-center justify-end">
+                            {filterTexts.map((text, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => navigate('/filter')}
+                                    className='px-4 py-2 bg-[#FFE2DB] rounded-[100px] text-[#F45F3A] text-[12px] font-semibold leading-[14px] flex items-center justify-center'
+                                    style={{
+                                        boxShadow: 'inset 0 0 0 1px #F45F3A'
+                                    }}
+                                >
+                                    {text}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 <div className="px-[18px] py-5 bg-white overflow-visible">
                     <div className="flex space-x-3 overflow-x-auto snap-x snap-proximity scrollbar-hide">
