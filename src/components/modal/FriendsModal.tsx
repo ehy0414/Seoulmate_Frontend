@@ -50,13 +50,11 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
 
     if (isVisible) {
       document.body.style.overflow = "hidden";
-      document.body.style.position = "fixed"; // 모바일에서 스크롤 고정
       document.body.style.width = "100%";
 
       document.addEventListener("touchmove", preventScroll, { passive: false });
     } else {
       document.body.style.overflow = "";
-      document.body.style.position = "";
       document.body.style.width = "";
       document.removeEventListener("touchmove", preventScroll);
     }
