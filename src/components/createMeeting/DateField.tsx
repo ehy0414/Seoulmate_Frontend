@@ -24,8 +24,9 @@ export const DateField: React.FC<DateFieldProps> = ({ value = '', onChange }) =>
           }}
           dateFormat="yyyy-MM-dd"
           placeholderText="모임 날짜를 입력하세요."
-          className="self-stretch my-auto text-black-700 bg-transparent border-none outline-none w-full cursor-pointer text-left text-black-300"
+          className="self-stretch my-auto text-black-700 bg-transparent border-none outline-none w-full cursor-pointer text-left"
           locale={ko} // 한국어 로케일 적용
+          customInput={<input className="self-stretch my-auto text-black-700 bg-transparent border-none outline-none w-full cursor-pointer text-left placeholder:text-[#D4D0D0]" />}
         />
       </div>
     </div>
