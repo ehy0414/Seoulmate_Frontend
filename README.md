@@ -1,70 +1,51 @@
-# React + TypeScript + Vite
+# 🌆 서울메이트 (SeoulMate)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### **프로젝트 기간:** 2025년 7월 ~ 8월
 
-Currently, two official plugins are available:
+![image.png](attachment:9c0295a7-e4c9-4b09-baae-f61fd04919b0:image.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 👥 팀 구성
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| 역할 | 이름 |
+| --- | --- |
+| **PM** | 이재민 |
+| **PD** | 주현지 |
+| **Frontend** | 김규태, 김민지, 엄현용 |
+| **Backend** | 노영서, 정다운, 장효원 |
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🛠 기술 스택
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Frontend
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- React.js
+- TypeScript
+- Tailwind CSS
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Backend
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# Seoulmate_Frontend
+- Spring Boot
+- JPA
+- MySQL
+- Redis
+- Docker
+
+### 인증 & 배포
+
+- OAuth2 (Google 로그인)
+- AWS, Vercel
+
+![image.png](attachment:a94e5fb8-ad18-4bb8-90e1-867a291836f1:image.png)
+
+![image.png](attachment:213e1949-085f-4a32-bcc3-1709a49692a5:image.png)
+
+![image.png](attachment:6a9cd365-61f8-42b4-b92d-3a57b115ea88:image.png)
+
+![image.png](attachment:71e0a7c7-3595-4714-8441-34d93cff5b28:image.png)
+
+![image.png](attachment:0734ef50-4aea-40bb-98a3-d23c335a54e7:image.png)
+
+![image.png](attachment:1873872a-b19d-49a4-8359-e2a371322170:image.png)
