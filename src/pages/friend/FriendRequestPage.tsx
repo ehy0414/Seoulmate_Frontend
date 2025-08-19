@@ -1,11 +1,13 @@
-"use client";
+// "use client";
 
 import * as React from "react";
-import { MenuBar } from "../../components/friend/MenuBar";
+import { useState } from "react";
+// import { MenuBar } from "../../components/friend/MenuBar";
 import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
 import { RequestUserListItem } from "../../components/friend/request/RequestUserListItem";
 import BottomNavBar from "../../components/common/BottomNavBar";
 import { FriendsModal } from "../../components/modal/FriendsModal";
+import TabMenu from '../../components/common/TabMenu';
 
 interface FriendRequest {
   id: string;
@@ -28,10 +30,13 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
   onDeleteRequest,
   onAcceptRequest,
 }) => {
-  const [activeTab, setActiveTab] = React.useState<"friends" | "requests">("requests");
+  // const [activeTab, setActiveTab] = React.useState<"friends" | "requests">("requests");
   const [isModalVisible, setModalVisible] = React.useState(false);
   const openModal = () => setModalVisible(true);
   const closeModal = () => setModalVisible(false);
+    const FIRST_TAB = '주최';
+    const SECOND_TAB = '참여';
+    const [activeTab, setActiveTab] = useState<string>(SECOND_TAB);
 
   const handleDeleteRequest = (id: string) => {
     onDeleteRequest?.(id);
@@ -42,13 +47,17 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
   };
 
   return (
-    <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
-        <HeaderSeoulmate title="서울메이트" alarm={false} />      
-            
-        <section className="w-[460px] fixed">
-          <MenuBar />
+    <main className="h-screen flex flex-col bg-white overflow-hidden">
+      <HeaderSeoulmate title="서울메이트" alarm={false} />
 
-        </section>
+      <div className="mt-[60px]"></div>
+      <TabMenu
+        firstTabText={FIRST_TAB}
+        secondTabText={SECOND_TAB}
+        activeTab={activeTab}
+        onFirstTabClick={() => setActiveTab(FIRST_TAB)}
+        onSecondTabClick={() => setActiveTab(SECOND_TAB)}
+      />
 
         <section className="flex flex-col items-start h-60 w-full mt-10">
             {requests.map((request) => (
