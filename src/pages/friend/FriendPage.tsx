@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { mockFriends } from "../../mock/friend/mockFriends";
 import FriendSearchBar from "../../components/friend/FriendSearchBar";
@@ -30,6 +31,18 @@ const FriendPage = () => {
     setFriends(filtered);
   };
 
+  const navigate = useNavigate();
+
+  const onFirstTabClick = () => {
+    setActiveTab(FIRST_TAB);
+    navigate("/friend");
+  };
+  
+  const onSecondTabClick = () => {
+    setActiveTab(SECOND_TAB);
+    navigate("/friend/request");
+  };
+
   return (
     <>
       <div className="h-screen flex flex-col bg-white overflow-hidden">
@@ -40,8 +53,8 @@ const FriendPage = () => {
         firstTabText={FIRST_TAB}
         secondTabText={SECOND_TAB}
         activeTab={activeTab}
-        onFirstTabClick={() => setActiveTab(FIRST_TAB)}
-        onSecondTabClick={() => setActiveTab(SECOND_TAB)}
+        onFirstTabClick={onFirstTabClick}
+        onSecondTabClick={onSecondTabClick}
       />
 
       <div className="shrink-0">

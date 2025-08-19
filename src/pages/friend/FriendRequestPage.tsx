@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 // import { MenuBar } from "../../components/friend/MenuBar";
 import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
 import { RequestUserListItem } from "../../components/friend/request/RequestUserListItem";
@@ -46,6 +48,18 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
     onAcceptRequest?.(id);
   };
 
+  const navigate = useNavigate();
+
+  const onFirstTabClick = () => {
+    setActiveTab(FIRST_TAB);
+    navigate("/friend");
+  };
+
+  const onSecondTabClick = () => {
+    setActiveTab(SECOND_TAB);
+    navigate("/friend/request");
+  };
+
   return (
     <main className="h-screen flex flex-col bg-white overflow-hidden">
       <HeaderSeoulmate title="서울메이트" alarm={false} />
@@ -55,8 +69,8 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
         firstTabText={FIRST_TAB}
         secondTabText={SECOND_TAB}
         activeTab={activeTab}
-        onFirstTabClick={() => setActiveTab(FIRST_TAB)}
-        onSecondTabClick={() => setActiveTab(SECOND_TAB)}
+        onFirstTabClick={onFirstTabClick}
+        onSecondTabClick={onSecondTabClick}
       />
 
         <section className="flex flex-col items-start h-60 w-full mt-10">
