@@ -103,9 +103,7 @@ export const SignUpProfilePage: React.FC = () => {
     }
 
     try {
-      const res = await api.post("/signup/create-profile", data, {
-        withCredentials: true, // 세션 쿠키 포함
-      });
+      const res = await api.post("/signup/create-profile", data);
       if (res.status === 200) {
         navigate("/signUp/langTest", { state: { country: formData.country } });
       }
@@ -114,7 +112,7 @@ export const SignUpProfilePage: React.FC = () => {
     }
 
     console.log('FormData values:', [...data.entries()]);
-    // navigate("/signUp/langTest", {state: {country: formData.country}});
+    navigate("/signUp/langTest", {state: {country: formData.country}});
   };
 
   const isFormValid = profileFile &&formData.lastName && formData.firstName && formData.DOB && formData.country;

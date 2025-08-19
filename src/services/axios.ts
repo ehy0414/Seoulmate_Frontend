@@ -6,3 +6,12 @@ const api = axios.create({
 });
 
 export default api;
+
+// 로컬스토리지 검사해서 세션이 있으면 Authorization 헤더에 추가
+// api.interceptors.request.use((config) => {
+//   const sessionId = localStorage.getItem("sessionId");
+//   if (sessionId) {
+//     config.headers.Cookie = `${sessionId}`;
+//   }
+//   return config;
+// });

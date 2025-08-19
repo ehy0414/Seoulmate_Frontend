@@ -6,7 +6,7 @@ export default function AuthRedirect() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        api.get("/signup/profile-info")
+        api.get("/auth/profile-info")
             .then(res => {
             const data = res.data.data; // 바로 꺼내기
             console.log("API data:", res.data);

@@ -5,6 +5,8 @@ import { SendIcon } from "./SendIcon";
 import { MicrophoneButton } from "./MicrophoneButton";
 import { FaStop, FaRedo } from "react-icons/fa";
 import RecordingPlayer from "./RecordingPlayer";
+import api from "../../../services/axios";
+import { form } from "framer-motion/client";
 
 type RecorderState = "idle" | "recording" | "readyToSend" | "done";
 
@@ -49,16 +51,17 @@ const AudioRecorder = ({ onScoreReady, setIsSending }: AudioRecorderProps) => {
     setIsSending(true);
 
     const formData = new FormData();
-    formData.append("file", wavBlob, "recording.wav");
+    formData.append("audioFile", wavBlob, "recording.wav");
+    formData.append("language", "Korean"); // 예시로 한국어로 설정, 필요에 따라 변경
 
     try {
       // 실제 API 요청을 시뮬레이션하기 위해 3초의 딜레이를 추가했습니다.
-      setTimeout(() => {
-        const score = 13;
-        onScoreReady(score);
-        setRecorderState("readyToSend");
-        setIsSending(false); // 딜레이 후 로딩 상태를 해제합니다.
-      }, 3000); // 3초 (3000ms) 딜레이
+      // setTimeout(() => {
+      //   const score = 13;
+      //   onScoreReady(score);
+      //   setRecorderState("readyToSend");
+      //   setIsSending(false); // 딜레이 후 로딩 상태를 해제합니다.
+      // }, 3000); // 3초 (3000ms) 딜레이
       
       // 실제 API 요청 코드 (필요하다면 주석을 해제하고 사용하세요):
       // const response = await fetch("/api/score", { method: "POST", body: formData });
@@ -66,6 +69,11 @@ const AudioRecorder = ({ onScoreReady, setIsSending }: AudioRecorderProps) => {
       // onScoreReady(score);
       // setRecorderState("readyToSend");
       // setIsSending(false);
+
+      const response = await api.post("/signup/language/submit-level-test", formData);
+      onScoreReady(response.data.score);
+      setRecorderState("readyToSend");
+      setIsSending(false);
 
     } catch (err) {
       console.error("음성 분석에 실패했습니다:", err);
