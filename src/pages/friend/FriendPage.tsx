@@ -1,11 +1,11 @@
 import { useState } from "react";
 
 import { mockFriends } from "../../mock/friend/mockFriends";
-
 import FriendSearchBar from "../../components/friend/FriendSearchBar";
 import FriendListItem from "../../components/friend/FriendListItem";
 import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
 import BottomNavBar from "../../components/common/BottomNavBar";
+import TabMenu from "../../components/common/TabMenu";
 
 type Friend = {
   userId: number;
@@ -14,6 +14,9 @@ type Friend = {
 };
 
 const FriendPage = () => {
+  const FIRST_TAB = '주최';
+  const SECOND_TAB = '참여';
+  const [activeTab, setActiveTab] = useState<string>(FIRST_TAB);
   const [friends, setFriends] = useState<Friend[]>(mockFriends);
 
   const handleSearch = (keyword: string) => {
@@ -32,13 +35,20 @@ const FriendPage = () => {
       <div className="h-screen flex flex-col bg-white overflow-hidden">
       <HeaderSeoulmate title="서울메이트" alarm={false} />
 
-      {/* 검색 바 */}
-      <div className="shrink-0 mt-[60px]">
+      <div className="mt-[60px]"></div>
+      <TabMenu
+        firstTabText={FIRST_TAB}
+        secondTabText={SECOND_TAB}
+        activeTab={activeTab}
+        onFirstTabClick={() => setActiveTab(FIRST_TAB)}
+        onSecondTabClick={() => setActiveTab(SECOND_TAB)}
+      />
+
+      <div className="shrink-0">
         <FriendSearchBar onSearch={handleSearch} />
       </div>
 
-      {/* 리스트 영역만 스크롤 */}
-      <div className="flex-1 overflow-y-auto scrollbar-hide">
+      <div className="flex-1 overflow-y-auto scrollbar-hide mb-[60px]">
         {friends.map((friend) => (
           <FriendListItem key={friend.userId} friend={friend} />
         ))}
