@@ -5,6 +5,7 @@ import { mockFriends } from "../../mock/friend/mockFriends";
 import FriendSearchBar from "../../components/friend/FriendSearchBar";
 import FriendListItem from "../../components/friend/FriendListItem";
 import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
+import BottomNavBar from "../../components/common/BottomNavBar";
 
 type Friend = {
   userId: number;
@@ -42,6 +43,7 @@ const FriendPage = () => {
         ))}
       </div>
     </div>
+    <BottomNavBar menu='friend'/>
     </>
     
   );
