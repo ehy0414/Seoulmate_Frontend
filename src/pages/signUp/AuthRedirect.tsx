@@ -9,8 +9,7 @@ export default function AuthRedirect() {
         api.get("/auth/profile-info")
             .then(res => {
             const data = res.data.data; // 바로 꺼내기
-            console.log("API data:", res.data);
-            console.log(res)
+            //console.log("API data:", res.data);
             localStorage.setItem("sessionId", data.sessionId);
 
             if (res.data.code === "SIGNUP 200") {
