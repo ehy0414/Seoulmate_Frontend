@@ -1,10 +1,7 @@
-// "use client";
-
 import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// import { MenuBar } from "../../components/friend/MenuBar";
 import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
 import { RequestUserListItem } from "../../components/friend/request/RequestUserListItem";
 import BottomNavBar from "../../components/common/BottomNavBar";
@@ -32,7 +29,6 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
   onDeleteRequest,
   onAcceptRequest,
 }) => {
-  // const [activeTab, setActiveTab] = React.useState<"friends" | "requests">("requests");
   const [isModalVisible, setModalVisible] = React.useState(false);
   const openModal = () => setModalVisible(true);
   const closeModal = () => setModalVisible(false);
@@ -73,7 +69,7 @@ export const FriendRequestPage: React.FC<FriendRequestListProps> = ({
         onSecondTabClick={onSecondTabClick}
       />
 
-        <section className="flex flex-col items-start h-60 w-full mt-10">
+        <section className="flex flex-col items-start h-60 w-full">
             {requests.map((request) => (
             <RequestUserListItem
                 key={request.id}
