@@ -29,14 +29,15 @@ const FriendPage = () => {
 
   return (
     <>
-    <HeaderSeoulmate title="서울메이트" alarm={false} />
+      <div className="h-screen flex flex-col bg-white overflow-hidden">
+      <HeaderSeoulmate title="서울메이트" alarm={false} />
 
-    <div className="flex flex-col h-screen bg-white mt-[60px]">
+      {/* 검색 바 */}
+      <div className="shrink-0 mt-[60px]">
+        <FriendSearchBar onSearch={handleSearch} />
+      </div>
 
-      {/* 검색창 */}
-      <FriendSearchBar onSearch={handleSearch} />
-
-      {/* 검색 결과 */}
+      {/* 리스트 영역만 스크롤 */}
       <div className="flex-1 overflow-y-auto scrollbar-hide">
         {friends.map((friend) => (
           <FriendListItem key={friend.userId} friend={friend} />
