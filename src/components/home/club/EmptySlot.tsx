@@ -1,13 +1,38 @@
 export const EmptySlot = () => {
   return (
-    <div className="flex flex-col items-center justify-center w-[38px] cursor-pointer">
-      <img
-        src="https://api.builder.io/api/v1/image/assets/TEMP/eb291469a2f4f78cfeec626212626c3bcec72080"
-        alt="참여하기"
-        className="w-10 h-10 object-contain "
+    <div className="flex flex-col items-center justify-center w-[38px]">
+      <svg
+      width="41"
+      height="40"
+      viewBox="0 0 41 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-10 h-10"
+    >
+      <rect
+        x="0.75"
+        y="0.25"
+        width="39.5"
+        height="39.5"
+        rx="19.75"
+        fill="#F3F2F2"
       />
+      <rect
+        x="0.75"
+        y="0.25"
+        width="39.5"
+        height="39.5"
+        rx="19.75"
+        stroke="#D4D0D0"
+        strokeWidth="0.5"
+      />
+      <path
+        d="M20.5 24C22.0975 24 23.6591 23.5308 24.9873 22.6518C26.3155 21.7727 27.3508 20.5233 27.9621 19.0615C28.5734 17.5997 28.7334 15.9911 28.4217 14.4393C28.1101 12.8874 27.3408 11.462 26.2112 10.3431C25.0817 9.22433 23.6425 8.4624 22.0757 8.15372C20.509 7.84504 18.885 8.00347 17.4091 8.60897C15.9332 9.21447 14.6718 10.2398 13.7843 11.5554C12.8968 12.871 12.4231 14.4178 12.4231 16C12.4231 18.1217 13.274 20.1566 14.7888 21.6569C16.3035 23.1571 18.3579 24 20.5 24ZM20.5 26.2857C15.4937 26.2857 5.5 29.3486 5.5 35.4286V40H35.5V35.4286C35.5 29.3486 25.5063 26.2857 20.5 26.2857Z"
+        fill="#E9E6E6"
+      />
+    </svg>
       <div className="mt-2 text-xs font-light text-neutral-400 text-center w-[42px]">
-        참여하기
+        -
       </div>
     </div>
   );
