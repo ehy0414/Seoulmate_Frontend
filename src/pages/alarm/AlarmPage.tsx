@@ -1,9 +1,11 @@
 import React from 'react';
-import { NotFixedHeaderDetail } from '../../components/common/NotFixedHeaderDetail';
+import { useNavigate } from 'react-router-dom';
 import TabMenu from '../../components/common/TabMenu';
 import EachAlarmComponent from '../../components/alarm/EachAlarmComponent';
+import { HeaderDetail } from '../../components/common/HeaderDetail';
 
 const AlarmPage = () => {
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = React.useState('모임');
 
     // 모임 알람 임시 데이터
@@ -83,18 +85,21 @@ const AlarmPage = () => {
 
     return (
         <div className='flex flex-col h-screen bg-white'>
-            <NotFixedHeaderDetail 
+            <HeaderDetail
                 title='알람' 
-                showBorder={false} 
+                showBorder={false}
+                onBackClick={() => navigate(-1)}
                 onNotificationClick={handleNotificationClick}
             />
-            <TabMenu
-                firstTabText="모임"
-                secondTabText="친구"
-                activeTab={activeTab}
-                onFirstTabClick={() => setActiveTab('모임')}
-                onSecondTabClick={() => setActiveTab('친구')}
-            />
+            <div className="mt-[60px]">
+                <TabMenu
+                    firstTabText="모임"
+                    secondTabText="친구"
+                    activeTab={activeTab}
+                    onFirstTabClick={() => setActiveTab('모임')}
+                    onSecondTabClick={() => setActiveTab('친구')}
+                />
+            </div>
             
             <div className="flex-1 overflow-y-auto">
                 {activeTab === '모임' ? (

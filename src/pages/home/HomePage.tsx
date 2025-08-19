@@ -94,6 +94,7 @@ export const HomePage: React.FC = () => {
                   date={club.date}
                   altText={club.altText}
                   id={club.id}
+                  onClick={() => navigate(`/club/${club.id}`)}
                 />
               ))}
             </ScrollableCardList>
@@ -118,6 +119,7 @@ export const HomePage: React.FC = () => {
                 date={klass.date}
                 altText={klass.altText}
                 id={klass.id}
+                onClick={() => navigate(`/class/${klass.id}`)}
               />
             ))}
           </ScrollableCardList>

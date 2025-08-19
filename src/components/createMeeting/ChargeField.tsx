@@ -16,14 +16,38 @@ export const ChargeField: React.FC<ChargeFieldProps> = ({
       </div>
       <div className="flex items-center px-4 mt-2 w-full rounded-[8px] border bg-black-100 border-black-700 min-h-[45px]">
         <input
-          type="number"
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
           value={value ?? ''}
-            onChange={(e) => {
+          onChange={(e) => {
             const inputValue = e.target.value;
-            if (inputValue === '') {
-              onChange?.(null); // 빈 값일 때 null 전달
+            // 숫자가 아닌 문자 제거
+            const numericValue = inputValue.replace(/[^0-9]/g, '');
+            
+            if (numericValue === '') {
+              onChange?.(null);
             } else {
-              onChange?.(Number(inputValue));
+              const numValue = Number(numericValue);
+              if (numValue >= 0) {
+                onChange?.(numValue);
+              }
+            }
+          }}
+          onKeyDown={(e) => {
+            // 숫자, 백스페이스, 삭제, 탭, 화살표 키만 허용
+            const allowedKeys = ['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+            if (!/^[0-9]$/.test(e.key) && !allowedKeys.includes(e.key)) {
+              e.preventDefault();
+            }
+          }}
+          onPaste={(e) => {
+            // 붙여넣기 시 숫자만 허용
+            e.preventDefault();
+            const pastedText = e.clipboardData.getData('text');
+            const numericText = pastedText.replace(/[^0-9]/g, '');
+            if (numericText) {
+              onChange?.(Number(numericText));
             }
           }}
           placeholder="모임에서 받을 참가비를 입력하세요."

@@ -29,7 +29,7 @@ const TabMenu: React.FC<TabMenuProps> = ({
         className={`flex-1 py-3 text-center text-sm ${
           activeTab === firstTabText
             ? 'text-black-700 font-[600]'
-            : 'text-black-600 font-[500] border-b border-gray-200'
+            : 'text-black-600 font-[500] border-b border-black-400'
         }`}
       >       
         {firstTabText}
@@ -39,7 +39,7 @@ const TabMenu: React.FC<TabMenuProps> = ({
         className={`flex-1 py-3 text-center text-sm ${
           activeTab === secondTabText
             ? 'text-black-700 font-[600]'
-            : 'text-black-600 font-[500] border-b border-gray-200'
+            : 'text-black-600 font-[500] border-b border-black-400'
         }`}
       >
         {secondTabText}

@@ -8,7 +8,6 @@ import image2 from "../../components/home/club/image2.png";
 import { ParticipantsList } from "../../components/home/club/ParticpantsList";
 import { useNavigate, useParams } from "react-router-dom";
 import { clubData } from "../../mock/club/mockClubData"; // mock 데이터
-import Info from "../../components/home/class/Info";
 
 interface MeetingDetailPageProps {
   onBackClick?: () => void;
@@ -27,7 +26,7 @@ interface club {
     imageUrls: string[];
 } 
 
-export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({
+export const ClassDetailPage: React.FC<MeetingDetailPageProps> = ({
 }) => {
   const participants = [
     {
@@ -88,17 +87,14 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({
         price={club.price}
         description={club.description}
         imageUrls={club.imageUrls}
-        extraContent={
-          <Info />
-        }
-        type="club"
+        type="class"
       />
 
-      <div className=" w-full px-4">
+      <div className="top-[580px] w-full px-4">
         <ParticipantsList 
           participants={participants} 
           maxParticipants={10}
-          type="club"
+          type="class"
         />
       </div>
 
@@ -112,4 +108,4 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({
   );
 };
 
-export default ClubDetailPage;
+export default ClassDetailPage;

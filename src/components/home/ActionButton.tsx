@@ -17,7 +17,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
       <button
         onClick={onClick}
         disabled={disabled}
-        className="flex relative justify-center items-center self-stretch bg-orange-400 rounded-lg h-[50px] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-orange-500 transition-colors"
+        className="flex relative justify-center items-center self-stretch bg-primary-600 rounded-lg h-[50px] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary-700 transition-colors"
       >
         <span className="relative text-base font-medium text-zinc-50">
           {text}

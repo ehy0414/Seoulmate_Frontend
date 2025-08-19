@@ -21,6 +21,8 @@ import Schedule from './pages/schedule/Schedule'
 import ChatList from './pages/chat/ChatList'
 import AlarmPage from './pages/alarm/AlarmPage'
 import AuthRedirect from './pages/signUp/AuthRedirect'
+import FilterPage from './pages/search/FilterPage'
+import ClassDetailPage from './pages/home/ClassDetailPage'
 
 function App() {
 
@@ -39,6 +41,7 @@ function App() {
         <Route path='/home' element={<HomePage />} />
         <Route path='/meeting/:id' element={<MeetingDetailPage />} />
         <Route path='/club/:id' element={<ClubDetailPage />} />
+        <Route path='/class/:id' element={<ClassDetailPage />} />
         <Route path='/create-meeting' element={<CreateMeeting />} />
         <Route path='/friend' element={<FriendPage />} />
         <Route path='/friend/request' element={<FriendRequestPage />} />
@@ -49,6 +52,7 @@ function App() {
         <Route path='/schedule' element={<Schedule />} />
         <Route path='/chat/list' element={<ChatList />} />
         <Route path='/alarm' element={<AlarmPage />} />
+        <Route path='/filter' element={<FilterPage />} />
       </Routes>
     </BrowserRouter>
   )
