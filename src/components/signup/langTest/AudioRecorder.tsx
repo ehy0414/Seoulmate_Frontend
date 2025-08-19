@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecorder } from "../../../hooks/useRecorder";
 import { convertToWav } from "./convertToWav";
 import { SendIcon } from "./SendIcon";
@@ -13,15 +13,22 @@ type RecorderState = "idle" | "recording" | "readyToSend" | "done";
 interface AudioRecorderProps {
   onScoreReady: (score: number | null) => void;
   setIsSending: (isSending: boolean) => void; // 상위 컴포넌트의 로딩 상태를 변경하는 함수를 받습니다.
+  isKorean: boolean;
 }
 
-const AudioRecorder = ({ onScoreReady, setIsSending }: AudioRecorderProps) => {
+const AudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorderProps) => {
   const { isRecording, startRecording, stopRecording } = useRecorder();
   
   // AudioRecorder 컴포넌트의 상태를 관리합니다.
   const [recorderState, setRecorderState] = useState<RecorderState>("idle");
   const [wavBlob, setWavBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [language, setLanguage] = useState<string>("");
+
+  useEffect(() => {
+    isKorean ? setLanguage("KOREAN") : setLanguage("ENGLISH");
+    //console.log("Language set to:", language);
+  }, [isKorean]);
 
   const handleMicClick = async () => {
     if (recorderState === "idle") {
@@ -52,7 +59,7 @@ const AudioRecorder = ({ onScoreReady, setIsSending }: AudioRecorderProps) => {
 
     const formData = new FormData();
     formData.append("audioFile", wavBlob, "recording.wav");
-    formData.append("language", "Korean"); // 예시로 한국어로 설정, 필요에 따라 변경
+    formData.append("language", language);
 
     try {
       // 실제 API 요청을 시뮬레이션하기 위해 3초의 딜레이를 추가했습니다.
@@ -63,15 +70,14 @@ const AudioRecorder = ({ onScoreReady, setIsSending }: AudioRecorderProps) => {
       //   setIsSending(false); // 딜레이 후 로딩 상태를 해제합니다.
       // }, 3000); // 3초 (3000ms) 딜레이
       
-      // 실제 API 요청 코드 (필요하다면 주석을 해제하고 사용하세요):
-      // const response = await fetch("/api/score", { method: "POST", body: formData });
-      // const { score } = await response.json();
-      // onScoreReady(score);
-      // setRecorderState("readyToSend");
-      // setIsSending(false);
+      // 실제 API 요청 코드 
+      const response = await api.post("/signup/language/take-level-test", formData, {
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
 
-      const response = await api.post("/signup/language/submit-level-test", formData);
-      onScoreReady(response.data.score);
+      onScoreReady(response.data.data);
       setRecorderState("readyToSend");
       setIsSending(false);
 

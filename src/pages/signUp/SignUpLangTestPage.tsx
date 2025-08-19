@@ -77,7 +77,7 @@ const SignUpLangTestPage = () => {
 
             <div className="pb-20">
                 <TextContent isKorean={isKorean}/>
-                <AudioRecorder onScoreReady={setScore} setIsSending={setIsSending} />
+                <AudioRecorder onScoreReady={setScore} setIsSending={setIsSending} isKorean={isKorean}/>
             </div>
             
             <NavigationButtons
