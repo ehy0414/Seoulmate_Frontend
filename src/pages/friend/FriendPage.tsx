@@ -1,70 +1,49 @@
-"use client";
 import { useState } from "react";
+
+import { mockFriends } from "../../mock/friend/mockFriends";
+
+import FriendSearchBar from "../../components/friend/FriendSearchBar";
+import FriendListItem from "../../components/friend/FriendListItem";
 import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
-import { MenuBar } from "../../components/friend/MenuBar";
-import { SearchSection } from "../../components/friend/SearchSection";
-import { UserList } from "../../components/friend/UserList";
-import BottomNavBar from "../../components/common/BottomNavBar";
 
-interface User {
-  id: string;
+type Friend = {
+  userId: number;
   name: string;
-  percentage: string;
-}
+  profileImage: string;
+};
 
-interface FriendsListProps {
-  users?: User[];
-  onTabChange?: (tab: "friends" | "requests") => void;
-  onSearch?: (query: string) => void;
-  onBack?: () => void;
-}
+const FriendPage = () => {
+  const [friends, setFriends] = useState<Friend[]>(mockFriends);
 
-export const FriendPage: React.FC<FriendsListProps> = ({
-  users,
-  onTabChange,
-  onSearch,
-  onBack
-}) => {
-  const [activeTab, setActiveTab] = useState<"friends" | "requests">("friends");
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleTabChange = (tab: "friends" | "requests") => {
-    setActiveTab(tab);
-    onTabChange?.(tab);
-  };
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    onSearch?.(query);
-  };
-
-  const handleBack = () => {
-    onBack?.();
+  const handleSearch = (keyword: string) => {
+    if (!keyword.trim()) {
+      setFriends(mockFriends);
+      return;
+    }
+    const filtered = mockFriends.filter((f) =>
+      f.name.toLowerCase().includes(keyword.toLowerCase())
+    );
+    setFriends(filtered);
   };
 
   return (
-    <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
-        <HeaderSeoulmate title="서울메이트" alarm={false} />
-      
-        <section className="w-[460px] fixed">
-            <MenuBar />
-            <SearchSection
-            onBack={handleBack}
-            onSearch={handleSearch}
-            placeholder="찾고 싶은 친구를 검색하세요."
-            />
-        </section>
-        <div
-            role="tabpanel"
-            id={activeTab === "friends" ? "friends-panel" : "requests-panel"}
-            aria-labelledby={activeTab === "friends" ? "friends-tab" : "requests-tab"}
-            className="mb-[23rem] w-full"
-        >
-            <UserList users={users} />
-        </div>
+    <>
+    <HeaderSeoulmate title="서울메이트" alarm={false} />
 
-        <BottomNavBar menu='friend'/>
-    </main>
+    <div className="flex flex-col h-screen bg-white mt-[60px]">
+
+      {/* 검색창 */}
+      <FriendSearchBar onSearch={handleSearch} />
+
+      {/* 검색 결과 */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide">
+        {friends.map((friend) => (
+          <FriendListItem key={friend.userId} friend={friend} />
+        ))}
+      </div>
+    </div>
+    </>
+    
   );
 };
 
