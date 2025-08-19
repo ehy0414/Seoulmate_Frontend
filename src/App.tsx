@@ -20,6 +20,7 @@ import ChatRoom from './pages/chat/ChatRoom'
 import Schedule from './pages/schedule/Schedule'
 import ChatList from './pages/chat/ChatList'
 import AlarmPage from './pages/alarm/AlarmPage'
+import AuthRedirect from './pages/signUp/AuthRedirect'
 import FilterPage from './pages/search/FilterPage'
 import ClassDetailPage from './pages/home/ClassDetailPage'
 
@@ -30,6 +31,7 @@ function App() {
       <Routes>
         {/* 회원가입 페이지 */}
         <Route path='/' element={<SignUpPage />} />
+        <Route path='/login/oauth2/code/google' element={<AuthRedirect />} />
         <Route path='/signUp/profile' element={<SignUpProfilePage />} />
         <Route path='/signUp/langTest' element={<SignUpLangTestPage />} />
         <Route path='/signUp/hobby' element={<HobbySelectionPage />} />
