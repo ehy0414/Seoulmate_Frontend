@@ -1,5 +1,5 @@
-// components/signup/profile/ProfileImageUpload.tsx
 import React, { useRef } from "react";
+import icon from "./images/icon.jpg";
 
 interface Props {
   onImageChange: (file: File) => void;
@@ -20,9 +20,7 @@ export const ProfileImageUpload: React.FC<Props> = ({ onImageChange, previewUrl 
     }
   };
 
-  const defaultIcon =
-    "https://api.builder.io/api/v1/image/assets/TEMP/c98cc0f189cd4596ac0218ccc3940df161af7907?placeholderIfAbsent=true&apiKey=7adddd5587f24b91884c2915be4df62c";
-
+  const defaultIcon =icon;
   return (
     <section className="flex justify-center items-center pb-5 pt-20 bg-white">
       <img
