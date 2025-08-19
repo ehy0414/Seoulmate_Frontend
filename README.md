@@ -2,7 +2,7 @@
 
 ### **프로젝트 기간:** 2025년 7월 ~ 8월
 
-![image.png](attachment:9c0295a7-e4c9-4b09-baae-f61fd04919b0:image.png)
+<img width="1194" height="674" alt="image" src="https://github.com/user-attachments/assets/6a167f5b-6d1e-4e87-b323-76ebfa3a37be" />
 
 ---
 
@@ -38,14 +38,20 @@
 - OAuth2 (Google 로그인)
 - AWS, Vercel
 
-![image.png](attachment:a94e5fb8-ad18-4bb8-90e1-867a291836f1:image.png)
+<img width="1106" height="614" alt="image" src="https://github.com/user-attachments/assets/74b20430-029c-4d75-8147-331a1b8b032f" />
 
-![image.png](attachment:213e1949-085f-4a32-bcc3-1709a49692a5:image.png)
 
-![image.png](attachment:6a9cd365-61f8-42b4-b92d-3a57b115ea88:image.png)
+<img width="1084" height="601" alt="image" src="https://github.com/user-attachments/assets/17456de0-9e92-46b9-b28a-cf0e7dccd66e" />
 
-![image.png](attachment:71e0a7c7-3595-4714-8441-34d93cff5b28:image.png)
 
-![image.png](attachment:0734ef50-4aea-40bb-98a3-d23c335a54e7:image.png)
+<img width="1087" height="595" alt="image" src="https://github.com/user-attachments/assets/a2838e53-7f98-4f90-b63f-20239d538391" />
 
-![image.png](attachment:1873872a-b19d-49a4-8359-e2a371322170:image.png)
+
+<img width="1078" height="609" alt="image" src="https://github.com/user-attachments/assets/f254339c-2971-4604-b53d-47c9c920de02" />
+
+
+<img width="1067" height="612" alt="image" src="https://github.com/user-attachments/assets/e23c3502-4fa1-4838-9964-6f85ef71e1ce" />
+
+
+<img width="1068" height="591" alt="image" src="https://github.com/user-attachments/assets/1e070e20-e70b-42af-968d-695fc897410a" />
+
