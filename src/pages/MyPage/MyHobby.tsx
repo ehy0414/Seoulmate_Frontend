@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '../../services/axios';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { userProfileAtom} from '../../store/userProfileAtom';
 import { useNavigate } from 'react-router-dom';
 import { NotFixedHeaderDetail } from '../../components/common/NotFixedHeaderDetail';
 
@@ -15,14 +18,41 @@ const categories = {
 
 const MyHobby: React.FC = () => {
   const navigate = useNavigate();
-  // TODO: 백엔드에서 기존 선택된 취미 가져오기
-  const [selectedHobbies, setSelectedHobbies] = useState<string[]>([
-    '축구', '영화', '커피'  // 임시 데이터 (백엔드에서 가져올 예정)
-  ]);
+  // userProfileAtom에서 기존 선택된 취미 가져오기
+  const userProfile = useAtomValue(userProfileAtom);
+  const setUserProfile = useSetAtom(userProfileAtom);
+
+  // userProfileAtom 값이 없으면 /my-page로 요청해서 atom 업데이트
+  useEffect(() => {
+    if (!userProfile) {
+      const fetchUserProfile = async () => {
+        try {
+          const response = await api.get('/my-page');
+          if (response.data?.data) {
+            setUserProfile(response.data.data);
+          }
+        } catch (error) {
+          // 에러 처리 필요시 추가
+          console.error('사용자 정보 가져오기 실패:', error);
+        }
+      };
+      fetchUserProfile();
+    }
+  }, [userProfile, setUserProfile]);
+  const [selectedHobbies, setSelectedHobbies] = useState<string[]>([]);
+  // userProfile의 hobbies와 selectedHobbies를 비교하여 변경 여부 판단
+  const initialHobbies = userProfile?.hobbies?.map(hobby => hobby.hobbyName) ?? [];
+  const isChanged = JSON.stringify(selectedHobbies.slice().sort()) !== JSON.stringify(initialHobbies.slice().sort());
   const [showToast, setShowToast] = useState(false);
 
+  useEffect(() => {
+    if (userProfile?.hobbies) {
+      setSelectedHobbies(userProfile.hobbies.map(hobby => hobby.hobbyName));
+    }
+  }, [userProfile]);
+
   const handleBackClick = () => {
-    navigate('/mypage')
+    navigate(-1)
   };
 
   const handleNotificationClick = () => {
@@ -50,10 +80,24 @@ const MyHobby: React.FC = () => {
     console.log(selectedHobbies.length);
   };
 
-  const handleSave = () => {
-    // TODO: 백엔드에 선택된 취미 저장
-    console.log('Selected hobbies:', selectedHobbies);
-    navigate('/myPage');
+  const handleSave = async () => {
+    if (!isChanged) return;
+    console.log("수정된 카테고리", selectedHobbies);
+    try {
+      await api.post('/my-page/update-hobby', {
+        hobbies: selectedHobbies
+      });
+      // 업데이트 성공 후 최신 정보로 userProfileAtom 갱신
+      const response = await api.get('/my-page');
+      if (response.data?.data) {
+        setUserProfile(response.data.data);
+      }
+      // 성공 시 페이지 이동
+      navigate('/myPage/profile');
+    } catch (error) {
+      // 에러 처리 필요시 추가
+      console.error('취미 업데이트 실패:', error);
+    }
   };
 
   return (
@@ -96,7 +140,8 @@ const MyHobby: React.FC = () => {
       <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[430px] px-[18px] py-4 bg-white">
         <button
           onClick={handleSave}
-          className="w-full h-[50px] bg-primary-600 text-black-100 rounded-[8px] font-[500] text-base flex items-center justify-center"
+          className={`w-full h-[50px] rounded-[8px] font-[500] text-base flex items-center justify-center ${isChanged && userProfile && selectedHobbies.length > 2 ? 'bg-primary-600 text-black-100' : 'bg-black-200 text-black-400 cursor-not-allowed'}`}
+          disabled={!isChanged || !userProfile || selectedHobbies.length < 3}
         >
           저장하기
         </button>
