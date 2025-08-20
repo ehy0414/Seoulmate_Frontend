@@ -1,31 +1,41 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { userProfileAtom } from '../../store/userProfileAtom';
+import api from '../../services/axios';
 import { NotFixedHeaderDetail } from '../../components/common/NotFixedHeaderDetail';
 import BottomNavBar from '../../components/common/BottomNavBar';
 import { ProfileSection, HobbyChips, InfoCard } from '../../components/MyProfile';
 
 const MyProfile: React.FC = () => {
 
-  const handleEditProfile = () => {
-    console.log('Edit profile clicked');
-  };
+  // Atom에서 데이터 가져오기
+  const userProfile = useAtomValue(userProfileAtom);
+  const setUserProfile = useSetAtom(userProfileAtom);
 
-  // Sample data - in real app this would come from props or API
-  const userProfile = {
-    name: 'name',
-    description: '자기소개',
-    profileImage: 'https://api.builder.io/api/v1/image/assets/TEMP/ce3653c63350278e9056ca9cab1e39fed7f9c959?width=160'
-  };
+  useEffect(() => {
+    if (!userProfile) {
+      const fetchUserProfile = async () => {
+        try {
+          const response = await api.get('/my-page');
+          if (response.data?.data) {
+            setUserProfile(response.data.data);
+          }
+        } catch (error) {
+          console.log("profile 정보 가져오는 중 오류",error);
+        }
+      };
+      fetchUserProfile();
+    }
+  }, [userProfile, setUserProfile]);
 
-  const hobbies = [
-    '한국어', '일본어', '필라테스', '페스티벌',
-    '시내', '그림', '콘서트', '스시'
-  ];
+  // 데이터 가공
+  const hobbies = userProfile?.hobbies?.map(h => h.hobbyName) ?? [];
 
   const infoItems = [
-    { label: '학교', value: '숭실대학교' },
-    { label: '나이', value: '22세' },
-    { label: '영어 구사 레벨', value: '76' },
-    { label: '한국어 구사 레벨', value: '92' }
+    { label: '학교', value: userProfile?.university ?? '' },
+    { label: '나이', value: userProfile?.age ? `${userProfile.age}세` : '' },
+    { label: '영어 구사 레벨', value: userProfile?.languages?.['영어']?.toString() ?? '' },
+    { label: '한국어 구사 레벨', value: userProfile?.languages?.['한국어']?.toString() ?? '' }
   ];
 
   return (
@@ -38,12 +48,8 @@ const MyProfile: React.FC = () => {
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto pb-[94px]">
         {/* Profile Section */}
-        <ProfileSection
-          name={userProfile.name}
-          description={userProfile.description}
-          profileImage={userProfile.profileImage}
-          onEditClick={handleEditProfile}
-        />
+        <ProfileSection/>
+
 
         {/* Hobby Chips */}
         <div className="px-[18px] pb-5 border-b-[3px] border-[#F3F2F2]">
