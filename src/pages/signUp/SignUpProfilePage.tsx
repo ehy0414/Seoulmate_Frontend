@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProgressBar } from "../../components/signup/ProgressBar";
 import { ProfileImageUpload } from "../../components/signup/profile/ProfileImageUpload";
 import { FormField } from "../../components/signup/profile/FormField";
@@ -26,6 +26,29 @@ export const SignUpProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [birthDate, setBirthDate] = useState<Date | null>(null);
+
+  useEffect(() => {
+    const checkInProgress = async () => {
+      try {
+        // 2. 회원가입 시작된 사용자만 in-progress 확인
+        const inProgressRes = await api.get("/signup/in-progress");
+        const inProgressData = inProgressRes.data.data;
+
+        if (inProgressData.univVerification === "VERIFIED") {
+            navigate("/signUp/wait");
+        } else if (inProgressData.univVerification === "SUBMITTED") {
+            navigate("/home");
+        } else {
+            navigate("/home");
+        }
+      } catch (err) {
+        console.error(err);
+        navigate("/"); // 에러 시 홈
+      }
+    };
+
+    checkInProgress();
+  }, [navigate]);
 
   const [formData, setFormData] = useState<FormData>({
     lastName: '',
