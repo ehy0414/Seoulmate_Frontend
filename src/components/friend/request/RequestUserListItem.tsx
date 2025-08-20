@@ -1,4 +1,6 @@
 import React from "react";
+import RejectIcon from '../../../assets/friend/rejectIcon.png';
+import AcceptIcon from '../../../assets/friend/acceptIcon.png';
 
 export type FriendRequest = {
   requestId: number;
@@ -20,33 +22,33 @@ const RequestUserListItem: React.FC<Props> = ({ request, onAccept, onReject }) =
     <img
       src={profileImage}
       alt={`${name} 프로필`}
-      className="h-16 w-16 rounded-full object-cover"
+      className="h-[40px] w-[40px] rounded-full object-cover"
     />
   ) : (
-    <div className="h-16 w-16 rounded-full bg-gray-300 grid place-items-center">
+    <div className="h-[40px] w-[40px] rounded-full bg-gray-300 grid place-items-center">
     </div>
   );
 
   return (
-    <li className="flex items-center justify-between gap-4 p-4 border-b">
+    <li className="flex items-center justify-between gap-4 p-4 border-b h-[60px]">
       <div className="flex items-center gap-4 min-w-0">
         {avatar}
-        <span className="text-xl font-semibold truncate">{name}</span>
+        <span className="text-base font-medium text-black-700">{name}</span>
       </div>
 
       <div className="flex items-center gap-3 shrink-0">
         <button
           onClick={() => onReject(request)}
-          className="rounded-xl bg-blue-500 text-white px-4 py-2 text-sm font-medium hover:opacity-90 active:opacity-80"
+          className="bg-none"
         >
-          삭제
+          <img src={RejectIcon} alt="거절 아이콘" className="w-[30px] h-[30px]" />
         </button>
 
         <button
           onClick={() => onAccept(request)}
-          className="rounded-xl bg-blue-500 text-white px-4 py-2 text-sm font-medium hover:opacity-90 active:opacity-80"
+          className="bg-none"
         >
-          수락
+          <img src={AcceptIcon} alt="수락 아이콘" className="w-[30px] h-[30px]" />
         </button>
       </div>
     </li>
