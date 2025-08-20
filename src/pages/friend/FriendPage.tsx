@@ -19,10 +19,9 @@ type Friend = {
 const FriendPage = () => {
   const FIRST_TAB = "친구 목록";
   const SECOND_TAB = "친구 요청";
+  
   const [activeTab, setActiveTab] = useState<string>(FIRST_TAB);
   const [friends, setFriends] = useState<Friend[]>([]);
-
-  // 모달 상태 및 선택된 사용자
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState<number | null>(null);
 
@@ -48,7 +47,7 @@ const FriendPage = () => {
       try {
         const res = await api.get("/friends");
         const list = pickFriendsArray(res);
-        setFriends(list); // 참조가 확실히 바뀌도록 그대로 세팅
+        setFriends(list); 
       } catch (error) {
         console.error("친구 목록 가져오기 실패:", error);
       }
@@ -66,7 +65,7 @@ const FriendPage = () => {
       }
   
       const res = await api.get("/friends/search/my", {
-        params: { query: keyword, page: 1, size: 20 }, // 보통 page는 0부터 시작
+        params: { query: keyword, page: 1, size: 20 }, 
       });
   
       const list = pickFriendsArray(res);
