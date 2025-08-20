@@ -64,7 +64,6 @@ const ChatList = () => {
     setActiveTab('개인 채팅');
   };
 
-  // 채팅방으로 이동하는 함수 (roomId 추가 전달)
   const handleChatRoomClick = (roomId: number, chatName: string) => {
     navigate(`/chat?roomId=${roomId}&name=${encodeURIComponent(chatName)}`);
   };

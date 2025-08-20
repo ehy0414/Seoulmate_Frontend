@@ -19,10 +19,9 @@ type Friend = {
 const FriendPage = () => {
   const FIRST_TAB = "친구 목록";
   const SECOND_TAB = "친구 요청";
+  
   const [activeTab, setActiveTab] = useState<string>(FIRST_TAB);
   const [friends, setFriends] = useState<Friend[]>([]);
-
-  // 모달 상태 및 선택된 사용자
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState<number | null>(null);
 
@@ -34,41 +33,49 @@ const FriendPage = () => {
 
   const navigate = useNavigate();
 
+  const pickFriendsArray = (res: any): Friend[] => {
+    if (Array.isArray(res?.data?.data)) return res.data.data as Friend[];
+    if (Array.isArray(res?.data?.data?.content)) return res.data.data.content as Friend[];
+    if (Array.isArray(res?.data?.content)) return res.data.content as Friend[];
+    if (Array.isArray(res?.data)) return res.data as Friend[];
+
+    return [];
+  };
+
   useEffect(() => {
     const fetchFriends = async () => {
       try {
         const res = await api.get("/friends");
-        if (res.data.success && Array.isArray(res.data.data)) {
-          setFriends(res.data.data);
-        }
+        const list = pickFriendsArray(res);
+        setFriends(list); 
       } catch (error) {
         console.error("친구 목록 가져오기 실패:", error);
       }
     };
     fetchFriends();
   }, []);
-
+  
   // 검색
   const handleSearch = async (keyword: string) => {
     try {
       if (!keyword.trim()) {
         const res = await api.get("/friends");
-        if (res.data.success && Array.isArray(res.data.data)) {
-          setFriends(res.data.data);
-        }
+        setFriends(pickFriendsArray(res));
         return;
       }
+  
       const res = await api.get("/friends/search/my", {
-        params: { query: keyword, page: 1, size: 20 },
+        params: { query: keyword, page: 1, size: 20 }, 
       });
-      if (res.data.success && Array.isArray(res.data.data)) {
-        setFriends(res.data.data);
-      }
+  
+      const list = pickFriendsArray(res);
+      setFriends(list);
     } catch (error) {
       console.error("친구 검색 실패:", error);
     }
   };
 
+  
   const onFirstTabClick = () => {
     setActiveTab(FIRST_TAB);
     navigate("/friend");

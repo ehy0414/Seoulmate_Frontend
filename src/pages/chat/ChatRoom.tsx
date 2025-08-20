@@ -71,7 +71,6 @@ const ChatRoom = () => {
     isPinnedRef.current = isNearBottom();
   };
 
-  // 초기 목록 불러오기
   useEffect(() => {
     if (!roomId || Number.isNaN(roomId)) return;
 
@@ -87,8 +86,6 @@ const ChatRoom = () => {
           const d = new Date(it.createdAt);
           return {
             id: it.messageId,
-            // 서버에서 mine 판단이 늦게 반영될 수 있으니 목록 표시에서는 그대로 쓰되,
-            // 전송 직후 UI는 아래 handleSend에서 무조건 'me'로 처리한다.
             sender: it.mine ? 'me' : 'friend',
             text: it.content,
             time: getFormattedTime(d),
@@ -103,7 +100,6 @@ const ChatRoom = () => {
     })();
   }, [roomId]);
 
-  // 새 메시지 나타날 때 하단 고정
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -112,14 +108,12 @@ const ChatRoom = () => {
     }
   }, [messages]);
 
-  // 전송
   const handleSend = async () => {
     if (!input.trim() || !roomId) return;
 
     const now = new Date();
     const tempId = `temp-${Date.now()}`;
 
-    // 1) UI 먼저: 무조건 'me'
     const optimisticMsg: Message = {
       id: tempId,
       sender: 'me',
@@ -132,7 +126,6 @@ const ChatRoom = () => {
     setInput('');
 
     try {
-      // 2) 서버 전송
       const res = await api.post(`/chat/rooms/${roomId}/messages`, {
         type: 'TEXT',
         content: optimisticMsg.text,
@@ -145,7 +138,6 @@ const ChatRoom = () => {
 
       const d = new Date(saved.createdAt);
 
-      // 3) temp 치환: sender는 계속 'me' 유지 (서버 mine 값 무시)
       setMessages((prev) =>
         prev.map((m) =>
           m.id === tempId
@@ -163,7 +155,6 @@ const ChatRoom = () => {
       );
     } catch (e) {
       console.error('메시지 전송 실패:', e);
-      // 실패 표시 (원하면 rollback 제거도 가능)
       setMessages((prev) =>
         prev.map((m) => (m.id === tempId ? { ...m, pending: false, error: true } : m))
       );
