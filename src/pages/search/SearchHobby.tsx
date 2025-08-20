@@ -51,7 +51,7 @@ const SearchHobby: React.FC = () => {
             ) : (
                 searchValue.trim() === ''
                     ? <ActiveSearchFriend />
-                    : <ActiveSearchResult />
+                    : <ActiveSearchResult searchValue={searchValue}/>
             )}
             
 
