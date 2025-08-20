@@ -38,26 +38,33 @@ const FriendPage = () => {
     fetchFriends();
   }, []);
 
-  // 검색 필터링 (백엔드 연동 전이므로 프론트에서만 필터링)
-  const handleSearch = (keyword: string) => {
-    if (!keyword.trim()) {
-      // 다시 전체 요청 불러오기
-      (async () => {
-        try {
-          const res = await api.get("/friends");
-          if (res.data.success && Array.isArray(res.data.data)) {
-            setFriends(res.data.data);
-          }
-        } catch (error) {
-          console.error(error);
+  // 검색 함수 수정
+  const handleSearch = async (keyword: string) => {
+    try {
+      if (!keyword.trim()) {
+        // 빈 검색어일 경우 전체 목록 다시 불러오기
+        const res = await api.get("/friends");
+        if (res.data.success && Array.isArray(res.data.data)) {
+          setFriends(res.data.data);
         }
-      })();
-      return;
+        return;
+      }
+
+      // 검색 API 호출
+      const res = await api.get("/friends/search", {
+        params: {
+          query: keyword,
+          page: 1,
+          size: 20,
+        },
+      });
+
+      if (res.data.success && Array.isArray(res.data.data)) {
+        setFriends(res.data.data);
+      }
+    } catch (error) {
+      console.error("친구 검색 실패:", error);
     }
-    const filtered = friends.filter((f) =>
-      f.name.toLowerCase().includes(keyword.toLowerCase())
-    );
-    setFriends(filtered);
   };
 
   const onFirstTabClick = () => {
