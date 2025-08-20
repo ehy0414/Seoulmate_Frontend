@@ -35,7 +35,7 @@ export const FriendRequestPage: React.FC = () => {
   const [list, setList] = useState<FriendRequest[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [pendingIds, setPendingIds] = useState<Set<number>>(new Set());
+  // const [pendingIds, setPendingIds] = useState<Set<number>>(new Set());
 
   const navigate = useNavigate();
 
