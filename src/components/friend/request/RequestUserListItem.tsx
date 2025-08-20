@@ -11,11 +11,10 @@ export type FriendRequest = {
 
 type Props = {
   request: FriendRequest;
-  onAccept: (request: FriendRequest) => void; 
-  onReject: (request: FriendRequest) => void; 
+  onClick: () => void; // 리스트 아이템 클릭 핸들러
 };
 
-const RequestUserListItem: React.FC<Props> = ({ request, onAccept, onReject }) => {
+const RequestUserListItem: React.FC<Props> = ({ request, onClick }) => {
   const { name, profileImage } = request;
 
   const avatar = profileImage ? (
@@ -25,31 +24,22 @@ const RequestUserListItem: React.FC<Props> = ({ request, onAccept, onReject }) =
       className="h-[40px] w-[40px] rounded-full object-cover"
     />
   ) : (
-    <div className="h-[40px] w-[40px] rounded-full bg-gray-300 grid place-items-center">
-    </div>
+    <div className="h-[40px] w-[40px] rounded-full bg-gray-300 grid place-items-center"></div>
   );
 
   return (
-    <li className="flex items-center justify-between gap-4 p-4 border-b h-[60px]">
+    <li
+      className="flex items-center justify-between gap-4 p-4 border-b h-[60px] cursor-pointer"
+      onClick={onClick}
+    >
       <div className="flex items-center gap-4 min-w-0">
         {avatar}
         <span className="text-base font-medium text-black-700">{name}</span>
       </div>
 
       <div className="flex items-center gap-3 shrink-0">
-        <button
-          onClick={() => onReject(request)}
-          className="bg-none"
-        >
-          <img src={RejectIcon} alt="거절 아이콘" className="w-[30px] h-[30px]" />
-        </button>
-
-        <button
-          onClick={() => onAccept(request)}
-          className="bg-none"
-        >
-          <img src={AcceptIcon} alt="수락 아이콘" className="w-[30px] h-[30px]" />
-        </button>
+        <img src={RejectIcon} alt="거절 아이콘" className="w-[30px] h-[30px]" />
+        <img src={AcceptIcon} alt="수락 아이콘" className="w-[30px] h-[30px]" />
       </div>
     </li>
   );

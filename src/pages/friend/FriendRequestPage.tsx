@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
 import RequestUserListItem from "../../components/friend/request/RequestUserListItem";
+import type { FriendRequest} from "../../components/friend/request/RequestUserListItem";
 import BottomNavBar from "../../components/common/BottomNavBar";
 import { FriendsModal } from "../../components/modal/FriendsModal";
 import TabMenu from "../../components/common/TabMenu";
 
-import type { FriendRequest } from "../../components/friend/request/RequestUserListItem";
 import api from "../../services/axios";
 
 type ApiResponse<T> = {
@@ -20,7 +20,12 @@ type ApiResponse<T> = {
 
 export const FriendRequestPage: React.FC = () => {
   const [isModalVisible, setModalVisible] = React.useState(false);
-  const openModal = () => setModalVisible(true);
+  const [selectedRequestId, setSelectedRequestId] = useState<number | null>(null);
+
+  const openModal = (requestId: number) => {
+    setSelectedRequestId(requestId);
+    setModalVisible(true);
+  };
   const closeModal = () => setModalVisible(false);
 
   const FIRST_TAB = "친구 목록";
@@ -62,57 +67,10 @@ export const FriendRequestPage: React.FC = () => {
     fetchRequests();
   }, []);
 
-  // 수락
-  const handleAccept = async (req: FriendRequest) => {
-    if (!confirm(`${req.name} 님의 친구 요청을 수락하시겠습니까?`)) return;
-
-    // 낙관적 업데이트
-    setList((prev) => prev.filter((r) => r.requestId !== req.requestId));
-    setPendingIds((prev) => new Set(prev).add(req.requestId));
-
-    try {
-      await api.patch(`/friends/requests/${req.requestId}`, { status: "APPROVED" });
-    } catch (e) {
-      alert("수락 처리에 실패했어요. 다시 시도해 주세요.");
-      // 되돌리기
-      setList((prev) => [req, ...prev]);
-    } finally {
-      setPendingIds((prev) => {
-        const next = new Set(prev);
-        next.delete(req.requestId);
-        return next;
-      });
-    }
-  };
-
-  // 거절
-  const handleDelete = async (req: FriendRequest) => {
-    if (!confirm(`${req.name} 님의 친구 요청을 거절하시겠습니까?`)) return;
-
-    // 낙관적 업데이트
-    setList((prev) => prev.filter((r) => r.requestId !== req.requestId));
-    setPendingIds((prev) => new Set(prev).add(req.requestId));
-
-    try {
-      await api.patch(`/friends/requests/${req.requestId}`, { status: "REJECTED" });
-    } catch (e) {
-      alert("거절 처리에 실패했어요. 다시 시도해 주세요.");
-      // 되돌리기
-      setList((prev) => [req, ...prev]);
-    } finally {
-      setPendingIds((prev) => {
-        const next = new Set(prev);
-        next.delete(req.requestId);
-        return next;
-      });
-    }
-  };
-
   return (
     <main className="h-screen flex flex-col bg-white overflow-hidden">
       <HeaderSeoulmate title="서울메이트" alarm={false} />
 
-      {/* 헤더 높이 보정 */}
       <div className="mt-[60px]" />
 
       <TabMenu
@@ -125,7 +83,6 @@ export const FriendRequestPage: React.FC = () => {
 
       <section className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-2xl">
-          {/* 로딩 / 에러 상태 */}
           {loading && (
             <div className="p-8 text-center text-gray-500">불러오는 중…</div>
           )}
@@ -141,8 +98,7 @@ export const FriendRequestPage: React.FC = () => {
                 <RequestUserListItem
                   key={request.requestId}
                   request={request}
-                  onAccept={() => pendingIds.has(request.requestId) ? undefined : handleAccept(request)}
-                  onReject={() => pendingIds.has(request.requestId) ? undefined : handleDelete(request)}
+                  onClick={() => openModal(request.senderId)} // 버튼 클릭 시 모달 오픈
                 />
               ))}
 
@@ -155,7 +111,14 @@ export const FriendRequestPage: React.FC = () => {
           )}
         </div>
 
-        <FriendsModal isVisible={isModalVisible} onClose={closeModal} />
+        {/* requestId 전달 */}
+        {selectedRequestId && (
+          <FriendsModal
+            isVisible={isModalVisible}
+            onClose={closeModal}
+            requestId={selectedRequestId}
+          />
+        )}
       </section>
 
       <BottomNavBar menu="friend" />
