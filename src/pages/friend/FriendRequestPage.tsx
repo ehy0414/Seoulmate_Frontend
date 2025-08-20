@@ -23,8 +23,8 @@ export const FriendRequestPage: React.FC = () => {
   const openModal = () => setModalVisible(true);
   const closeModal = () => setModalVisible(false);
 
-  const FIRST_TAB = "주최";
-  const SECOND_TAB = "참여";
+  const FIRST_TAB = "친구 목록";
+  const SECOND_TAB = "친구 요청";
   const [activeTab, setActiveTab] = useState<string>(SECOND_TAB);
 
   const [list, setList] = useState<FriendRequest[]>([]);

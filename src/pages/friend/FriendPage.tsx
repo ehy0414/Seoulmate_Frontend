@@ -16,8 +16,8 @@ type Friend = {
 };
 
 const FriendPage = () => {
-  const FIRST_TAB = "주최";
-  const SECOND_TAB = "참여";
+  const FIRST_TAB = "친구 목록";
+  const SECOND_TAB = "친구 요청";
   const [activeTab, setActiveTab] = useState<string>(FIRST_TAB);
   const [friends, setFriends] = useState<Friend[]>([]);
 
@@ -50,7 +50,7 @@ const FriendPage = () => {
       }
 
       // 검색 API 호출
-      const res = await api.get("/friends/search", {
+      const res = await api.get("/friends/search/my", {
         params: {
           query: keyword,
           page: 1,
