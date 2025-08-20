@@ -5,6 +5,7 @@ import AudioRecorder from "../../components/signup/langTest/AudioRecorder";
 import { NavigationButtons } from "../../components/signup/langTest/NavigationButtons";
 import { TextContent } from "../../components/signup/langTest/TextContent";
 import Spinner from "../../components/signup/langTest/Spinner";
+import api from "../../services/axios";
 
 const SignUpLangTestPage = () => {
     const navigate = useNavigate();
@@ -30,19 +31,30 @@ const SignUpLangTestPage = () => {
 
     const handleNext = async () => {
         if (score === null) return alert("녹음을 완료하고 점수를 받아야 합니다.");
+        console.log(score);
+
+        // 언어 이름 기반으로 객체 생성
+        const languageKey = isKorean ? "영어" : "한국어";
+        const data = {
+            languages: {
+                [languageKey]: score
+            }
+        };
 
         try {
-            await fetch("/api/saveScore", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ score, country }),
+            await api.post("/signup/language/submit-level-test", data, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
 
             navigate("/signUp/hobby");
         } catch (err) {
+            console.error(err);
             alert("점수 저장에 실패했습니다.");
         }
     };
+
 
     // 이전 핸들러
     const handlePrevious = () => {

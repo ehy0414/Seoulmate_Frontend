@@ -7,38 +7,36 @@ export default function AuthRedirect() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        // 1. 프로필 정보 가져오기
+        try {
         const profileRes = await api.get("/auth/profile-info");
         const profileData = profileRes.data.data;
         localStorage.setItem("sessionId", profileData.sessionId);
 
-        // 2. 회원가입 진행 상태 확인
-        const inProgressRes = await api.get("/signup/in-progress");
+        // 1. 회원가입 안 된 경우
+        if (profileRes.data.code === "SIGNUP 200") {
+            navigate("/signUp/profile");
+            return;
+        }
+
+        // 2. 회원가입 시작된 사용자만 in-progress 확인
+        const inProgressRes = await api.get("/signup/in-progress", { withCredentials: true });
         const inProgressData = inProgressRes.data.data;
 
-        // 3. 조건부 리디렉션
-        if (profileRes.data.code === "SIGNUP 200") {
-          // 회원가입 안 된 경우
-          navigate("/signUp/profile");
-        } else if (inProgressData.univVerification === "verified") {
-          // 학교 인증 중
-          navigate("/signUp/wait");
+        if (inProgressData.univVerification === "verified") {
+            navigate("/signUp/wait");
         } else if (inProgressData.univVerification === "SUBMITTED") {
-          // 인증 완료
-          navigate("/home");
+            navigate("/home");
         } else {
-          // 안전하게 홈으로
-          navigate("/home");
+            navigate("/home");
         }
-      } catch (err) {
+        } catch (err) {
         console.error(err);
         navigate("/"); // 에러 시 홈
-      }
+        }
     };
 
     checkAuth();
-  }, [navigate]);
+    }, [navigate]);
 
   return <p>로그인 처리 중...</p>;
 }

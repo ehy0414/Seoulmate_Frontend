@@ -9,6 +9,7 @@ interface ClubCardProps {
   altText?: string;
   id: number;
   onClick?: () => void;
+  startTime?: string;
 }
 
 export const ClubCard: React.FC<ClubCardProps> = ({
@@ -18,7 +19,8 @@ export const ClubCard: React.FC<ClubCardProps> = ({
   date,
   altText = "",
   id,
-  onClick
+  onClick,
+  startTime
 }) => {
   return (
     <article className="w-[176px] flex flex-col shrink-0 gap-3 justify-center items-start p-2 rounded-lg border-solid shadow-sm bg-zinc-50 border-[0.5px] border-black-300 cursor-pointer"
