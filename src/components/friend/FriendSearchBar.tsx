@@ -26,7 +26,7 @@ const FriendSearchBar = ({ onSearch }: Props) => {
         <button>
             <img src={BackArrow} alt="뒤로가기 아이콘" className="w-[19px] h-[19px] mr-[16px]" />
         </button>
-        <div className="flex flex-1 h-[45px] w-[293px] items-center border border-black-300 rounded-md px-3 py-2">
+        <div className="flex flex-1 h-[45px] w-[293px] items-center border-[1px] border-black-700 rounded-md px-3 py-2">
             <input
             type="text"
             value={keyword}

@@ -10,15 +10,15 @@ type Props = {
 
 const FriendListItem = ({ friend }: Props) => {
   return (
-    <div className="flex items-center gap-3 px-4 py-3 border-b border-black-200">
+    <div className="flex items-center gap-3 px-4 py-[10px] border-b border-black-400">
       {friend.profileImage ? (
         <img
           src={friend.profileImage}
           alt={friend.name}
-          className="w-12 h-12 rounded-full object-cover"
+          className="w-[40px] h-[40px] rounded-full object-cover"
         />
       ) : (
-        <div className="w-12 h-12 rounded-full bg-black-300"></div>
+        <div className="w-[40px] h-[40px] rounded-full bg-black-300"></div>
       )}
       <span className="text-base font-medium text-black-700">{friend.name}</span>
     </div>
