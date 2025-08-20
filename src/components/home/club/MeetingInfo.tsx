@@ -59,7 +59,9 @@ export const MeetingInfo: React.FC<MeetingInfoProps> = ({
       {/* 미팅 정보 */}
       <header className="flex justify-between px-4 items-center w-full pt-3 text-2xl font-semibold">
         <h1 className="self-stretch my-auto">{title}</h1>
-        <h1 className="self-stretch my-auto text-xs text-primary-700 bg-primary-200 px-3 py-2 rounded-lg border-solid border-black-200">{hobby}</h1>
+        {type === "club" && (
+          <h1 className="self-stretch my-auto text-xs text-primary-700 bg-primary-200 px-3 py-2 rounded-lg border-solid border-black-200">{hobby}</h1>
+        )}
       </header>
 
       <section className="mt-5 w-full px-4 text-xs font-medium">

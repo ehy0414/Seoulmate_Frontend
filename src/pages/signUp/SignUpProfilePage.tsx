@@ -33,13 +33,16 @@ export const SignUpProfilePage: React.FC = () => {
         // 2. 회원가입 시작된 사용자만 in-progress 확인
         const inProgressRes = await api.get("/signup/in-progress");
         const inProgressData = inProgressRes.data.data;
+        console.log(inProgressData);
 
-        if (inProgressData.univVerification === "VERIFIED") {
+
+        if (inProgressData.univVerification === "SUBMITTED") {
             navigate("/signUp/wait");
-        } else if (inProgressData.univVerification === "SUBMITTED") {
+        } else if (inProgressData.univVerification === "VERIFIED") {
             navigate("/home");
-        } else {
-            navigate("/home");
+        } else if (inProgressData.univVerification === "NOT_SUBMITTED") {
+            alert("대학 인증이 거절되었습니다. 다시 시도해주세요.");
+            navigate("/");
         }
       } catch (err) {
         console.error(err);

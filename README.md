@@ -1,70 +1,57 @@
-# React + TypeScript + Vite
+# 🌆 서울메이트 (SeoulMate)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### **프로젝트 기간:** 2025년 7월 ~ 8월
 
-Currently, two official plugins are available:
+<img width="1194" height="674" alt="image" src="https://github.com/user-attachments/assets/6a167f5b-6d1e-4e87-b323-76ebfa3a37be" />
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 👥 팀 구성
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| 역할 | 이름 |
+| --- | --- |
+| **PM** | 이재민 |
+| **PD** | 주현지 |
+| **FE** | 김규태, 김민지, 엄현용 |
+| **BE** | 노영서, 정다운, 장효원 |
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## 🛠 기술 스택
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Frontend
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- React.js
+- TypeScript
+- Tailwind CSS
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Backend
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# Seoulmate_Frontend
+- Spring Boot
+- JPA
+- MySQL
+- Redis
+- Docker
+
+### 인증 & 배포
+
+- OAuth2 (Google 로그인)
+- AWS, Vercel
+
+<img width="1106" height="614" alt="image" src="https://github.com/user-attachments/assets/74b20430-029c-4d75-8147-331a1b8b032f" />
+
+
+<img width="1084" height="601" alt="image" src="https://github.com/user-attachments/assets/17456de0-9e92-46b9-b28a-cf0e7dccd66e" />
+
+
+<img width="1087" height="595" alt="image" src="https://github.com/user-attachments/assets/a2838e53-7f98-4f90-b63f-20239d538391" />
+
+
+<img width="1078" height="609" alt="image" src="https://github.com/user-attachments/assets/f254339c-2971-4604-b53d-47c9c920de02" />
+
+
+<img width="1067" height="612" alt="image" src="https://github.com/user-attachments/assets/e23c3502-4fa1-4838-9964-6f85ef71e1ce" />
+
+
+<img width="1068" height="591" alt="image" src="https://github.com/user-attachments/assets/1e070e20-e70b-42af-968d-695fc897410a" />
+

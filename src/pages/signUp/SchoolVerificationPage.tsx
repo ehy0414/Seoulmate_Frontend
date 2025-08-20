@@ -11,9 +11,13 @@ export const SchoolVerificationPage = () => {
     try {
       const response = await api.get("/signup/in-progress");
       console.log("학교 인증 상태:", response.data);
-      if(response.data.data.univVerification === "SUBMITTED") {
+      if(response.data.data.univVerification === "VERIFIED") {
         navigate("/home");
+      } else if (response.data.data.univVerification === "NOT_SUBMITTED") {
+        alert("대학 인증이 거절되었습니다. 다시 시도해주세요.");
+        navigate("/");
       }
+      
       
     } catch (error) {
       console.error("학교 인증 중 오류 발생:", error);
