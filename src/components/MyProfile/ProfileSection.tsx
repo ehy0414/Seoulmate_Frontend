@@ -1,26 +1,60 @@
 import React from 'react';
 import ReWrite from '../../assets/mypage/change-pan.svg?react';
-interface ProfileSectionProps {
-  name: string;
-  description: string;
-  profileImage: string;
-  onEditClick?: () => void;
-}
+import api from '../../services/axios';
+import { useSetAtom, useAtomValue } from 'jotai';
+import { userProfileAtom } from '../../store/userProfileAtom';
 
-const ProfileSection: React.FC<ProfileSectionProps> = ({
-  name,
-  description,
-  profileImage,
-  onEditClick
-}) => {
+const ProfileSection: React.FC<{ onEditClick?: () => void }> = ({ onEditClick }) => {
+  // atom에서 직접 데이터 꺼내기
+  const userProfile = useAtomValue(userProfileAtom);
+  const name = userProfile?.name ?? '';
+  const description = userProfile?.bio ?? '';
+  const profileImage = userProfile?.profileImageUrl ?? '';
+  // 파일 input ref
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const setUserProfile = useSetAtom(userProfileAtom);
+
+  // 이미지 클릭 시 파일 선택
+  const handleImageClick = () => {
+    if (fileInputRef.current) fileInputRef.current.click();
+  };
+
+  // 파일 선택 시 API 요청 및 atom 최신화
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('profileImage', file);
+    try {
+      await api.put('/my-page/update-profile-image', formData);
+      // 이미지 변경 성공 시 최신 정보로 atom 업데이트
+      const profileRes = await api.get('/my-page');
+      if (profileRes.data?.data) {
+        setUserProfile(profileRes.data.data);
+      }
+    } catch (error) {
+      console.log("이미지 변경 중 오류", error);
+    }
+  };
+
   return (
     <div className="flex w-full px-[18px] py-5 flex-col justify-center items-center gap-5 ">
       {/* Profile Image with Camera Icon */}
       <div className="relative w-20 h-20">
-        <img
-          className="w-20 h-20 flex-shrink-0 rounded-[50px]"
-          src={profileImage}
-          alt="프로필 이미지"
+        {profileImage && profileImage !== '' ? (
+          <img
+            className="w-20 h-20 flex-shrink-0 rounded-[50px] cursor-pointer"
+            src={profileImage}
+            alt="프로필 이미지"
+            onClick={handleImageClick}
+          />
+        ) : null}
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          ref={fileInputRef}
+          onChange={handleFileChange}
         />
         <div className="absolute bottom-0 right-0 w-[25px] h-[25px] bg-black-200 border-2 border-white rounded-full flex items-center justify-center">
           <svg width="9" height="11" viewBox="0 0 12 11" fill="none" xmlns="http://www.w3.org/2000/svg">
