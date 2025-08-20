@@ -18,17 +18,6 @@ export default function AuthRedirect() {
             return;
         }
 
-        // 2. 회원가입 시작된 사용자만 in-progress 확인
-        const inProgressRes = await api.get("/signup/in-progress", { withCredentials: true });
-        const inProgressData = inProgressRes.data.data;
-
-        if (inProgressData.univVerification === "verified") {
-            navigate("/signUp/wait");
-        } else if (inProgressData.univVerification === "SUBMITTED") {
-            navigate("/home");
-        } else {
-            navigate("/home");
-        }
         } catch (err) {
         console.error(err);
         navigate("/"); // 에러 시 홈
