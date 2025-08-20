@@ -2,7 +2,7 @@ type Friend = {
     userId: number;
     name: string;
     profileImage: string;
-  };
+};
 
 type Props = {
   friend: Friend;
