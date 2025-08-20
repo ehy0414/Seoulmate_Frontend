@@ -5,6 +5,7 @@ import { ProgressBar } from '../../components/signup/ProgressBar';
 import { InterestSelector } from '../../components/signup/hobby/InterestSelector';
 import { NavigationButtons } from '../../components/signup/NavigationButtons';
 import { useNavigate, type NavigateFunction } from 'react-router-dom';
+import api from '../../services/axios';
 
 export const HobbySelectionPage: React.FC = () => {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
@@ -58,7 +59,7 @@ export const HobbySelectionPage: React.FC = () => {
         hobbies: Array.from(selectedItems)
       }
       try {
-        // await axios.post("/signup/select-hobby", data);
+        await api.post("/signup/select-hobby", data);
         navigate("/signUp/school");
       } catch (error) {
         console.error("전송 실패:", error);
