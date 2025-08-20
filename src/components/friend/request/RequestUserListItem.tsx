@@ -1,6 +1,6 @@
 import React from "react";
-import RejectIcon from '../../../assets/friend/rejectIcon.png';
-import AcceptIcon from '../../../assets/friend/acceptIcon.png';
+import RejectIcon from "../../../assets/friend/rejectIcon.png";
+import AcceptIcon from "../../../assets/friend/acceptIcon.png";
 
 export type FriendRequest = {
   requestId: number;
@@ -11,10 +11,17 @@ export type FriendRequest = {
 
 type Props = {
   request: FriendRequest;
-  onClick: () => void; // 리스트 아이템 클릭 핸들러
+  onClick: () => void; // 리스트 전체 클릭 (모달 열기)
+  onAccept: (request: FriendRequest) => void; // 수락
+  onReject: (request: FriendRequest) => void; // 거절
 };
 
-const RequestUserListItem: React.FC<Props> = ({ request, onClick }) => {
+const RequestUserListItem: React.FC<Props> = ({
+  request,
+  onClick,
+  onAccept,
+  onReject,
+}) => {
   const { name, profileImage } = request;
 
   const avatar = profileImage ? (
@@ -29,17 +36,48 @@ const RequestUserListItem: React.FC<Props> = ({ request, onClick }) => {
 
   return (
     <li
-      className="flex items-center justify-between gap-4 p-4 border-b h-[60px] cursor-pointer"
-      onClick={onClick}
+      className="flex items-center justify-between gap-4 p-4 border-b h-[60px]"
     >
-      <div className="flex items-center gap-4 min-w-0">
+      {/* 프로필 클릭 시 모달 열기 */}
+      <div
+        className="flex items-center gap-4 min-w-0 cursor-pointer"
+        onClick={onClick}
+      >
         {avatar}
         <span className="text-base font-medium text-black-700">{name}</span>
       </div>
 
+      {/* 수락 / 거절 버튼 */}
       <div className="flex items-center gap-3 shrink-0">
-        <img src={RejectIcon} alt="거절 아이콘" className="w-[30px] h-[30px]" />
-        <img src={AcceptIcon} alt="수락 아이콘" className="w-[30px] h-[30px]" />
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation(); // 부모 onClick 막기
+            onReject(request);
+          }}
+          className="bg-none"
+        >
+          <img
+            src={RejectIcon}
+            alt="거절 아이콘"
+            className="w-[30px] h-[30px]"
+          />
+        </button>
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation(); // 부모 onClick 막기
+            onAccept(request);
+          }}
+          className="bg-none"
+        >
+          <img
+            src={AcceptIcon}
+            alt="수락 아이콘"
+            className="w-[30px] h-[30px]"
+          />
+        </button>
       </div>
     </li>
   );

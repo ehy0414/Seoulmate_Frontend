@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
 import RequestUserListItem from "../../components/friend/request/RequestUserListItem";
-import type { FriendRequest} from "../../components/friend/request/RequestUserListItem";
+import type { FriendRequest } from "../../components/friend/request/RequestUserListItem";
 import BottomNavBar from "../../components/common/BottomNavBar";
 import { FriendsModal } from "../../components/modal/FriendsModal";
 import TabMenu from "../../components/common/TabMenu";
@@ -35,7 +35,7 @@ export const FriendRequestPage: React.FC = () => {
   const [list, setList] = useState<FriendRequest[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  // const [pendingIds, setPendingIds] = useState<Set<number>>(new Set());
+  const [pendingIds, setPendingIds] = useState<Set<number>>(new Set());
 
   const navigate = useNavigate();
 
@@ -66,6 +66,52 @@ export const FriendRequestPage: React.FC = () => {
   useEffect(() => {
     fetchRequests();
   }, []);
+
+  // 수락
+  const handleAccept = async (req: FriendRequest) => {
+    if (!confirm(`${req.name} 님의 친구 요청을 수락하시겠습니까?`)) return;
+
+    // 낙관적 업데이트 (리스트에서 제거)
+    setList((prev) => prev.filter((r) => r.requestId !== req.requestId));
+    setPendingIds((prev) => new Set(prev).add(req.requestId));
+
+    try {
+      await api.patch(`/friends/requests/${req.requestId}`, { status: "APPROVED" });
+    } catch (e) {
+      alert("수락 처리에 실패했어요. 다시 시도해 주세요.");
+      // 롤백
+      setList((prev) => [req, ...prev]);
+    } finally {
+      setPendingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(req.requestId);
+        return next;
+      });
+    }
+  };
+
+  // 거절
+  const handleReject = async (req: FriendRequest) => {
+    if (!confirm(`${req.name} 님의 친구 요청을 거절하시겠습니까?`)) return;
+
+    // 낙관적 업데이트 (리스트에서 제거)
+    setList((prev) => prev.filter((r) => r.requestId !== req.requestId));
+    setPendingIds((prev) => new Set(prev).add(req.requestId));
+
+    try {
+      await api.patch(`/friends/requests/${req.requestId}`, { status: "DENIED" });
+    } catch (e) {
+      alert("거절 처리에 실패했어요. 다시 시도해 주세요.");
+      // 롤백
+      setList((prev) => [req, ...prev]);
+    } finally {
+      setPendingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(req.requestId);
+        return next;
+      });
+    }
+  };
 
   return (
     <main className="h-screen flex flex-col bg-white overflow-hidden">
@@ -98,7 +144,13 @@ export const FriendRequestPage: React.FC = () => {
                 <RequestUserListItem
                   key={request.requestId}
                   request={request}
-                  onClick={() => openModal(request.senderId)} // 버튼 클릭 시 모달 오픈
+                  onClick={() => openModal(request.senderId)} // 프로필(왼쪽 영역) 클릭 → 모달
+                  onAccept={(r) =>
+                    pendingIds.has(r.requestId) ? undefined : handleAccept(r)
+                  }
+                  onReject={(r) =>
+                    pendingIds.has(r.requestId) ? undefined : handleReject(r)
+                  }
                 />
               ))}
 
