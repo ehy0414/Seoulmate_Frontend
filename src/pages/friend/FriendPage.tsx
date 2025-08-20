@@ -7,7 +7,7 @@ import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
 import BottomNavBar from "../../components/common/BottomNavBar";
 import TabMenu from "../../components/common/TabMenu";
 
-import api from '../../services/axios'; // 앞에서 만든 axios 인스턴스
+import api from '../../services/axios'; 
 
 type Friend = {
   userId: number;
@@ -23,7 +23,6 @@ const FriendPage = () => {
 
   const navigate = useNavigate();
 
-  // 컴포넌트 로드 시 API 요청
   useEffect(() => {
     const fetchFriends = async () => {
       try {
@@ -38,7 +37,7 @@ const FriendPage = () => {
     fetchFriends();
   }, []);
 
-  // 검색 함수 수정
+  // 검색 함수
   const handleSearch = async (keyword: string) => {
     try {
       if (!keyword.trim()) {
