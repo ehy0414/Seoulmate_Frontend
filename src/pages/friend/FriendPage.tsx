@@ -1,70 +1,75 @@
-"use client";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { mockFriends } from "../../mock/friend/mockFriends";
+import FriendSearchBar from "../../components/friend/FriendSearchBar";
+import FriendListItem from "../../components/friend/FriendListItem";
 import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
-import { MenuBar } from "../../components/friend/MenuBar";
-import { SearchSection } from "../../components/friend/SearchSection";
-import { UserList } from "../../components/friend/UserList";
 import BottomNavBar from "../../components/common/BottomNavBar";
+import TabMenu from "../../components/common/TabMenu";
 
-interface User {
-  id: string;
+type Friend = {
+  userId: number;
   name: string;
-  percentage: string;
-}
+  profileImage: string;
+};
 
-interface FriendsListProps {
-  users?: User[];
-  onTabChange?: (tab: "friends" | "requests") => void;
-  onSearch?: (query: string) => void;
-  onBack?: () => void;
-}
+const FriendPage = () => {
+  const FIRST_TAB = '주최';
+  const SECOND_TAB = '참여';
+  const [activeTab, setActiveTab] = useState<string>(FIRST_TAB);
+  const [friends, setFriends] = useState<Friend[]>(mockFriends);
 
-export const FriendPage: React.FC<FriendsListProps> = ({
-  users,
-  onTabChange,
-  onSearch,
-  onBack
-}) => {
-  const [activeTab, setActiveTab] = useState<"friends" | "requests">("friends");
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const handleTabChange = (tab: "friends" | "requests") => {
-    setActiveTab(tab);
-    onTabChange?.(tab);
+  const handleSearch = (keyword: string) => {
+    if (!keyword.trim()) {
+      setFriends(mockFriends);
+      return;
+    }
+    const filtered = mockFriends.filter((f) =>
+      f.name.toLowerCase().includes(keyword.toLowerCase())
+    );
+    setFriends(filtered);
   };
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    onSearch?.(query);
-  };
+  const navigate = useNavigate();
 
-  const handleBack = () => {
-    onBack?.();
+  const onFirstTabClick = () => {
+    setActiveTab(FIRST_TAB);
+    navigate("/friend");
+  };
+  
+  const onSecondTabClick = () => {
+    setActiveTab(SECOND_TAB);
+    navigate("/friend/request");
   };
 
   return (
-    <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
-        <HeaderSeoulmate title="서울메이트" alarm={false} />
-      
-        <section className="w-[460px] fixed">
-            <MenuBar />
-            <SearchSection
-            onBack={handleBack}
-            onSearch={handleSearch}
-            placeholder="찾고 싶은 친구를 검색하세요."
-            />
-        </section>
-        <div
-            role="tabpanel"
-            id={activeTab === "friends" ? "friends-panel" : "requests-panel"}
-            aria-labelledby={activeTab === "friends" ? "friends-tab" : "requests-tab"}
-            className="mb-[23rem] w-full"
-        >
-            <UserList users={users} />
-        </div>
+    <>
+      <div className="h-screen flex flex-col bg-white overflow-hidden">
+      <HeaderSeoulmate title="서울메이트" alarm={false} />
 
-        <BottomNavBar menu='friend'/>
-    </main>
+      <div className="mt-[60px]"></div>
+      <TabMenu
+        firstTabText={FIRST_TAB}
+        secondTabText={SECOND_TAB}
+        activeTab={activeTab}
+        onFirstTabClick={onFirstTabClick}
+        onSecondTabClick={onSecondTabClick}
+      />
+
+      <div className="shrink-0">
+        <FriendSearchBar onSearch={handleSearch} />
+      </div>
+
+      <div className="flex-1 overflow-y-auto scrollbar-hide mb-[60px]">
+        {friends.map((friend) => (
+          <FriendListItem key={friend.userId} friend={friend} />
+        ))}
+      </div>
+    </div>
+    <BottomNavBar menu='friend'/>
+    </>
+    
   );
 };
 
