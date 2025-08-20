@@ -6,33 +6,40 @@ import { SubmitButton } from "../../components/signup/SubmitButton";
 import { SchoolDropdown } from "../../components/signup/schoolVerify/SchoolDropdown";
 import { FileUploadField } from "../../components/signup/schoolVerify/FileUploadField";
 import { useNavigate, type NavigateFunction } from "react-router-dom";
+import api from "../../services/axios";
 
 export function SchoolVerifyPage() {
   const [selectedSchool, setSelectedSchool] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const navigate:NavigateFunction = useNavigate();
 
-  const handleNext = async() => {
+  const handleNext = async () => {
     console.log("Selected school:", selectedSchool);
     console.log("Selected file:", selectedFile);
-    if((selectedSchool === "") || (selectedFile === null)) {
+
+    if (!selectedSchool || !selectedFile) {
       alert("모두 입력해주세요.");
-    } else {
-      const data = {
-        universityName: selectedSchool,
-        certificate: selectedFile
-      }
-      try {
-        // await axios.post(`/signup/school`, data);
-        alert("회원가입이 완료되었습니다!");
-        navigate("/signUp/wait");
-      } catch (error) {
-        alert(error);
-        console.error(error);
-      }
-      
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("university", selectedSchool);   // 문자열
+    formData.append("univCertificate", selectedFile); // 파일
+
+    try {
+      await api.post(`/signup/school`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("회원가입이 완료되었습니다!");
+      navigate("/signUp/wait");
+    } catch (error) {
+      alert("업로드 실패: " + error);
+      console.error(error);
     }
   };
+
   
   return (
     <main className="flex flex-col items-center px-6 pt-[200px] pb-24 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">

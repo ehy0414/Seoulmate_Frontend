@@ -1,5 +1,7 @@
 "use client";
-import React from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../../services/axios';
 import { HeaderSeoulmate } from '../../components/common/HeaderSeoulmate';
 import { ClubMiniCard } from '../../components/home/club/ClubMiniCard';
 import { ClubCard } from '../../components/home/club/ClubCard';
@@ -7,102 +9,107 @@ import { SectionHeader } from '../../components/home/SectionHeader';
 import { ScrollableCardList } from '../../components/home/ScrollableCardList';
 import { CategoryGrid } from '../../components/home/category/CategoryGrid';
 import BottomNavBar from '../../components/common/BottomNavBar';
-import { useNavigate } from 'react-router-dom';
 
-const recommendedClubs = [
-  {
-    id: 1,
-    image: "https://api.builder.io/api/v1/image/assets/TEMP/8a697336a0668e6f2e3ffae0cb45c99d4b9d1681?width=320",
-    title: "페인팅 모임",
-    place: "학식당 옆 잔디밭",
-    date: "7/8 12:00",
-    altText: ""
-  },
-  {
-    id: 2,
-    image: "https://api.builder.io/api/v1/image/assets/TEMP/8b57a445adaf2e0cb61b740abeae36eb3b3a9a54?width=320",
-    title: "피아노 독학 모임",
-    place: "정문 건너 자유레슨실",
-    date: "7/12 15:00",
-    altText: ""
-  },
-  {
-    id: 3,
-    image: "https://api.builder.io/api/v1/image/assets/TEMP/8a697336a0668e6f2e3ffae0cb45c99d4b9d1681?width=320",
-    title: "페인팅 모임",
-    place: "학식당 옆 잔디밭",
-    date: "7/8 12:00",
-    altText: ""
-  }
-];
+interface Club {
+  id: number;
+  image: string;
+  title: string;
+  place: string;
+  date: string;
+  startTime?: string;
+  type?: string;
+}
 
-// 한국어 클래스 데이터
-const koreanClasses = [
-  {
-    id: 3,
-    image: "https://api.builder.io/api/v1/image/assets/TEMP/c470bd21cab6825806f1d59b81d84febb47dcfa2?width=320",
-    title: "한국어 기초 클래스",
-    place: "창신관 102호",
-    date: "7/29 12:00",
-    altText: ""
-  },
-  {
-    id: 4,
-    image: "https://api.builder.io/api/v1/image/assets/TEMP/344c6a924c437317e8a762e0972dbf9e9d225456?width=320",
-    title: "실생활 한국어 회화",
-    place: "월당관 3502호",
-    date: "7/13 15:00",
-    altText: ""
-  },
-  {
-    id: 3,
-    image: "https://api.builder.io/api/v1/image/assets/TEMP/c470bd21cab6825806f1d59b81d84febb47dcfa2?width=320",
-    title: "한국어 기초 클래스",
-    place: "창신관 102호",
-    date: "7/29 12:00",
-    altText: ""
-  },
-];
-
-export const HomePage: React.FC = () => {
+export const HomePage = () => {
   const navigate = useNavigate();
+  const [recommendedClubs, setRecommendedClubs] = useState<Club[]>([]);
+  const [koreanClasses, setKoreanClasses] = useState<Club[]>([]);
+  const [regularMeeting, setRegularMeeting] = useState<Club | null>(null);
+
+  const AllClubs = async () => {
+    try {
+      const response = await api.get("/home");
+      const data = response.data.data;
+
+      // 추천 모임
+      setRecommendedClubs(
+        (data.recommendedMeetings ?? []).map((club: any) => ({
+          ...club,
+          place: club.place || club.location || "장소 미정",
+          date: club.meeting_day ? `${club.meeting_day} ${club.start_time ?? ""}` : "날짜 미정",
+          startTime: club.start_time
+        }))
+      );
+
+      // 한국어 클래스
+      setKoreanClasses(
+        (data.koreanClasses ?? []).map((klass: any) => ({
+          ...klass,
+          place: klass.place || "장소 미정",
+          date: klass.meeting_day ? `${klass.meeting_day} ${klass.start_time ?? ""}` : "날짜 미정",
+          startTime: klass.start_time
+        }))
+      );
+
+      // 정기 모임
+      if (data.regularMeeting) {
+        setRegularMeeting({
+          ...data.regularMeeting,
+          place: data.regularMeeting.place || data.regularMeeting.location || "장소 미정",
+          date: data.regularMeeting.meeting_day ? `${data.regularMeeting.meeting_day} ${data.regularMeeting.start_time ?? ""}` : "날짜 미정",
+          startTime: data.regularMeeting.start_time
+        });
+      } else {
+        setRegularMeeting(null);
+      }
+    } catch (error) {
+      console.error("Error fetching clubs:", error);
+      setRecommendedClubs([]);
+      setKoreanClasses([]);
+      setRegularMeeting(null);
+    }
+  };
+
+  useEffect(() => {
+    AllClubs();
+  }, [navigate]);
 
   return (
     <main className="flex flex-col items-center px-[18px] mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
       <HeaderSeoulmate title="서울메이트" alarm={true}/>
 
       <div className="flex left-0 flex-col gap-7 items-center py-5 top-[203px] w-full">
-        <ClubMiniCard
-          image="https://api.builder.io/api/v1/image/assets/TEMP/0830a6226ef6b285754acdb3c55e7e749e64b48b?width=160"
-          title="숭실대 정기모임"
-          place="블루힐"
-          date="7/21 18:00"
-          altText="숭실대 정기모임"
-          onClick={() => {navigate("/meeting/1")}}
-        />
+        {regularMeeting && (
+          <ClubMiniCard
+            key={regularMeeting.id}
+            image={regularMeeting.image}
+            title={regularMeeting.title}
+            place={regularMeeting.place}
+            date={regularMeeting.date}
+            altText={regularMeeting.title}
+            onClick={() => navigate(`/meeting/${regularMeeting.id}`)}
+          />
+        )}
 
-        <section className=" flex flex-col gap-5 items-start self-stretch py-0 w-full">
+        <section className="flex flex-col gap-5 items-start self-stretch py-0 w-full">
           <SectionHeader title="추천 모임" />
           <ScrollableCardList>
-            <ScrollableCardList>
-              {recommendedClubs.map((club) => (
-                <ClubCard
-                  key={club.id}
-                  image={club.image}
-                  title={club.title}
-                  place={club.place}
-                  date={club.date}
-                  altText={club.altText}
-                  id={club.id}
-                  onClick={() => navigate(`/club/${club.id}`)}
-                />
-              ))}
-            </ScrollableCardList>
-
+            {recommendedClubs.map((club) => (
+              <ClubCard
+                key={club.id}
+                image={club.image}
+                title={club.title}
+                place={club.place}
+                date={club.date}
+                altText={club.title}
+                id={club.id}
+                onClick={() => navigate(`/class/${club.id}`)}
+              />
+            ))}
           </ScrollableCardList>
         </section>
 
-        <section className="flex flex-col gap-5 justify-center w-full items-start self-stretch py-0 ">
+        <section className="flex flex-col gap-5 justify-center w-full items-start self-stretch py-0">
           <SectionHeader title="우리학교 모임" />
           <CategoryGrid />
         </section>
@@ -110,25 +117,23 @@ export const HomePage: React.FC = () => {
         <section className="flex flex-col gap-5 items-start self-stretch py-0 w-full">
           <SectionHeader title="한국어 클래스" />
           <ScrollableCardList>
-            {koreanClasses.map((klass, index) => (
+            {koreanClasses.map((klass) => (
               <ClubCard
-                key={index}
+                key={klass.id}
                 image={klass.image}
                 title={klass.title}
                 place={klass.place}
                 date={klass.date}
-                altText={klass.altText}
+                altText={klass.title}
                 id={klass.id}
                 onClick={() => navigate(`/class/${klass.id}`)}
               />
             ))}
           </ScrollableCardList>
         </section>
-    
+
         <BottomNavBar menu='home'/>
-    </div>
-
-
+      </div>
     </main>
   );
 };

@@ -1,70 +1,123 @@
-"use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+import FriendSearchBar from "../../components/friend/FriendSearchBar";
+import FriendListItem from "../../components/friend/FriendListItem";
 import { HeaderSeoulmate } from "../../components/common/HeaderSeoulmate";
-import { MenuBar } from "../../components/friend/MenuBar";
-import { SearchSection } from "../../components/friend/SearchSection";
-import { UserList } from "../../components/friend/UserList";
 import BottomNavBar from "../../components/common/BottomNavBar";
+import TabMenu from "../../components/common/TabMenu";
+import { FriendsModal } from "../../components/modal/FriendsModal";
 
-interface User {
-  id: string;
+import api from '../../services/axios';
+
+type Friend = {
+  userId: number;
   name: string;
-  percentage: string;
-}
+  profileImage: string;
+};
 
-interface FriendsListProps {
-  users?: User[];
-  onTabChange?: (tab: "friends" | "requests") => void;
-  onSearch?: (query: string) => void;
-  onBack?: () => void;
-}
+const FriendPage = () => {
+  const FIRST_TAB = "친구 목록";
+  const SECOND_TAB = "친구 요청";
+  const [activeTab, setActiveTab] = useState<string>(FIRST_TAB);
+  const [friends, setFriends] = useState<Friend[]>([]);
 
-export const FriendPage: React.FC<FriendsListProps> = ({
-  users,
-  onTabChange,
-  onSearch,
-  onBack
-}) => {
-  const [activeTab, setActiveTab] = useState<"friends" | "requests">("friends");
-  const [searchQuery, setSearchQuery] = useState("");
+  // 모달 상태 및 선택된 사용자
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedRequestId, setSelectedRequestId] = useState<number | null>(null);
 
-  const handleTabChange = (tab: "friends" | "requests") => {
-    setActiveTab(tab);
-    onTabChange?.(tab);
+  const openModal = (userId: number) => {
+    setSelectedRequestId(userId);
+    setModalVisible(true);
+  };
+  const closeModal = () => setModalVisible(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchFriends = async () => {
+      try {
+        const res = await api.get("/friends");
+        if (res.data.success && Array.isArray(res.data.data)) {
+          setFriends(res.data.data);
+        }
+      } catch (error) {
+        console.error("친구 목록 가져오기 실패:", error);
+      }
+    };
+    fetchFriends();
+  }, []);
+
+  // 검색
+  const handleSearch = async (keyword: string) => {
+    try {
+      if (!keyword.trim()) {
+        const res = await api.get("/friends");
+        if (res.data.success && Array.isArray(res.data.data)) {
+          setFriends(res.data.data);
+        }
+        return;
+      }
+      const res = await api.get("/friends/search/my", {
+        params: { query: keyword, page: 1, size: 20 },
+      });
+      if (res.data.success && Array.isArray(res.data.data)) {
+        setFriends(res.data.data);
+      }
+    } catch (error) {
+      console.error("친구 검색 실패:", error);
+    }
   };
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    onSearch?.(query);
+  const onFirstTabClick = () => {
+    setActiveTab(FIRST_TAB);
+    navigate("/friend");
   };
 
-  const handleBack = () => {
-    onBack?.();
+  const onSecondTabClick = () => {
+    setActiveTab(SECOND_TAB);
+    navigate("/friend/request");
   };
 
   return (
-    <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
+    <>
+      <div className="h-screen flex flex-col bg-white overflow-hidden">
         <HeaderSeoulmate title="서울메이트" alarm={false} />
-      
-        <section className="w-[460px] fixed">
-            <MenuBar />
-            <SearchSection
-            onBack={handleBack}
-            onSearch={handleSearch}
-            placeholder="찾고 싶은 친구를 검색하세요."
-            />
-        </section>
-        <div
-            role="tabpanel"
-            id={activeTab === "friends" ? "friends-panel" : "requests-panel"}
-            aria-labelledby={activeTab === "friends" ? "friends-tab" : "requests-tab"}
-            className="mb-[23rem] w-full"
-        >
-            <UserList users={users} />
+
+        <div className="mt-[60px]" />
+        <TabMenu
+          firstTabText={FIRST_TAB}
+          secondTabText={SECOND_TAB}
+          activeTab={activeTab}
+          onFirstTabClick={onFirstTabClick}
+          onSecondTabClick={onSecondTabClick}
+        />
+
+        <div className="shrink-0">
+          <FriendSearchBar onSearch={handleSearch} />
         </div>
 
-        <BottomNavBar menu='friend'/>
-    </main>
+        <div className="flex-1 overflow-y-auto scrollbar-hide mb-[60px]">
+          {friends.map((friend) => (
+            <FriendListItem
+              key={friend.userId}
+              friend={friend}
+              onClick={() => openModal(friend.userId)} // 클릭 시 모달 오픈
+            />
+          ))}
+        </div>
+
+        {/* 모달 */}
+        {selectedRequestId && (
+          <FriendsModal
+            isVisible={isModalVisible}
+            onClose={closeModal}
+            requestId={selectedRequestId}
+          />
+        )}
+      </div>
+      <BottomNavBar menu="friend" />
+    </>
   );
 };
 

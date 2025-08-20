@@ -91,29 +91,30 @@ export const SignUpProfilePage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const data = new FormData();
-    data.append("firstName", formData.firstName);
-    data.append("lastName", formData.lastName);
-    data.append("DOB", formData.DOB);
-    data.append("country", formData.country);
-    data.append("bio", formData.bio);
-
-    if (profileFile) {
-      data.append("profileImage", profileFile);
-    }
+    if (!profileFile) return;
 
     try {
-      const res = await api.post("/signup/create-profile", data);
+      const params = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        DOB: formData.DOB,
+        country: formData.country,
+        bio: formData.bio,
+      };
+
+      const data = new FormData();
+      data.append("profileImage", profileFile);
+
+      const res = await api.post("/signup/create-profile", data, { params });
+
       if (res.status === 200) {
         navigate("/signUp/langTest", { state: { country: formData.country } });
       }
     } catch (error) {
       console.error("Error submitting profile data:", error);
     }
-
-    console.log('FormData values:', [...data.entries()]);
-    navigate("/signUp/langTest", {state: {country: formData.country}});
   };
+
 
   const isFormValid = profileFile &&formData.lastName && formData.firstName && formData.DOB && formData.country;
 
