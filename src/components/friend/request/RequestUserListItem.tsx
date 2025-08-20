@@ -1,37 +1,56 @@
-"use client";
+import React from "react";
 
-import * as React from "react";
-import { RequestActionButton } from "./RequestActionButton";
-
-interface UserListItemProps {
+export type FriendRequest = {
+  requestId: number;
+  senderId: number;
   name: string;
-  onDelete?: () => void;
-  onAccept?: () => void;
-  onClick: () => void;
-}
+  profileImage?: string | null;
+};
 
-export const RequestUserListItem: React.FC<UserListItemProps> = ({
-  name,
-  onDelete,
-  onAccept,
-  onClick
-}) => {
+type Props = {
+  request: FriendRequest;
+  onAccept: (request: FriendRequest) => void; 
+  onReject: (request: FriendRequest) => void; 
+};
 
-  return (
-    <div className="flex gap-4 items-center self-stretch px-5 py-0 bg-white border-solid border-b-[0.5px] border-b-neutral-400 h-[60px] max-sm:gap-3 max-sm:px-3 max-sm:py-0">
-      <div  className="w-10 h-10 bg-zinc-400 rounded-[100px] cursor-pointer"
-            onClick={onClick} />
-        <div className="flex gap-3 items-center flex-[1_0_0] max-sm:gap-2">
-          <div className="flex flex-col gap-2.5 items-start">
-            <h3 className="overflow-hidden self-stretch text-base font-medium text-ellipsis text-zinc-900">
-              {name}
-            </h3>
-          </div>
-        </div>
-        <div className="flex gap-4 items-center max-sm:gap-3">
-          <RequestActionButton type="delete" onClick={onDelete} />
-          <RequestActionButton type="check" onClick={onAccept} />
-        </div>
+const RequestUserListItem: React.FC<Props> = ({ request, onAccept, onReject }) => {
+  const { name, profileImage } = request;
+
+  const avatar = profileImage ? (
+    <img
+      src={profileImage}
+      alt={`${name} 프로필`}
+      className="h-16 w-16 rounded-full object-cover"
+    />
+  ) : (
+    <div className="h-16 w-16 rounded-full bg-gray-300 grid place-items-center">
     </div>
   );
+
+  return (
+    <li className="flex items-center justify-between gap-4 p-4 border-b">
+      <div className="flex items-center gap-4 min-w-0">
+        {avatar}
+        <span className="text-xl font-semibold truncate">{name}</span>
+      </div>
+
+      <div className="flex items-center gap-3 shrink-0">
+        <button
+          onClick={() => onReject(request)}
+          className="rounded-xl bg-blue-500 text-white px-4 py-2 text-sm font-medium hover:opacity-90 active:opacity-80"
+        >
+          삭제
+        </button>
+
+        <button
+          onClick={() => onAccept(request)}
+          className="rounded-xl bg-blue-500 text-white px-4 py-2 text-sm font-medium hover:opacity-90 active:opacity-80"
+        >
+          수락
+        </button>
+      </div>
+    </li>
+  );
 };
+
+export default RequestUserListItem;

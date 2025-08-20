@@ -18,7 +18,7 @@ const FriendListItem = ({ friend }: Props) => {
           className="w-[40px] h-[40px] rounded-full object-cover"
         />
       ) : (
-        <div className="w-[40px] h-[40px] rounded-full bg-black-300"></div>
+        <div className="w-[40px] h-[40px] rounded-full bg-[#B8B8B8]"></div>
       )}
       <span className="text-base font-medium text-black-700">{friend.name}</span>
     </div>

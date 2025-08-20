@@ -19,8 +19,6 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
 
   const [height, setHeight] = useState(90);
 
-  // (이하 로직은 변경 없음)
-  // ... (드래그, useEffect 등 기존 로직) ...
   const updateHeight = (deltaY: number) => {
     const sensitivity = 1;
     const newHeight = Math.min(
