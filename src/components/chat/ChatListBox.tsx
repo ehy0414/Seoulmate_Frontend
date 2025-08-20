@@ -42,11 +42,11 @@ const ChatListBox: React.FC<ChatListBoxProps> = ({
             <div className='flex justify-end items-start gap-5 flex-1'>
                 <div className='flex flex-col items-start gap-1 flex-1'>
                     {/* Name */}
-                    <div className='self-stretch text-black font-medium text-base font-sans'>
+                    <div className='self-stretch text-black text-[16px] font-medium text-base font-sans'>
                         {name}
                     </div>
                     {/* Last Message */}
-                    <div className='self-stretch text-black text-sm font-light leading-[19px] font-sans'>
+                    <div className='self-stretch text-black text-[14px] font-light leading font-sans'>
                         {lastMessage}
                     </div>
                 </div>
@@ -54,7 +54,7 @@ const ChatListBox: React.FC<ChatListBoxProps> = ({
                 {/* Info Section */}
                 <div className='flex flex-col justify-center items-end gap-1'>
                     {/* Timestamp */}
-                    <div className='text-black font-light text-[8px]'>
+                    <div className='text-black font-light text-[12px]'>
                         {timestamp}
                     </div>
                     {/* Notification Badge */}

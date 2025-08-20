@@ -203,8 +203,6 @@ const ChatRoom = () => {
               const isSameSender = prev && prev.sender === msg.sender;
               const marginTop = isSameSender ? 'mt-1' : 'mt-5';
 
-              // 선택: pending/error를 MessageBubble에 전달해서
-              // 말풍선에 작은 점프(로딩 점)나 실패 아이콘 표시 가능
               return (
                 <MessageBubble
                   key={`${date}-${msg.time}-${msg.id ?? idx}`}
