@@ -14,6 +14,10 @@ const ProfileSection: React.FC<{ onEditClick?: () => void }> = ({ onEditClick })
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const setUserProfile = useSetAtom(userProfileAtom);
 
+  // 자기소개 수정 상태
+  const [editMode, setEditMode] = React.useState(false);
+  const [editValue, setEditValue] = React.useState(description);
+
   // 이미지 클릭 시 파일 선택
   const handleImageClick = () => {
     if (fileInputRef.current) fileInputRef.current.click();
@@ -37,8 +41,33 @@ const ProfileSection: React.FC<{ onEditClick?: () => void }> = ({ onEditClick })
     }
   };
 
+  // 자기소개 수정 완료
+  const handleEditSubmit = async () => {
+    // bio가 기존 값과 같거나 빈 문자열이면 요청하지 않음
+    if (editValue === description || editValue.trim() === "") {
+      setEditMode(false);
+      return;
+    }
+    try {
+      await api.put('/my-page/update-profile-bio',  editValue);
+      // PUT 성공 시 바로 atom bio만 업데이트
+      if (!userProfile) return;
+      setUserProfile({ ...userProfile, bio: editValue });
+      setEditMode(false);
+    } catch (error) {
+      console.log("자기소개 변경 오류", error);
+    }
+  };
+
+  // 엔터 입력 시
+  const handleEditKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleEditSubmit();
+    }
+  };
+
   return (
-    <div className="flex w-full px-[18px] py-5 flex-col justify-center items-center gap-5 ">
+  <div className="flex w-full px-[18px] py-5 flex-col justify-center items-center gap-5 ">
       {/* Profile Image with Camera Icon */}
       <div className="relative w-20 h-20">
         {profileImage && profileImage !== '' ? (
@@ -69,12 +98,27 @@ const ProfileSection: React.FC<{ onEditClick?: () => void }> = ({ onEditClick })
           {name}
         </div>
         <div className="flex justify-center items-center gap-2 self-stretch">
-          <div className="text-black text-center font-sans text-sm font-medium leading-[19px]">
-            {description}
-          </div>
-          <button onClick={onEditClick} className="w-4 h-4 flex items-center justify-center">
-            <ReWrite fill='#AFA9A9'/>
-          </button>
+          {editMode ? (
+            <input
+              type="text"
+              value={editValue}
+              onChange={e => setEditValue(e.target.value)}
+              onKeyDown={handleEditKeyDown}
+              onBlur={handleEditSubmit}
+              autoFocus
+              className="text-black text-center font-sans text-sm font-medium leading-[19px] border-b border-black-300 outline-none bg-transparent"
+              placeholder="자기소개를 입력하세요"
+            />
+          ) : (
+            <>
+              <div className="text-black text-center font-sans text-sm font-medium leading-[19px]">
+                {description}
+              </div>
+              <button onClick={() => { setEditMode(true); setEditValue(description); }} className="w-4 h-4 flex items-center justify-center">
+                <ReWrite fill='#AFA9A9'/>
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
