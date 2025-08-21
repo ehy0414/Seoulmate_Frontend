@@ -40,9 +40,13 @@ const MyProfile: React.FC = () => {
   const infoItems = [
     { label: '학교', value: userProfile?.university ?? '' },
     { label: '나이', value: userProfile?.age != null ? `${userProfile.age}세` : '' },
-    { label: '영어 구사 레벨', value: userProfile?.languages?.['영어']?.toString() ?? '' },
-    { label: '한국어 구사 레벨', value: userProfile?.languages?.['한국어']?.toString() ?? '' }
-  ];
+    userProfile?.languages?.['영어'] != null ? {
+      label: '영어 구사 레벨', value: userProfile.languages['영어'].toString()
+    } : undefined,
+    userProfile?.languages?.['한국어'] != null ? {
+      label: '한국어 구사 레벨', value: userProfile.languages['한국어'].toString()
+    } : undefined
+  ].filter((item): item is { label: string; value: string } => item !== undefined);
 
   return (
     <div className="flex flex-col w-full mx-auto h-screen bg-white relative">
