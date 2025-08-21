@@ -45,7 +45,7 @@ export const HomePage = () => {
       setKoreanClasses(
         (data.koreanClasses ?? []).map((klass: any) => ({
           ...klass,
-          place: klass.place || "장소 미정",
+          place: klass.location || "장소 미정",
           date: klass.meeting_day ? `${klass.meeting_day} ${klass.start_time ?? ""}` : "날짜 미정",
           startTime: klass.start_time
         }))
@@ -87,7 +87,7 @@ export const HomePage = () => {
             place={regularMeeting.place}
             date={regularMeeting.date}
             altText={regularMeeting.title}
-            onClick={() => navigate(`/meeting/${regularMeeting.id}`)}
+            onClick={() => navigate(`/class/${regularMeeting.id}`)}
           />
         )}
 
@@ -103,7 +103,7 @@ export const HomePage = () => {
                 date={club.date}
                 altText={club.title}
                 id={club.id}
-                onClick={() => navigate(`/class/${club.id}`)}
+                onClick={() => navigate(`/club/${club.id}`)}
               />
             ))}
           </ScrollableCardList>

@@ -46,7 +46,6 @@ export const SignUpProfilePage: React.FC = () => {
         }
       } catch (err) {
         console.error(err);
-        navigate("/"); // 에러 시 홈
       }
     };
 

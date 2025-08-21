@@ -58,7 +58,6 @@ export const MeetingDetailPage = () => {
         <HeaderDetail
           title="숭실대 정기모임"
           onBackClick={() => navigate(-1)}
-          onNotificationClick={() => navigate("")}
         />
 
         <MeetingInfo

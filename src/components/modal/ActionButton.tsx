@@ -23,7 +23,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
         className={`flex shrink-0 justify-center items-center h-[38px] w-1/2 rounded-lg ${
           isFriend
             ? "bg-white border border-gray-300 text-black"
-            : "bg-primary-700 text-white"
+            : "bg-primary-700 text-white hover:bg-primary-800 transition-colors"
         } ${isDisabled && "opacity-50 cursor-not-allowed"}`}
       >
         <span className="text-xs font-bold">
