@@ -6,13 +6,15 @@ interface ProfileHeaderProps {
   name: string;
   description: string;
   flagSrc?: string | null;
+  userId: number;
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
   profileImage,
   name,
   description,
-  flagSrc
+  flagSrc,
+  userId
 }) => {
   return (
     <section className="flex gap-7 items-start self-stretch">
@@ -41,12 +43,12 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
             
           </div>
-          <p className="self-stretch text-sm leading-5 text-black">
+          <p className="self-stretch text-sm leading-5 text-black break-words whitespace-normal">
             {description}
           </p>
         </div>
         <div>
-          <MenuIcon />
+          <MenuIcon userId={userId} />
         </div>
       </div>
     </section>

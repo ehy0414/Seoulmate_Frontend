@@ -1,13 +1,11 @@
 "use client";
-import * as React from "react";
 import { HeaderDetail } from "../../components/common/HeaderDetail";
 import { ActionButton } from "../../components/home/ActionButton";
 import { MeetingInfo } from "../../components/home/club/MeetingInfo";
-import image1 from "../../components/home/club/image.png";
-import image2 from "../../components/home/club/image2.png";
 import { ParticipantsList } from "../../components/home/club/ParticpantsList";
 import { useNavigate, useParams } from "react-router-dom";
-import { clubData } from "../../mock/club/mockClubData"; // mock 데이터
+import api from "../../services/axios";
+import { useEffect, useState } from "react";
 import Info from "../../components/home/class/Info";
 
 interface MeetingDetailPageProps {
@@ -16,97 +14,121 @@ interface MeetingDetailPageProps {
   onJoinClick?: () => void;
 }
 
-interface club {
+interface Club {
+  id: number;
+  type: string;
+  image: string;
+  title: string;
+  location: string;
+  meeting_day: string;
+  start_time: string;
+  min_participants: number;
+  max_participants: number;
+  current_participants: number;
+  host_message: string;
+  price: number;
+  hobbyCategory: string;
+  primaryHobbyName: string;
+  language: string;
+  host: {
     id: number;
-    title: string;
-    hobby: string;
-    location: string;
-    datetime: string;
-    price: string;
-    description: string;
-    imageUrls: string[];
-} 
+    name: string;
+    profile_image: string;
+    score: number;
+  };
+}
 
-export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({
-}) => {
-  const participants = [
-    {
-      id: "1",
-      imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/b13f698dcdd227584cf0fcf49accd676a1fdc9ff?width=80",
-      nickname: "닉네임"
-    },
-    {
-      id: "2",
-      imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/6291d9c5ef5c598f4227f6a632ed45e10b220a66?width=80",
-      nickname: "닉네임"
-    },
-    {
-      id: "3",
-      imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/8c5bccbd52c19a7c3b9a9916ec632e4f83f2ead3?width=80",
-      nickname: "닉네임"
-    },
-    {
-      id: "4",
-      imageUrl: "https://api.builder.io/api/v1/image/assets/TEMP/95395f2615ce261e3a2a1351121628cd35d51b30?width=80",
-      nickname: "닉네임4"
-    },
-    
-    
-  ];
 
+interface Participant {
+  id: string;
+  imageUrl: string;
+  nickname: string;
+}
+
+// 사설모임 페이지
+export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
+  const [club, setClub] = useState<Club | null>(null);
+  const [participants, setParticipants] = useState<Participant[]>([]);
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // 문자열로 넘어오는 id를 숫자로 변환
-  const club = clubData.find((item) => item.id === Number(id));
+  const getClub = async () => {
+    try {
+      // 모임 정보 가져오기
+      const clubRes = await api.get(`/meetings/private/${id}`, {
+        headers: { userId: id },
+      });
+
+      setClub(clubRes.data.data);
+
+      // 참여자 정보 가져오기
+      const participantsRes = await api.get(`/meetings/${id}/participants`);
+      const participantsData = participantsRes.data.data.participants;
+
+      // ParticipantsList 에 맞게 변환
+      const mapped = participantsData.map((p: any) => ({
+        id: String(p.userId),
+        nickname: p.name,
+        imageUrl: p.profileImageUrl,
+      }));
+
+      setParticipants(mapped);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getClub();
+  }, [id]);
 
   if (!club) {
-  return (
-    <main className="flex items-center justify-center min-h-screen">
-      <p className="text-gray-500">존재하지 않는 클럽입니다.</p>
-    </main>
-  );
-}
+    return (
+      <main className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500">존재하지 않는 클럽입니다.</p>
+      </main>
+    );
+  }
 
   return (
     <>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-      />
-    <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
-        <HeaderDetail
-        title={club.title}
-        onBackClick={() => navigate(-1)}
-      />
+      <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
+        <HeaderDetail title={club.title} onBackClick={() => navigate(-1)} />
 
-      <MeetingInfo
-        title={club.title}
-        hobby={club.hobby}
-        location={club.location}
-        datetime={club.datetime}
-        price={club.price}
-        description={club.description}
-        imageUrls={club.imageUrls}
-        extraContent={
-          <Info />
-        }
-        type="club"
-      />
-
-      <div className=" w-full px-4">
-        <ParticipantsList 
-          participants={participants} 
-          maxParticipants={10}
+        <MeetingInfo
+          title={club.title}
+          hobby={club.primaryHobbyName}
+          location={club.location}
+          datetime={`${club.meeting_day} ${club.start_time}`}
+          price={club.price === 0 ? "무료" : `${club.price}원`}
+          description={club.host_message}
+          imageUrls={[club.image]}
           type="club"
+          language={club.language}
+          score={club.host.score}
+          extraContent={
+            <Info 
+              hostName={club.host.name}
+              hostImage={club.host.profile_image}
+              hostId={club.host.id}
+            />
+          }
         />
-      </div>
 
-      <ActionButton
-        text="참여하기"
-        onClick={() => console.log("참여 클릭")}
-        disabled={participants.length >= 10}
-      />
+
+        <div className="top-[580px] w-full px-4">
+          <ParticipantsList
+            participants={participants}
+            maxParticipants={10}
+            type="club"
+          />
+        </div>
+
+        <ActionButton
+          text="참여하기"
+          onClick={() => console.log("참여 클릭")}
+          disabled={participants.length >= 10}
+        />
       </main>
     </>
   );
