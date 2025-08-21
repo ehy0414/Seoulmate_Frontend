@@ -68,18 +68,16 @@ export const CreateMeeting: React.FC = () => {
     formData.append('meeting_day', formatDate(meetingData.date)); // YYYY-MM-DD -> DD/MM/YYYY
     formData.append('location', meetingData.location);
     formData.append('language', meetingData.language[0] || ''); // array 첫 번째 사용, 필요시 join
-    formData.append('price', (meetingData.charge ?? 0));
-    formData.append('min_participants', (meetingData.minParticipants ?? 0));
-    formData.append('max_participants', (meetingData.maxParticipants ?? 0));
+    formData.append('price', String(meetingData.charge ?? 0));
+    formData.append('min_participants', String(meetingData.minParticipants ?? 0));
+    formData.append('max_participants', String(meetingData.maxParticipants ?? 0));
     const logObj: { [key: string]:string | File } = {};
     formData.forEach((value, key) => {
       logObj[key] = value;
     });
     console.log('전송 데이터:', logObj);
     try {
-      await api.post('/meetings/private', formData, { // 엔드포인트는 '/meetings'로 가정, 실제에 맞게 변경
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      await api.post('/meetings/private?userId=11', formData);
       navigate('/success'); // 성공 시 리다이렉트, 필요시 변경
     } catch (error) {
       console.error('모임 생성 실패:', error);

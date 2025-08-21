@@ -2,11 +2,13 @@
 
 interface SpinnerProps {
   message?: string;
+  text?: string;
   className?: string;
 }
 
 export function Spinner({
   message = "녹음본을 서버에 전송하고 있습니다...",
+  text,
   className = ""
 }: SpinnerProps) {
   return (
@@ -36,7 +38,7 @@ export function Spinner({
 
       <div className="relative text-xs font-medium text-zinc-50 max-md:text-xs max-sm:text-xs">
         <p className="text-xs text-zinc-50 max-md:text-xs max-sm:text-xs">
-          {message}
+          {text ?? message}
         </p>
       </div>
     </section>

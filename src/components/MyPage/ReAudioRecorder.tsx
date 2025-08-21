@@ -6,6 +6,8 @@ import { SendIcon } from "../signup/langTest/SendIcon";
 import { MicrophoneButton } from "../signup/langTest/MicrophoneButton";
 import { useRecorder } from "../../hooks/useRecorder";
 import api from "../../services/axios";
+import { useSetAtom } from "jotai";
+import { userProfileAtom } from "../../store/userProfileAtom";
 
 type RecorderState = "idle" | "recording" | "readyToSend";
 
@@ -17,6 +19,7 @@ interface AudioRecorderProps {
 
 const ReAudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorderProps) => {
   const { isRecording, startRecording, stopRecording } = useRecorder();
+  const setUserProfile = useSetAtom(userProfileAtom);
 
   const [recorderState, setRecorderState] = useState<RecorderState>("idle");
   const [wavBlob, setWavBlob] = useState<Blob | null>(null);
@@ -52,16 +55,12 @@ const ReAudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorder
 
   const handleSend = async () => {
     if (!wavBlob) return;
-
     setIsSending(true);
-
     const lang = isKorean ? "ENGLISH" : "KOREAN";
-
     const formData = new FormData();
     formData.append("audioFile", wavBlob, "recording.wav");
-
     try {
-      // query parameter 방식으로 수정
+      // 점수 업데이트 요청
       const response = await api.patch(
         `/my-page/update-language-level?language=${lang}`,
         formData,
@@ -72,6 +71,15 @@ const ReAudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorder
         }
       );
       if(response.data.success === true) {
+        // 최신 점수 가져와서 atom 업데이트
+        const getRes = await api.get("/my-page");
+        console.log("내정보", getRes.data);
+        const languages = getRes.data.data.languages;
+        console.log("languages", languages);
+        setUserProfile(prev => prev
+          ? { ...prev, languages: { ...prev.languages, ...languages } }
+          : { profileImageUrl: "", name: "", email: "", bio: "", hobbies: [], university: "", age: 0, languages }
+        );
         onScoreReady(1);
       }
       setRecorderState("readyToSend");
