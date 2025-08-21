@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ActionButtons } from "./ActionButton";
 import { HobbyChips } from "./HobbyChips";
 import { InfoCard } from "./InfoCard";
@@ -31,7 +32,23 @@ interface FriendDetail {
   friend: boolean;
 }
 
+interface ChatRoom {
+  roomId: number;
+  title: string;
+  roomImageUrl: string;
+  type: string;
+  myUserId: number;
+  participants: {
+    userId: number;
+    name: string;
+    profileImageUrl: string;
+    role: string;
+    me: boolean;
+  }[];
+}
+
 function Friends({ requestId }: FriendsProps) {
+  const navigate = useNavigate();
   const [friendData, setFriendData] = useState<FriendDetail | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,6 +72,20 @@ function Friends({ requestId }: FriendsProps) {
   if (!friendData) return <div className="p-4">불러오는 중…</div>;
 
   const flagSrc = `/country/${friendData.country.toUpperCase()}.gif`;
+
+  const handleSendMessage = async () => {
+    try {
+      const res = await api.post<ApiResponse<ChatRoom>>(
+        "/chat/room/onetoone",
+        { partnerUserId: requestId }
+      );
+      const { roomId } = res.data.data;
+      navigate(`/chat/rooms/${roomId}`);
+    } catch (err) {
+      console.error("1:1 채팅방 생성 실패", err);
+      alert("채팅방 생성에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
 
   return (
     <main className="flex flex-col justify-end items-start w-full max-w-[clamp(360px,100vw,430px)]">
@@ -81,7 +112,7 @@ function Friends({ requestId }: FriendsProps) {
         />
         <ActionButtons
           onFriendRequest={isFriend ? () => setIsFriend(false) : () => setIsModalOpen(true)}
-          onSendMessage={() => {}}
+          onSendMessage={handleSendMessage} 
           friendRequestText={isPending ? "요청 중..." : "친구 신청"}
           sendMessageText="메시지 보내기"
           isFriend={isFriend}
