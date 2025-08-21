@@ -7,14 +7,15 @@ import ChatListBox from '../../components/chat/ChatListBox';
 import api from '../../services/axios';
 
 type ChatRoom = {
-  roomId: number;
-  type: string;
-  title: string;
-  roomImageUrl: string;
-  partnerUserId: number;
-  lastMessageType: string;
-  lastMessage: string;
-  lastMessageAt: string;
+    roomId: number;
+    type: string;
+    title: string;
+    roomImageUrl: string;
+    partnerUserId: number;
+    lastMessageType: string;
+    lastMessage: string;
+    lastMessageAt: string;
+    unreadCount: number; 
 };
 
 const ChatList = () => {
@@ -88,7 +89,7 @@ const ChatList = () => {
                 name={chat.title}
                 lastMessage={chat.lastMessage}
                 timestamp={chat.lastMessageAt}
-                unreadCount="0" // 서버 응답에 unreadCount 없어서 임시
+                unreadCount={chat.unreadCount}
                 onClick={() => handleChatRoomClick(chat.roomId, chat.title)}
               />
             ))}
@@ -101,7 +102,7 @@ const ChatList = () => {
                 name={chat.title}
                 lastMessage={chat.lastMessage}
                 timestamp={chat.lastMessageAt}
-                unreadCount="0" // 서버 응답에 unreadCount 없어서 임시
+                unreadCount={chat.unreadCount} 
                 onClick={() => handleChatRoomClick(chat.roomId, chat.title)}
               />
             ))}

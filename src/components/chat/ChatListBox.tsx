@@ -4,7 +4,7 @@ interface ChatListBoxProps {
   name?: string;
   lastMessage?: string;
   timestamp?: string;
-  unreadCount?: string;
+  unreadCount?: number;
   profileImage?: string;
   onClick?: () => void;
 }
@@ -13,7 +13,7 @@ const ChatListBox: React.FC<ChatListBoxProps> = ({
   name = "name",
   lastMessage = "마지막 채팅 내용",
   timestamp = "07/30 14:08",
-  unreadCount = "nn",
+  unreadCount = 0,
   profileImage,
   onClick
 }) => {
