@@ -23,6 +23,7 @@ import AlarmPage from './pages/alarm/AlarmPage'
 import AuthRedirect from './pages/signUp/AuthRedirect'
 import FilterPage from './pages/search/FilterPage'
 import ClassDetailPage from './pages/home/ClassDetailPage'
+import MyReLangTestPage from './pages/MyPage/MyReLangTestPage'
 
 function App() {
 
@@ -53,6 +54,7 @@ function App() {
         <Route path='/chat/list' element={<ChatList />} />
         <Route path='/alarm' element={<AlarmPage />} />
         <Route path='/filter' element={<FilterPage />} />
+        <Route path='/myPage/langTest' element={<MyReLangTestPage />} />
       </Routes>
     </BrowserRouter>
   )

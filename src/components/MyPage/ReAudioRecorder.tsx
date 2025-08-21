@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useRecorder } from "../../../hooks/useRecorder";
-import { convertToWav } from "./convertToWav";
-import { SendIcon } from "./SendIcon";
-import { MicrophoneButton } from "./MicrophoneButton";
-import { FaStop, FaRedo } from "react-icons/fa";
-import RecordingPlayer from "./RecordingPlayer";
-import api from "../../../services/axios";
+import { convertToWav } from "../signup/langTest/convertToWav";
+import RecordingPlayer from "../signup/langTest/RecordingPlayer";
+import { FaRedo, FaStop } from "react-icons/fa";
+import { SendIcon } from "../signup/langTest/SendIcon";
+import { MicrophoneButton } from "../signup/langTest/MicrophoneButton";
+import { useRecorder } from "../../hooks/useRecorder";
+import api from "../../services/axios";
 
 type RecorderState = "idle" | "recording" | "readyToSend";
 
@@ -15,7 +15,7 @@ interface AudioRecorderProps {
   isKorean: boolean;
 }
 
-const AudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorderProps) => {
+const ReAudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorderProps) => {
   const { isRecording, startRecording, stopRecording } = useRecorder();
 
   const [recorderState, setRecorderState] = useState<RecorderState>("idle");
@@ -62,8 +62,8 @@ const AudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorderPr
 
     try {
       // query parameter 방식으로 수정
-      const response = await api.post(
-        `/signup/language/take-level-test?language=${lang}`,
+      const response = await api.patch(
+        `/my-page/update-language-level?language=${lang}`,
         formData,
         {
           headers: {
@@ -71,12 +71,15 @@ const AudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorderPr
           },
         }
       );
-      onScoreReady(parseInt(response.data.data));
+      if(response.data.success === true) {
+        onScoreReady(1);
+      }
       setRecorderState("readyToSend");
     } catch (err) {
       console.error("음성 분석에 실패했습니다:", err);
       alert("다시 시도해주세요.");
       setRecorderState("readyToSend");
+      onScoreReady(null);
     } finally {
       setIsSending(false);
     }
@@ -114,4 +117,4 @@ const AudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorderPr
   );
 };
 
-export default AudioRecorder;
+export default ReAudioRecorder;

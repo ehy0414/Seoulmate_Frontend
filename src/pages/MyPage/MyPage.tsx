@@ -42,7 +42,7 @@ const MyPage: React.FC = () => {
       />
 
       {/* Quick Action Buttons */}
-      <QuickActionButtons />
+      <QuickActionButtons isKorean={userProfile?.languages["한국어"] ? true : false}/>
 
       {/* Menu Section */}
       <MenuSection />
