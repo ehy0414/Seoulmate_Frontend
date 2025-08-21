@@ -79,8 +79,8 @@ function Friends({ requestId }: FriendsProps) {
         "/chat/room/onetoone",
         { partnerUserId: requestId }
       );
-      const { roomId } = res.data.data;
-      navigate(`/chat/rooms/${roomId}`);
+      const { roomId, title } = res.data.data;
+      navigate(`/chat?roomId=${roomId}&name=${encodeURIComponent(title)}`);
     } catch (err) {
       console.error("1:1 채팅방 생성 실패", err);
       alert("채팅방 생성에 실패했습니다. 다시 시도해주세요.");
