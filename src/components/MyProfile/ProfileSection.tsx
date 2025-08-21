@@ -4,7 +4,7 @@ import api from '../../services/axios';
 import { useSetAtom, useAtomValue } from 'jotai';
 import { userProfileAtom } from '../../store/userProfileAtom';
 
-const ProfileSection: React.FC<{ onEditClick?: () => void }> = ({ onEditClick }) => {
+const ProfileSection: React.FC = () => {
   // atom에서 직접 데이터 꺼내기
   const userProfile = useAtomValue(userProfileAtom);
   const name = userProfile?.name ?? '';
