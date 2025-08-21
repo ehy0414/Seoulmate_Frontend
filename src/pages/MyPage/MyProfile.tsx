@@ -18,7 +18,13 @@ const MyProfile: React.FC = () => {
         try {
           const response = await api.get('/my-page');
           if (response.data?.data) {
-            setUserProfile(response.data.data);
+            const data = response.data.data;
+            // bio가 객체면 bio.bio로 변환
+            const fixedData = {
+              ...data,
+              bio: typeof data.bio === 'object' && data.bio !== null ? data.bio.bio : data.bio
+            };
+            setUserProfile(fixedData);
           }
         } catch (error) {
           console.log("profile 정보 가져오는 중 오류",error);
@@ -33,7 +39,7 @@ const MyProfile: React.FC = () => {
 
   const infoItems = [
     { label: '학교', value: userProfile?.university ?? '' },
-    { label: '나이', value: userProfile?.age ? `${userProfile.age}세` : '' },
+    { label: '나이', value: userProfile?.age != null ? `${userProfile.age}세` : '' },
     { label: '영어 구사 레벨', value: userProfile?.languages?.['영어']?.toString() ?? '' },
     { label: '한국어 구사 레벨', value: userProfile?.languages?.['한국어']?.toString() ?? '' }
   ];
