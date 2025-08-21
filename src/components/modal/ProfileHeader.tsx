@@ -43,7 +43,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 
             
           </div>
-          <p className="self-stretch text-sm leading-5 text-black">
+          <p className="self-stretch text-sm leading-5 text-black break-words whitespace-normal">
             {description}
           </p>
         </div>
