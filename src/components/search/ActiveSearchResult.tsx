@@ -22,9 +22,8 @@ const ActiveSearchResult = ({ searchValue }: { searchValue: string }) => {
         params: { query: searchValue, page, size: 20 },
       })
         .then((response) => {
-          let newUsers = response.data.data;
+          let newUsers = response.data.data.content;
           if (!Array.isArray(newUsers)) newUsers = [];
-          console.log("검색한 유저 결과", newUsers);
           setUsers((prev) => (page === 1 ? newUsers : [...prev, ...newUsers]));
         })
         .catch(() => setUsers([]));
@@ -33,8 +32,13 @@ const ActiveSearchResult = ({ searchValue }: { searchValue: string }) => {
     return () => clearTimeout(timer); // 입력이 바뀌면 이전 타이머 제거
   }, [searchValue, page]);
 
+  // searchValue가 실제로 변경될 때만 setPage(1) 실행
+  const prevSearchValueRef = useRef<string>('');
   useEffect(() => {
-    setPage(1);
+    if (prevSearchValueRef.current !== searchValue) {
+      setPage(1);
+      prevSearchValueRef.current = searchValue;
+    }
   }, [searchValue]);
 
   useEffect(() => {
