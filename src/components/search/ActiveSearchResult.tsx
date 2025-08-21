@@ -1,45 +1,81 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import api from '../../services/axios';
 
 interface User {
-  id: number;
+  userId: number;
   name: string;
-  image: string;
+  profileImage: string;
 }
 
-const users: User[] = [
-  { id: 1, name: '김철수', image: '/api/placeholder/40/40' },
-  { id: 2, name: '이영희', image: '/api/placeholder/40/40' },
-  { id: 3, name: '박민수', image: '/api/placeholder/40/40' },
-  { id: 4, name: '정수진', image: '/api/placeholder/40/40' },
-  { id: 5, name: '최동현', image: '/api/placeholder/40/40' },
-  { id: 6, name: '한지영', image: '/api/placeholder/40/40' },
-  { id: 7, name: '이영희', image: '/api/placeholder/40/40' },
-  { id: 8, name: '박민수', image: '/api/placeholder/40/40' },
-  { id: 9, name: '정수진', image: '/api/placeholder/40/40' },
-  { id: 10, name: '최동현', image: '/api/placeholder/40/40' },
-  { id: 11, name: '한지영', image: '/api/placeholder/40/40' },
-];
+const ActiveSearchResult = ({ searchValue }: { searchValue: string }) => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [page, setPage] = useState(1);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-const ActiveSearchResult = () => {
+  useEffect(() => {
+    if (!searchValue.trim()) return;
+
+    const timer = setTimeout(() => {
+      // API 요청
+      api.get('/friends/search', {
+        params: { query: searchValue, page, size: 20 },
+      })
+        .then((response) => {
+          let newUsers = response.data.data.content;
+          if (!Array.isArray(newUsers)) newUsers = [];
+          setUsers((prev) => (page === 1 ? newUsers : [...prev, ...newUsers]));
+        })
+        .catch(() => setUsers([]));
+    }, 1000); // 1초 후 요청
+
+    return () => clearTimeout(timer); // 입력이 바뀌면 이전 타이머 제거
+  }, [searchValue, page]);
+
+  // searchValue가 실제로 변경될 때만 setPage(1) 실행
+  const prevSearchValueRef = useRef<string>('');
+  useEffect(() => {
+    if (prevSearchValueRef.current !== searchValue) {
+      setPage(1);
+      prevSearchValueRef.current = searchValue;
+    }
+  }, [searchValue]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setPage((prev) => prev + 1);
+      }
+    });
+    if (bottomRef.current) observer.observe(bottomRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="w-full flex flex-col items-center">
-      {users.map((user, index) => (
+      {Array.isArray(users) && users.map((user, index) => (
         <motion.div
-          key={user.id}
+          key={user.userId}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
           className="w-full h-[60px] bg-white border-b-[0.5px] border-b-black-400 flex items-center px-[18px]"
         >
           {/* 프로필 */}
-          <div className="w-10 h-10 bg-[#b8b8b8] rounded-full flex-shrink-0 mr-4"></div>
+          <img
+            src={user.profileImage}
+            alt={user.name}
+            className="w-10 h-10 rounded-full flex-shrink-0 mr-4 object-cover bg-[#b8b8b8]"
+          />
           {/* 이름 */}
           <div className="flex-1">
-            <span className="text-[16px] font-medium text-[#1a1a1a]">{user.name}</span>
+            <span className="text-[16px] font-medium text-[#1a1a1a]">
+              {user.name}
+            </span>
           </div>
         </motion.div>
       ))}
+      <div ref={bottomRef}></div>
     </div>
   );
 };
