@@ -15,9 +15,8 @@ export const MenuIcon: React.FC<{ userId: number }> = ({ userId }) => {
       const response = await api.delete(`/friends/${userId}`);
       if(response.status === 200) {
         alert("친구가 삭제되었습니다.");
+        setPopupOpen(false); // 성공 시에만 팝업 닫기
       }
-      // 친구 삭제 로직 실행 후 팝업 닫기
-      setPopupOpen(false);
     } catch (error) {
       console.error("친구 삭제 실패", error);
       alert("친구 삭제에 실패했습니다.");
