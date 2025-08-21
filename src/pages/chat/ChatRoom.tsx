@@ -71,6 +71,18 @@ const ChatRoom = () => {
     isPinnedRef.current = isNearBottom();
   };
 
+  // ✅ 화면 진입 시 읽음 처리 호출
+  useEffect(() => {
+    if (!roomId || Number.isNaN(roomId)) return;
+    (async () => {
+      try {
+        await api.patch(`/chat/rooms/${roomId}/read`);
+      } catch (e) {
+        console.error('읽음 처리 실패:', e);
+      }
+    })();
+  }, [roomId]);
+
   useEffect(() => {
     if (!roomId || Number.isNaN(roomId)) return;
 
