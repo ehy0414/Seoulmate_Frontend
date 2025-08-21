@@ -58,11 +58,13 @@ const ChatListBox: React.FC<ChatListBoxProps> = ({
                         {timestamp}
                     </div>
                     {/* Notification Badge */}
+                    {unreadCount > 0 && (
                     <div className='flex h-[18px] px-0 py-[2px] justify-center items-center rounded-full bg-primary-700'>
                         <div className='w-[30px] flex-shrink-0 text-black-100 text-center font-light text-xs'>
-                            {unreadCount}
+                        {unreadCount}
                         </div>
                     </div>
+                    )}
                 </div>
             </div>
         </div>
