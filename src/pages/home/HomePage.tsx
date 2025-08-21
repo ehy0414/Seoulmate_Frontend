@@ -87,7 +87,7 @@ export const HomePage = () => {
             place={regularMeeting.place}
             date={regularMeeting.date}
             altText={regularMeeting.title}
-            onClick={() => navigate(`/meeting/${regularMeeting.id}`)}
+            onClick={() => navigate(`/class/${regularMeeting.id}`)}
           />
         )}
 
@@ -103,7 +103,7 @@ export const HomePage = () => {
                 date={club.date}
                 altText={club.title}
                 id={club.id}
-                onClick={() => navigate(`/class/${club.id}`)}
+                onClick={() => navigate(`/club/${club.id}`)}
               />
             ))}
           </ScrollableCardList>
