@@ -13,7 +13,6 @@ export interface Schedule {
   title: string;
   place: string;
   date: string; // YYYY-MM-DD
-  isConfirmed: boolean;
 }
 
 export default function Schedule() {
