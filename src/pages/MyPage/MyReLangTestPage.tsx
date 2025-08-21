@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Spinner from "../../components/signup/langTest/Spinner";
 import { TextContent } from "../../components/signup/langTest/TextContent";
 import { NavigationButtons } from "../../components/signup/langTest/NavigationButtons";
 import { HeaderDetail } from "../../components/common/HeaderDetail";
-import ReAudioRecorder from "./ReAudioRecorder";
+import ReAudioRecorder from "../../components/MyPage/ReAudioRecorder";
 
 const MyReLangTestPage = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     // // 테스트용
     const language = "한국어"
@@ -19,15 +20,17 @@ const MyReLangTestPage = () => {
     const isNextEnabled = score !== null;
 
     useEffect(() => {
-        if(language === "한국어") {
-            setIsKorean(true);
-        } else {
-            setIsKorean(false);
-        }
-    },[language]);
+        // location.state가 없을 수도 있으니 optional chaining
+        const stateIsKorean = location.state?.isKorean;
+        
+        // 문자열이면 boolean으로 변환, 없으면 false
+        setIsKorean(stateIsKorean === true || stateIsKorean === "true");
+        console.log("isKorean:", stateIsKorean);
+    }, [location.state]);
 
     const handleNext = () => {
-        navigate("myPage");
+        alert("재테스트 점수는 저장되었습니다.");
+        navigate("/myPage");
     };
 
 
@@ -55,7 +58,7 @@ const MyReLangTestPage = () => {
                     <h1 className="text-2xl font-bold text-zinc-900 mb-2">언어레벨 테스트</h1>
                     <p className=" h-3.5 text-xs font-medium left-0 text-neutral-400 w-full">
                         <p className="text-xs text-neutral-400 mt-2">
-                        {isKorean ? (<>영어 테스트를 진행할게요.<br/>마이크 버튼을 누르고 아래 문장을 또박또박 읽어주세요.</>
+                        {!isKorean ? (<>영어 테스트를 진행할게요.<br/>마이크 버튼을 누르고 아래 문장을 또박또박 읽어주세요.</>
                             ) : (<>한국어 테스트를 진행할게요.<br />마이크 버튼을 누르고 아래 문장을 또박또박 읽어주세요.</>)}
                         </p>
                         <p className="text-primary-700 text-xs mt-2">
@@ -66,8 +69,8 @@ const MyReLangTestPage = () => {
             </div>
 
             <div className="pb-20">
-                <TextContent isKorean={isKorean}/>
-                <ReAudioRecorder onScoreReady={setScore} setIsSending={setIsSending} isKorean={isKorean}/>
+                <TextContent isKorean={!isKorean}/>
+                <ReAudioRecorder onScoreReady={setScore} setIsSending={setIsSending} isKorean={!isKorean}/>
             </div>
             
             <div className="w-full flex justify-between bottom-0 left-0 bg-white py-4">

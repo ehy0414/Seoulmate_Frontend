@@ -56,7 +56,7 @@ const QuickActionButton: React.FC<QuickActionButtonProps> = ({ type, onClick }) 
   );
 };
 
-const QuickActionButtons: React.FC = () => {
+const QuickActionButtons: React.FC<{ isKorean?: boolean }> = ({ isKorean }) => {
   const navigate = useNavigate();
   const handleScheduleClick = () => {
     navigate('/schedule')
@@ -67,7 +67,7 @@ const QuickActionButtons: React.FC = () => {
   };
 
   const handleLanguageClick = () => {
-    navigate('/myPage/langTest');
+    navigate('/myPage/langTest', { state: { isKorean } });
   };
 
   return (

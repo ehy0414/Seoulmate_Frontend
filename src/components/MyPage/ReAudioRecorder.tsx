@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { convertToWav } from "../../components/signup/langTest/convertToWav";
-import RecordingPlayer from "../../components/signup/langTest/RecordingPlayer";
+import { convertToWav } from "../signup/langTest/convertToWav";
+import RecordingPlayer from "../signup/langTest/RecordingPlayer";
 import { FaRedo, FaStop } from "react-icons/fa";
-import { SendIcon } from "../../components/signup/langTest/SendIcon";
-import { MicrophoneButton } from "../../components/signup/langTest/MicrophoneButton";
+import { SendIcon } from "../signup/langTest/SendIcon";
+import { MicrophoneButton } from "../signup/langTest/MicrophoneButton";
 import { useRecorder } from "../../hooks/useRecorder";
 import api from "../../services/axios";
 
@@ -71,7 +71,7 @@ const ReAudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorder
           },
         }
       );
-      if(response.data.success === "true") {
+      if(response.data.success === true) {
         onScoreReady(1);
       }
       setRecorderState("readyToSend");
