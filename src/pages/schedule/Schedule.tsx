@@ -29,6 +29,15 @@ export default function Schedule() {
     setSchedules(mockSchedules.filter((s) => s.date === selectedDateStr));
   }, [selectedDate]);
 
+  const onFirstTabClick = () => {
+    setActiveTab(FIRST_TAB);
+    // GET /my-page/hosted 호출
+  }
+  const onSecondTabClick = () => {
+    setActiveTab(SECOND_TAB);
+    // GET /my-page/participated 호출
+  }
+
   return (
     <div className="relative min-h-screen bg-white pb-[100px]">
       <NoAlarmBackHeader title="일정" showBorder={false} />
@@ -36,8 +45,8 @@ export default function Schedule() {
         firstTabText={FIRST_TAB}
         secondTabText={SECOND_TAB}
         activeTab={activeTab}
-        onFirstTabClick={() => setActiveTab(FIRST_TAB)}
-        onSecondTabClick={() => setActiveTab(SECOND_TAB)}
+        onFirstTabClick={onFirstTabClick}
+        onSecondTabClick={onSecondTabClick}
       />
       <CalendarGrid
         schedules={mockSchedules}
