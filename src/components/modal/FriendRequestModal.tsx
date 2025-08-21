@@ -2,6 +2,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import api from "../../services/axios";
+import { useNavigate } from "react-router-dom";
 
 interface FriendRequestModalProps {
   isOpen?: boolean;
@@ -23,6 +24,7 @@ const FriendRequestModal: React.FC<FriendRequestModalProps> = ({
   id
 }) => {
   const [isVisible, setIsVisible] = useState(isOpen);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsVisible(isOpen);
