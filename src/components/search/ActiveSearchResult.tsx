@@ -22,8 +22,9 @@ const ActiveSearchResult = ({ searchValue }: { searchValue: string }) => {
         params: { query: searchValue, page, size: 20 },
       })
         .then((response) => {
-          const newUsers = response.data.data || [];
-          console.log("검색한 유저 결과",newUsers)
+          let newUsers = response.data.data;
+          if (!Array.isArray(newUsers)) newUsers = [];
+          console.log("검색한 유저 결과", newUsers);
           setUsers((prev) => (page === 1 ? newUsers : [...prev, ...newUsers]));
         })
         .catch(() => setUsers([]));
@@ -48,7 +49,7 @@ const ActiveSearchResult = ({ searchValue }: { searchValue: string }) => {
 
   return (
     <div className="w-full flex flex-col items-center">
-      {users.map((user, index) => (
+      {Array.isArray(users) && users.map((user, index) => (
         <motion.div
           key={user.userId}
           initial={{ opacity: 0, y: 20 }}
@@ -58,7 +59,7 @@ const ActiveSearchResult = ({ searchValue }: { searchValue: string }) => {
         >
           {/* 프로필 */}
           <img
-            src={user.image}
+            src={user.profileImage}
             alt={user.name}
             className="w-10 h-10 rounded-full flex-shrink-0 mr-4 object-cover bg-[#b8b8b8]"
           />
