@@ -1,149 +1,107 @@
 "use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActionButtons } from "./ActionButton";
 import { HobbyChips } from "./HobbyChips";
 import { InfoCard } from "./InfoCard";
 import { ProfileHeader } from "./ProfileHeader";
 import FriendRequestModal from "./FriendRequestModal";
-
+import api from "../../services/axios";
 
 interface FriendsProps {
-  profileImage?: string;
-  name?: string;
-  badge?: string;
-  description?: string;
-  hobbies?: string[];
-  infoItems?: Array<{ label: string; value: string }>;
-  onFriendRequest?: () => void;
-  onSendMessage?: () => void;
-  friendRequestText?: string;
-  sendMessageText?: string;
-  country?: string;
+  requestId: number;
 }
 
-function Friends({
-  profileImage = "https://api.builder.io/api/v1/image/assets/TEMP/cd641a41ab04e92021e52ca7eff297a2f684bfba?width=200",
-  name = "name",
-  description = "자기소개",
-  hobbies = [
-    "취미명", "취미명", "취미명", "취미명", "취미명",
-    "취미명", "취미명", "취미명", "취미명", "취미명"
-  ],
-  infoItems = [
-    { label: "학교", value: "숭실대학교" },
-    { label: "나이", value: "22세" },
-    { label: "영어 구사 레벨", value: "B1" },
-    { label: "한국어 구사 레벨", value: "C2" }
-  ],
-  country ="DE",
-  onSendMessage,
-  sendMessageText = "메시지 보내기"
-}: FriendsProps) {
+interface ApiResponse<T> {
+  success: boolean;
+  code: string;
+  message: string;
+  data: T;
+}
+
+interface FriendDetail {
+  userId: number;
+  name: string;
+  profileImage: string;
+  bio: string;
+  university: string;
+  age: number;
+  country: string;
+  languageLevels: Record<string, number>;
+  hobbyList: string[];
+  friend: boolean;
+}
+
+function Friends({ requestId }: FriendsProps) {
+  const [friendData, setFriendData] = useState<FriendDetail | null>(null);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isRequesting, setIsRequesting] = useState(false); // 친구 신청 버튼 잠금 여부
-  const [isPending, setIsPending] = useState(false);       // 친구 요청 보낸 상태
-  const [isFriend, setIsFriend] = useState(false); // 친구인지 여부
+  const [isRequesting, setIsRequesting] = useState(false);
+  const [isPending, setIsPending] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
 
-  // Vite 기반 국가 이미지 가져오기
-  const countryFlags = import.meta.glob('../../assets/country/*.gif', {
-    eager: true,
-    import: 'default',
-  });
+  useEffect(() => {
+    const fetchFriend = async () => {
+      try {
+        const res = await api.get<ApiResponse<FriendDetail>>(`/friends/${requestId}`);
+        setFriendData(res.data.data);
+        setIsFriend(res.data.data.friend);
+      } catch (err) {
+        console.error("친구 정보 불러오기 실패", err);
+      }
+    };
+    fetchFriend();
+  }, [requestId]);
 
-  // 국기 이미지 URL 얻기 함수
-  const getCountryFlag = (code: string): string | null => {
-  const flag = countryFlags[`../../assets/country/${code}.gif`];
-    return typeof flag === 'string' ? flag : (flag as string | undefined) ?? null;
-  };
+  if (!friendData) return <div className="p-4">불러오는 중…</div>;
 
+  const flagSrc = `/country/${friendData.country.toUpperCase()}.gif`;
 
-  // 결과적으로 string | null 반환됨
-  const flagSrc = getCountryFlag(country);
-
-  const handleFriendRequest = async () => {
-    try {
-      setIsRequesting(true);  // 버튼 비활성화
-      setIsPending(true);     // 친구 요청 보냄 상태
-
-      // 친구 요청 API 호출
-      //await axios.post("/api/friend/request", { userId: targetUserId });
-
-      // 실제 친구 수락 여부는 백엔드 이벤트 or 주기적 polling으로 처리
-      // 예시로는 친구가 수락했다고 가정하고 일정 시간 뒤 setIsFriend(true)
-      // 실무에선 웹소켓이나 polling으로 처리
-
-    } catch (err) {
-      console.error("친구 요청 실패", err);
-      setIsPending(false);  // 실패했으면 다시 요청 가능하게
-    } finally {
-      setIsRequesting(false); // 로딩 상태 해제
-    }
-  };
-
-  const handleUnfriend = async () => {
-  try {
-    setIsRequesting(true);
-    //await axios.delete("/api/friend", { data: { userId: targetUserId } });
-    setIsFriend(false);
-    setIsPending(false);
-  } catch (err) {
-    console.error("친구 삭제 실패", err);
-  } finally {
-    setIsRequesting(false);
-  }
-};
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setIsRequesting(false); // 다시 활성화
-  };
-  
   return (
     <main className="flex flex-col justify-end items-start w-full max-w-[clamp(360px,100vw,430px)]">
       <div className="flex relative flex-col gap-6 items-end self-stretch px-5 pt-14 pb-4 bg-white rounded-[24px_24px_0_0] overflow-y-auto ">
-
         <div className="flex flex-col gap-5 items-start self-stretch">
           <ProfileHeader
-            profileImage={profileImage}
-            name={name}
-            description={description}
-            flagSrc={flagSrc ?? ""}
+            profileImage={friendData.profileImage}
+            name={friendData.name}
+            description={friendData.bio}
+            flagSrc={flagSrc}
+            userId={friendData.userId}
           />
-
-          <HobbyChips hobbies={hobbies} />
+          <HobbyChips hobbies={friendData.hobbyList} />
         </div>
-
-        <InfoCard items={infoItems} />
-
+        <InfoCard
+          items={[
+            { label: "학교", value: friendData.university },
+            { label: "나이", value: `${friendData.age}세` },
+            ...Object.entries(friendData.languageLevels).map(([lang, level]) => ({
+              label: `${lang} 구사 레벨`,
+              value: `${level}`,
+            })),
+          ]}
+        />
         <ActionButtons
-          onFriendRequest={isFriend ? handleUnfriend : () => setIsModalOpen(true)}
-          onSendMessage={onSendMessage}
-          friendRequestText={isFriend ? "친구 삭제" : (isPending ? "요청 중..." : "친구 신청")}
-          sendMessageText={sendMessageText}
+          onFriendRequest={isFriend ? () => setIsFriend(false) : () => setIsModalOpen(true)}
+          onSendMessage={() => {}}
+          friendRequestText={isPending ? "요청 중..." : "친구 신청"}
+          sendMessageText="메시지 보내기"
           isFriend={isFriend}
           isDisabled={isRequesting || isPending}
         />
       </div>
 
-      {/* 모달 띄우기 */}
       {isModalOpen && (
         <FriendRequestModal
           isOpen={isModalOpen}
-          onClose={handleCloseModal}
+          onClose={() => setIsModalOpen(false)}
           onConfirm={async () => {
-            await handleFriendRequest(); // 친구 요청 로직 실행
+            setIsPending(true);
             setIsModalOpen(false);
           }}
-          onCancel={() => {
-            //console.log("친구 신청 취소");
-            setIsModalOpen(false);
-            setIsRequesting(false);
-          }}
-          friendName={name} // "톰" 대신 실제 이름으로
+          onCancel={() => setIsModalOpen(false)}
+          friendName={friendData.name}
+          id={friendData.userId}
         />
       )}
-
     </main>
   );
 }

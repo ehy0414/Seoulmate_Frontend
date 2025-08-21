@@ -12,7 +12,7 @@ export interface Schedule {
   img: string;
   title: string;
   place: string;
-  date: string; // YYYY-MM-DD
+  date: string; 
   isConfirmed: boolean;
 }
 
@@ -26,7 +26,7 @@ export default function Schedule() {
   const [activeTab, setActiveTab] = useState<string>(FIRST_TAB);
 
   useEffect(() => {
-    const selectedDateStr = selectedDate.toISOString().split('T')[0]; // "YYYY-MM-DD"
+    const selectedDateStr = selectedDate.toISOString().split('T')[0];
     setSchedules(mockSchedules.filter((s) => s.date === selectedDateStr));
   }, [selectedDate]);
 

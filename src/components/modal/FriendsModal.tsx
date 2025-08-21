@@ -5,11 +5,13 @@ import Friends from "./Friends";
 interface FriendsModalProps {
   onClose: () => void;
   isVisible: boolean;
+  requestId: number;
 }
 
 export const FriendsModal: React.FC<FriendsModalProps> = ({
   isVisible,
-  onClose
+  onClose,
+  requestId
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const dragBarRef = useRef<HTMLDivElement>(null);
@@ -164,7 +166,7 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
 
         {/* 모달 콘텐츠 */}
         <div className="h-full overflow-y-auto scrollbar-hide px-2 pb-6">
-          <Friends />
+          <Friends requestId={requestId}/>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecorder } from "../../../hooks/useRecorder";
 import { convertToWav } from "./convertToWav";
 import { SendIcon } from "./SendIcon";
@@ -6,22 +6,28 @@ import { MicrophoneButton } from "./MicrophoneButton";
 import { FaStop, FaRedo } from "react-icons/fa";
 import RecordingPlayer from "./RecordingPlayer";
 import api from "../../../services/axios";
-import { form } from "framer-motion/client";
 
-type RecorderState = "idle" | "recording" | "readyToSend" | "done";
+type RecorderState = "idle" | "recording" | "readyToSend";
 
 interface AudioRecorderProps {
   onScoreReady: (score: number | null) => void;
-  setIsSending: (isSending: boolean) => void; // 상위 컴포넌트의 로딩 상태를 변경하는 함수를 받습니다.
+  setIsSending: (isSending: boolean) => void; // 상위 컴포넌트 로딩 상태
+  isKorean: boolean;
 }
 
-const AudioRecorder = ({ onScoreReady, setIsSending }: AudioRecorderProps) => {
+const AudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorderProps) => {
   const { isRecording, startRecording, stopRecording } = useRecorder();
-  
-  // AudioRecorder 컴포넌트의 상태를 관리합니다.
+
   const [recorderState, setRecorderState] = useState<RecorderState>("idle");
   const [wavBlob, setWavBlob] = useState<Blob | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+
+  // WAV URL 메모리 해제
+  useEffect(() => {
+    return () => {
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+    };
+  }, [audioUrl]);
 
   const handleMicClick = async () => {
     if (recorderState === "idle") {
@@ -46,45 +52,38 @@ const AudioRecorder = ({ onScoreReady, setIsSending }: AudioRecorderProps) => {
 
   const handleSend = async () => {
     if (!wavBlob) return;
-    
-    // 전송 시작 시 상위 컴포넌트에 로딩 시작을 알립니다.
+
     setIsSending(true);
+
+    const lang = isKorean ? "ENGLISH" : "KOREAN";
 
     const formData = new FormData();
     formData.append("audioFile", wavBlob, "recording.wav");
-    formData.append("language", "Korean"); // 예시로 한국어로 설정, 필요에 따라 변경
 
     try {
-      // 실제 API 요청을 시뮬레이션하기 위해 3초의 딜레이를 추가했습니다.
-      // setTimeout(() => {
-      //   const score = 13;
-      //   onScoreReady(score);
-      //   setRecorderState("readyToSend");
-      //   setIsSending(false); // 딜레이 후 로딩 상태를 해제합니다.
-      // }, 3000); // 3초 (3000ms) 딜레이
-      
-      // 실제 API 요청 코드 (필요하다면 주석을 해제하고 사용하세요):
-      // const response = await fetch("/api/score", { method: "POST", body: formData });
-      // const { score } = await response.json();
-      // onScoreReady(score);
-      // setRecorderState("readyToSend");
-      // setIsSending(false);
-
-      const response = await api.post("/signup/language/submit-level-test", formData);
-      onScoreReady(response.data.score);
+      // query parameter 방식으로 수정
+      const response = await api.post(
+        `/signup/language/take-level-test?language=${lang}`,
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+          },
+        }
+      );
+      console.log(parseInt(response.data.data));
+      onScoreReady(parseInt(response.data.data));
       setRecorderState("readyToSend");
-      setIsSending(false);
-
     } catch (err) {
       console.error("음성 분석에 실패했습니다:", err);
       setRecorderState("readyToSend");
+    } finally {
       setIsSending(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center gap-4 mx-auto h-40 w-[357px] relative">
-
       {audioUrl && <RecordingPlayer audioUrl={audioUrl} />}
 
       {recorderState === "readyToSend" ? (
@@ -108,11 +107,7 @@ const AudioRecorder = ({ onScoreReady, setIsSending }: AudioRecorderProps) => {
           onClick={handleMicClick}
           className="flex justify-center mt-10 items-center bg-primary-700 hover:bg-primary-800 rounded-lg h-[45px] w-[45px] transition-colors"
         >
-          {recorderState === "recording" ? (
-            <FaStop color="#fff" size={20} />
-          ) : (
-            <MicrophoneButton />
-          )}
+          {recorderState === "recording" ? <FaStop color="#fff" size={20} /> : <MicrophoneButton />}
         </button>
       )}
     </div>

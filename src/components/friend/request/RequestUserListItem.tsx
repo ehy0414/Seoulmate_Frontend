@@ -1,37 +1,86 @@
-"use client";
+import React from "react";
+import RejectIcon from "../../../assets/friend/rejectIcon.png";
+import AcceptIcon from "../../../assets/friend/acceptIcon.png";
 
-import * as React from "react";
-import { RequestActionButton } from "./RequestActionButton";
-
-interface UserListItemProps {
+export type FriendRequest = {
+  requestId: number;
+  senderId: number;
   name: string;
-  onDelete?: () => void;
-  onAccept?: () => void;
-  onClick: () => void;
-}
+  profileImage?: string | null;
+};
 
-export const RequestUserListItem: React.FC<UserListItemProps> = ({
-  name,
-  onDelete,
+type Props = {
+  request: FriendRequest;
+  onClick: () => void; // 리스트 전체 클릭 (모달 열기)
+  onAccept: (request: FriendRequest) => void; // 수락
+  onReject: (request: FriendRequest) => void; // 거절
+};
+
+const RequestUserListItem: React.FC<Props> = ({
+  request,
+  onClick,
   onAccept,
-  onClick
+  onReject,
 }) => {
+  const { name, profileImage } = request;
+
+  const avatar = profileImage ? (
+    <img
+      src={profileImage}
+      alt={`${name} 프로필`}
+      className="h-[40px] w-[40px] rounded-full object-cover"
+    />
+  ) : (
+    <div className="h-[40px] w-[40px] rounded-full bg-gray-300 grid place-items-center"></div>
+  );
 
   return (
-    <div className="flex gap-4 items-center self-stretch px-5 py-0 bg-white border-solid border-b-[0.5px] border-b-neutral-400 h-[60px] max-sm:gap-3 max-sm:px-3 max-sm:py-0">
-      <div  className="w-10 h-10 bg-zinc-400 rounded-[100px] cursor-pointer"
-            onClick={onClick} />
-        <div className="flex gap-3 items-center flex-[1_0_0] max-sm:gap-2">
-          <div className="flex flex-col gap-2.5 items-start">
-            <h3 className="overflow-hidden self-stretch text-base font-medium text-ellipsis text-zinc-900">
-              {name}
-            </h3>
-          </div>
-        </div>
-        <div className="flex gap-4 items-center max-sm:gap-3">
-          <RequestActionButton type="delete" onClick={onDelete} />
-          <RequestActionButton type="check" onClick={onAccept} />
-        </div>
-    </div>
+    <li
+      className="flex items-center justify-between gap-4 p-4 border-b h-[60px]"
+    >
+      {/* 프로필 클릭 시 모달 열기 */}
+      <div
+        className="flex items-center gap-4 min-w-0 cursor-pointer"
+        onClick={onClick}
+      >
+        {avatar}
+        <span className="text-base font-medium text-black-700">{name}</span>
+      </div>
+
+      {/* 수락 / 거절 버튼 */}
+      <div className="flex items-center gap-3 shrink-0">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation(); // 부모 onClick 막기
+            onReject(request);
+          }}
+          className="bg-none"
+        >
+          <img
+            src={RejectIcon}
+            alt="거절 아이콘"
+            className="w-[30px] h-[30px]"
+          />
+        </button>
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation(); // 부모 onClick 막기
+            onAccept(request);
+          }}
+          className="bg-none"
+        >
+          <img
+            src={AcceptIcon}
+            alt="수락 아이콘"
+            className="w-[30px] h-[30px]"
+          />
+        </button>
+      </div>
+    </li>
   );
 };
+
+export default RequestUserListItem;

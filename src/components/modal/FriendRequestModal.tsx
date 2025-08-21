@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import { useState, useEffect } from "react";
+import api from "../../services/axios";
 
 interface FriendRequestModalProps {
   isOpen?: boolean;
@@ -9,15 +10,17 @@ interface FriendRequestModalProps {
   onCancel?: () => void;
   onConfirm?: () => void;
   message?: string;
+  id?: number;
 }
 
 const FriendRequestModal: React.FC<FriendRequestModalProps> = ({
   isOpen = false,
   onClose,
-  friendName = "톰",
+  friendName,
   onCancel,
   onConfirm,
-  message
+  message,
+  id
 }) => {
   const [isVisible, setIsVisible] = useState(isOpen);
 
@@ -53,9 +56,24 @@ const FriendRequestModal: React.FC<FriendRequestModalProps> = ({
     handleClose();
   };
 
-  const handleConfirm = () => {
-    onConfirm?.();
-    handleClose();
+  const handleConfirm = async() => {
+    try {
+      await api.post('/friends/requests', { receiverId: id });
+      onConfirm?.();
+      handleClose();
+    } catch (error) {
+      console.error("친구 신청 실패", error);
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error &&
+        (error as any).response?.data?.code === 'FRIEND4001'
+      ) {
+        alert("자기 자신에게 친구 신청을 할 수 없습니다.");
+        handleClose();
+      }
+    }
+    
   };
 
   const handleBackdropClick = (event: React.MouseEvent) => {
@@ -119,11 +137,11 @@ const FriendRequestModal: React.FC<FriendRequestModalProps> = ({
 
             {/* Confirm Button */}
             <button
-              className="flex relative justify-center items-center bg-orange-400 rounded-lg cursor-pointer h-[38px] w-[120px] max-md:h-9 max-md:w-[108px] max-sm:w-full max-sm:h-[34px] hover:bg-orange-500 transition-colors"
+              className="flex relative justify-center items-center bg-primary-700 rounded-lg cursor-pointer h-[38px] w-[120px] hover:bg-primary-800 transition-colors"
               onClick={handleConfirm}
               type="button"
             >
-              <span className="relative text-xs font-bold text-zinc-50 max-md:text-xs max-sm:text-xs">
+              <span className="relative text-xs font-bold text-zinc-50 ">
                 확인
               </span>
             </button>
@@ -131,47 +149,6 @@ const FriendRequestModal: React.FC<FriendRequestModalProps> = ({
         </div>
       </div>
     </>
-  );
-};
-
-// Example usage component
-export const FriendRequestModalExample: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleConfirm = () => {
-    console.log('친구 신청을 보냈습니다!');
-    // 실제 친구 신청 로직 구현
-  };
-
-  const handleCancel = () => {
-    console.log('친구 신청을 취소했습니다.');
-  };
-
-  return (
-    <div className="p-8">
-      <button
-        onClick={handleOpenModal}
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-      >
-        친구 신청 모달 열기
-      </button>
-
-      <FriendRequestModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        friendName="톰"
-        onConfirm={handleConfirm}
-        onCancel={handleCancel}
-      />
-    </div>
   );
 };
 

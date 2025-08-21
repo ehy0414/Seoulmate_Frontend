@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProgressBar } from "../../components/signup/ProgressBar";
 import { ProfileImageUpload } from "../../components/signup/profile/ProfileImageUpload";
 import { FormField } from "../../components/signup/profile/FormField";
@@ -26,6 +26,31 @@ export const SignUpProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [birthDate, setBirthDate] = useState<Date | null>(null);
+
+  useEffect(() => {
+    const checkInProgress = async () => {
+      try {
+        // 2. 회원가입 시작된 사용자만 in-progress 확인
+        const inProgressRes = await api.get("/signup/in-progress");
+        const inProgressData = inProgressRes.data.data;
+        console.log(inProgressData);
+
+
+        if (inProgressData.univVerification === "SUBMITTED") {
+            navigate("/signUp/wait");
+        } else if (inProgressData.univVerification === "VERIFIED") {
+            navigate("/home");
+        } else if (inProgressData.univVerification === "NOT_SUBMITTED") {
+            alert("대학 인증이 거절되었습니다. 다시 시도해주세요.");
+            navigate("/");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    checkInProgress();
+  }, [navigate]);
 
   const [formData, setFormData] = useState<FormData>({
     lastName: '',
@@ -91,29 +116,30 @@ export const SignUpProfilePage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const data = new FormData();
-    data.append("firstName", formData.firstName);
-    data.append("lastName", formData.lastName);
-    data.append("DOB", formData.DOB);
-    data.append("country", formData.country);
-    data.append("bio", formData.bio);
-
-    if (profileFile) {
-      data.append("profileImage", profileFile);
-    }
+    if (!profileFile) return;
 
     try {
-      const res = await api.post("/signup/create-profile", data);
+      const params = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        DOB: formData.DOB,
+        country: formData.country,
+        bio: formData.bio,
+      };
+
+      const data = new FormData();
+      data.append("profileImage", profileFile);
+
+      const res = await api.post("/signup/create-profile", data, { params });
+
       if (res.status === 200) {
         navigate("/signUp/langTest", { state: { country: formData.country } });
       }
     } catch (error) {
       console.error("Error submitting profile data:", error);
     }
-
-    console.log('FormData values:', [...data.entries()]);
-    navigate("/signUp/langTest", {state: {country: formData.country}});
   };
+
 
   const isFormValid = profileFile &&formData.lastName && formData.firstName && formData.DOB && formData.country;
 

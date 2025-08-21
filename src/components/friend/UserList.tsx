@@ -13,7 +13,7 @@ interface UserListProps {
 }
 
 export const UserList: React.FC<UserListProps> = ({ users }) => {
-  const defaultUsers: User[] = Array.from({ length: 16 }, (_, index) => ({
+  const defaultUsers: User[] = Array.from({ length: 10 }, (_, index) => ({
     id: `user-${index}`,
     name: "name",
   }));

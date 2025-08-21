@@ -11,19 +11,18 @@ interface Participant {
 interface ParticipantsListProps {
   participants: Participant[];
   title?: string;
-  maxParticipants: number; // 추가
+  maxParticipants: number;
   type: "club" | "class";
 }
 
-
 const ParticipantItem: React.FC<{
   participant: Participant;
-  onClick?: () => void;
+  onClick?: (id: string) => void;
 }> = ({ participant, onClick }) => {
   return (
     <div
       className="flex relative flex-col gap-2 justify-center items-center w-[38px] max-sm:min-w-[38px] cursor-pointer"
-      onClick={onClick}
+      onClick={() => onClick?.(participant.id)} // 클릭 시 해당 id 전달
     >
       <img
         src={participant.imageUrl}
@@ -33,8 +32,6 @@ const ParticipantItem: React.FC<{
       <span className="relative self-stretch text-xs font-semibold text-center text-black w-[40px]">
         {participant.nickname}
       </span>
-
-      
     </div>
   );
 };
@@ -46,14 +43,18 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({
   type
 }) => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const openModal = () => setModalVisible(true);
+  const [selectedId, setSelectedId] = useState<string | null>(null); // ✅ 선택된 유저 id
+
+  const openModal = (id: string) => {
+    setSelectedId(id);
+    setModalVisible(true);
+  };
   const closeModal = () => setModalVisible(false);
 
-  const totalSlots = Math.min(maxParticipants, 999); // 안정성
+  const totalSlots = Math.min(maxParticipants, 999);
   const filledSlots = participants.length;
   const emptySlots = totalSlots - filledSlots;
 
-  // 전체 슬롯 배열 (ParticipantItem + EmptySlot)
   const slotComponents = [
     ...participants.map((p) => (
       <ParticipantItem key={p.id} participant={p} onClick={openModal} />
@@ -63,40 +64,52 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({
     ))
   ];
 
-  // 5개씩 자르기
   const rows: React.ReactNode[][] = [];
   for (let i = 0; i < slotComponents.length; i += 5) {
     rows.push(slotComponents.slice(i, i + 5));
   }
 
   return (
-      <section className="flex flex-col gap-3 items-start self-stretch w-full pb-10">
-        <div className="flex gap-3 items-center self-stretch w-full">
-          <h3 className="text-sm font-medium leading-5 text-black">{title}</h3>
-          <p className="text-xs font-bold leading-5 text-primary-700">({filledSlots}/{slotComponents.length})</p>
-        </div>
+    <section className="flex flex-col gap-3 items-start self-stretch w-full pb-10">
+      <div className="flex gap-3 items-center self-stretch w-full">
+        <h3 className="text-sm font-medium leading-5 text-black">{title}</h3>
+        <p className="text-xs font-bold leading-5 text-primary-700">
+          ({filledSlots}/{maxParticipants})
+        </p>
+      </div>
 
-        <div className="flex flex-col gap-5 p-5 rounded-lg border border-solid bg-zinc-50 border-stone-200 w-full">
-          {rows.map((row, rowIndex) => (
+      <div className="flex flex-col gap-5 p-5 rounded-lg border border-solid bg-zinc-50 border-stone-200 w-full">
+        {participants.length === 0 ? (
+          <p className="text-sm text-gray-500 text-center w-full">
+            아직 참여자가 없습니다.
+          </p>
+        ) : (
+          rows.map((row, rowIndex) => (
             <div
               key={rowIndex}
               className="flex justify-between items-center self-stretch"
             >
               {row}
-              {/* 이 줄은 5개 채워졌으니 공백 채울 필요 없음 */}
             </div>
-          ))}
-        </div>
-
-        {/* 🔹 클럽일 때만 표시 */}
-        {type === "club" && (
-          <p className="text-xs font-bold text-primary-700">8명 이상 참여해야 모임이 열려요.</p>
+          ))
         )}
+      </div>
 
-        {/* 모달 */}
-        <FriendsModal isVisible={isModalVisible} onClose={closeModal} />
-      </section>
+      {/* 🔹 클럽일 때만 표시 */}
+      {type === "club" && (
+        <p className="text-xs font-bold text-primary-700">
+          8명 이상 참여해야 모임이 열려요.
+        </p>
+      )}
 
-      
+      {/* 모달 (선택된 id만 넘김) */}
+      {selectedId && (
+        <FriendsModal
+          isVisible={isModalVisible}
+          onClose={closeModal}
+          requestId={Number(selectedId)}
+        />
+      )}
+    </section>
   );
 };

@@ -11,6 +11,10 @@ interface MeetingInfoProps {
   imageUrls: string[]; // 여러 장의 이미지
   extraContent?: React.ReactNode;
   type: "club" | "class";
+
+  // ✅ club 전용 props
+  language?: string;
+  score?: number;
 }
 
 export const MeetingInfo: React.FC<MeetingInfoProps> = ({
@@ -22,7 +26,9 @@ export const MeetingInfo: React.FC<MeetingInfoProps> = ({
   description,
   imageUrls,
   extraContent,
-  type
+  type,
+  language,
+  score
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -59,7 +65,9 @@ export const MeetingInfo: React.FC<MeetingInfoProps> = ({
       {/* 미팅 정보 */}
       <header className="flex justify-between px-4 items-center w-full pt-3 text-2xl font-semibold">
         <h1 className="self-stretch my-auto">{title}</h1>
-        <h1 className="self-stretch my-auto text-xs text-primary-700 bg-primary-200 px-3 py-2 rounded-lg border-solid border-black-200">{hobby}</h1>
+        {type === "club" && (
+          <h1 className="self-stretch my-auto text-xs text-primary-700 bg-primary-200 px-3 py-2 rounded-lg border-solid border-black-200">{hobby}</h1>
+        )}
       </header>
 
       <section className="mt-5 w-full px-4 text-xs font-medium">
@@ -98,7 +106,7 @@ export const MeetingInfo: React.FC<MeetingInfoProps> = ({
               alt="Language info icon"
               className="object-contain w-6 aspect-square"
             />
-            <p>한국어 90, 영어 45</p>
+            <p>{language == "KOREAN" ? `한국어 ${score}` : `영어 ${score}`}</p>
           </div>
         )}
 
