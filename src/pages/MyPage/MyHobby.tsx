@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/axios';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { userProfileAtom} from '../../store/userProfileAtom';
-import { useNavigate } from 'react-router-dom';
+import { replace, useNavigate } from 'react-router-dom';
 import { NotFixedHeaderDetail } from '../../components/common/NotFixedHeaderDetail';
 
 const categories = {
@@ -84,7 +84,7 @@ const MyHobby: React.FC = () => {
     if (!isChanged) return;
     console.log("수정된 카테고리", selectedHobbies);
     try {
-      await api.post('/my-page/update-hobby', {
+      await api.put('/my-page/update-hobby', {
         hobbies: selectedHobbies
       });
       // 업데이트 성공 후 최신 정보로 userProfileAtom 갱신
@@ -93,7 +93,7 @@ const MyHobby: React.FC = () => {
         setUserProfile(response.data.data);
       }
       // 성공 시 페이지 이동
-      navigate('/myPage/profile');
+      navigate('/myPage/profile', { replace: true });
     } catch (error) {
       // 에러 처리 필요시 추가
       console.error('취미 업데이트 실패:', error);
