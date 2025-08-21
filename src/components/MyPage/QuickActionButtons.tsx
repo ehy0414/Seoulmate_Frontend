@@ -37,7 +37,7 @@ const QuickActionButton: React.FC<QuickActionButtonProps> = ({ type, onClick }) 
       case 'hobby':
         return '내 취미';
       case 'language':
-        return '내 언어레벨';
+        return '언어레벨 재응시';
     }
   };
 
@@ -67,7 +67,7 @@ const QuickActionButtons: React.FC = () => {
   };
 
   const handleLanguageClick = () => {
-    console.log('Language clicked');
+    navigate('/myPage/langTest');
   };
 
   return (
