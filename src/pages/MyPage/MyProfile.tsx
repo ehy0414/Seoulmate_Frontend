@@ -52,7 +52,7 @@ const MyProfile: React.FC = () => {
       />
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto pb-[94px]">
+      <div className="flex-1 overflow-y-auto pb-[60px]">
         {/* Profile Section */}
         <ProfileSection/>
 
