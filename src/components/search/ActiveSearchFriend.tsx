@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import api from '../../services/axios';
 import { FriendsModal } from '../../components/modal/FriendsModal';
 import NoFriend from '../../assets/search/nofriend.svg';
-// ...existing code...
 import Spinner from '../signup/langTest/Spinner';
 
 
