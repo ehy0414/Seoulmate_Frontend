@@ -45,7 +45,7 @@ export const HomePage = () => {
       setKoreanClasses(
         (data.koreanClasses ?? []).map((klass: any) => ({
           ...klass,
-          place: klass.place || "장소 미정",
+          place: klass.location || "장소 미정",
           date: klass.meeting_day ? `${klass.meeting_day} ${klass.start_time ?? ""}` : "날짜 미정",
           startTime: klass.start_time
         }))

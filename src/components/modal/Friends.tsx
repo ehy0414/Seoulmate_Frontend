@@ -54,7 +54,7 @@ function Friends({ requestId }: FriendsProps) {
 
   if (!friendData) return <div className="p-4">불러오는 중…</div>;
 
-  const flagSrc = `/assets/country/${friendData.country}.gif`;
+  const flagSrc = `/country/${friendData.country.toUpperCase()}.gif`;
 
   return (
     <main className="flex flex-col justify-end items-start w-full max-w-[clamp(360px,100vw,430px)]">
@@ -65,6 +65,7 @@ function Friends({ requestId }: FriendsProps) {
             name={friendData.name}
             description={friendData.bio}
             flagSrc={flagSrc}
+            userId={friendData.userId}
           />
           <HobbyChips hobbies={friendData.hobbyList} />
         </div>
@@ -81,7 +82,7 @@ function Friends({ requestId }: FriendsProps) {
         <ActionButtons
           onFriendRequest={isFriend ? () => setIsFriend(false) : () => setIsModalOpen(true)}
           onSendMessage={() => {}}
-          friendRequestText={isFriend ? "친구 삭제" : (isPending ? "요청 중..." : "친구 신청")}
+          friendRequestText={isPending ? "요청 중..." : "친구 신청"}
           sendMessageText="메시지 보내기"
           isFriend={isFriend}
           isDisabled={isRequesting || isPending}
@@ -98,6 +99,7 @@ function Friends({ requestId }: FriendsProps) {
           }}
           onCancel={() => setIsModalOpen(false)}
           friendName={friendData.name}
+          id={friendData.userId}
         />
       )}
     </main>

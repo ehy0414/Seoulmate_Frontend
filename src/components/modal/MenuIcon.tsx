@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
+import api from "../../services/axios";
 
-export const MenuIcon: React.FC = () => {
+export const MenuIcon: React.FC<{ userId: number }> = ({ userId }) => {
   // 팝업창의 표시 여부를 관리하는 상태
   const [isPopupOpen, setPopupOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -9,10 +10,18 @@ export const MenuIcon: React.FC = () => {
     setPopupOpen(prev => !prev);
   };
 
-  const deleteFriend = () => {
-    console.log("Delete friend action triggered!");
-    // 친구 삭제 로직 실행 후 팝업 닫기
-    setPopupOpen(false);
+  const deleteFriend = async() => {
+    try {
+      const response = await api.delete(`/friends/${userId}`);
+      if(response.status === 200) {
+        alert("친구가 삭제되었습니다.");
+      }
+      // 친구 삭제 로직 실행 후 팝업 닫기
+      setPopupOpen(false);
+    } catch (error) {
+      console.error("친구 삭제 실패", error);
+      alert("친구 삭제에 실패했습니다.");
+    }
   };
 
   // 팝업 바깥 영역을 클릭하면 팝업이 닫히도록 하는 로직 (변경 없음)
