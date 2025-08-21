@@ -29,7 +29,7 @@ interface FriendDetail {
   country: string;
   languageLevels: Record<string, number>;
   hobbyList: string[];
-  friend: boolean;
+  relation?: "NONE" | "FRIEND" | "REQUEST_SENT"; 
 }
 
 interface ChatRoom {
@@ -50,18 +50,14 @@ interface ChatRoom {
 function Friends({ requestId }: FriendsProps) {
   const navigate = useNavigate();
   const [friendData, setFriendData] = useState<FriendDetail | null>(null);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isRequesting, setIsRequesting] = useState(false);
   const [isPending, setIsPending] = useState(false);
-  const [isFriend, setIsFriend] = useState(false);
 
   useEffect(() => {
     const fetchFriend = async () => {
       try {
         const res = await api.get<ApiResponse<FriendDetail>>(`/friends/${requestId}`);
         setFriendData(res.data.data);
-        setIsFriend(res.data.data.friend);
       } catch (err) {
         console.error("친구 정보 불러오기 실패", err);
       }
@@ -72,6 +68,17 @@ function Friends({ requestId }: FriendsProps) {
   if (!friendData) return <div className="p-4">불러오는 중…</div>;
 
   const flagSrc = `/country/${friendData.country.toUpperCase()}.gif`;
+
+  let friendRequestText = "친구 신청";
+  let isDisabled = false;
+
+  if (friendData.relation === "FRIEND") {
+    friendRequestText = "친구입니다";
+    isDisabled = true;
+  } else if (friendData.relation === "REQUEST_SENT") {
+    friendRequestText = "친구 요청중...";
+    isDisabled = true;
+  }
 
   const handleSendMessage = async () => {
     try {
@@ -111,12 +118,14 @@ function Friends({ requestId }: FriendsProps) {
           ]}
         />
         <ActionButtons
-          onFriendRequest={isFriend ? () => setIsFriend(false) : () => setIsModalOpen(true)}
-          onSendMessage={handleSendMessage} 
-          friendRequestText={isPending ? "요청 중..." : "친구 신청"}
+          onFriendRequest={() =>
+            friendData.relation === "NONE" ? setIsModalOpen(true) : undefined
+          }
+          onSendMessage={handleSendMessage}
+          friendRequestText={friendRequestText}
           sendMessageText="메시지 보내기"
-          isFriend={isFriend}
-          isDisabled={isRequesting || isPending}
+          isFriend={friendData.relation === "FRIEND"}
+          isDisabled={isDisabled}
         />
       </div>
 
@@ -125,7 +134,9 @@ function Friends({ requestId }: FriendsProps) {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onConfirm={async () => {
-            setIsPending(true);
+            setFriendData((prev) =>
+              prev ? { ...prev, relation: "REQUEST_SENT" } : prev
+            );
             setIsModalOpen(false);
           }}
           onCancel={() => setIsModalOpen(false)}
