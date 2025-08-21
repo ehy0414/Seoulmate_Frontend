@@ -15,6 +15,7 @@ import {
   ParticipantField
 } from "../../components/createMeeting";
 import { useNavigate } from "react-router-dom";
+import api from "../../services/axios";
 
 
 interface MeetingData {
@@ -52,8 +53,44 @@ export const CreateMeeting: React.FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleCreateMeeting = () => {
-    navigate('/create-meeting');
+  const handleCreateMeeting = async () => {
+    if (!isFormValid()) return;
+
+    // 데이터 매핑 (백엔드 형식에 맞춤)
+    const formData = new FormData();
+    formData.append('title', meetingData.title);
+    if (meetingData.photo) {
+      formData.append('image', meetingData.photo); // 백엔드가 파일 처리 후 URL 저장 가정
+    }
+    formData.append('host_message', meetingData.description);
+    formData.append('category', meetingData.category);
+    formData.append('start_time', meetingData.time); // HH:MM 가정
+    formData.append('meeting_day', formatDate(meetingData.date)); // YYYY-MM-DD -> DD/MM/YYYY
+    formData.append('location', meetingData.location);
+    formData.append('language', meetingData.language[0] || ''); // array 첫 번째 사용, 필요시 join
+    formData.append('price', (meetingData.charge ?? 0));
+    formData.append('min_participants', (meetingData.minParticipants ?? 0));
+    formData.append('max_participants', (meetingData.maxParticipants ?? 0));
+    const logObj: { [key: string]:string | File } = {};
+    formData.forEach((value, key) => {
+      logObj[key] = value;
+    });
+    console.log('전송 데이터:', logObj);
+    try {
+      await api.post('/meetings/private', formData, { // 엔드포인트는 '/meetings'로 가정, 실제에 맞게 변경
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      navigate('/success'); // 성공 시 리다이렉트, 필요시 변경
+    } catch (error) {
+      console.error('모임 생성 실패:', error);
+      // 에러 처리 (예: alert)
+    }
+  };
+
+  const formatDate = (date: string) => {
+    if (!date) return '';
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
   };
 
   const isFormValid = () => {

@@ -22,11 +22,13 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
     <div className="flex w-full px-[18px] py-4 items-center justify-between border-b-[3px] border-[#F3F2F2] h-28">
       {/* 프로필 이미지와 텍스트 그룹 */}
       <div className="flex items-center gap-[30px]">
-        <img 
-          className="w-20 h-20 flex-shrink-0 rounded-[50px] border-[0.5px] border-black-400" 
-          src={profileImage} 
-          alt="프로필 이미지" 
-        />
+        {profileImage ? (
+          <img 
+            className="w-20 h-20 flex-shrink-0 rounded-[50px] border-[0.5px] border-black-400" 
+            src={profileImage} 
+            alt="프로필 이미지" 
+          />
+        ) : null}
         <div className="flex flex-col items-start gap-2">
           <div className="self-stretch text-black text-2xl font-semibold">
             {name}

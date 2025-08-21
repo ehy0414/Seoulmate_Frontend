@@ -15,6 +15,11 @@ const SearchHobby: React.FC = () => {
     const handleFirstTabClick = () => setActiveTab('모임');
     const handleSecondTabClick = () => setActiveTab('친구');
 
+    // 탭 변경 시 input값 초기화
+    useEffect(() => {
+        setSearchValue('');
+    }, [activeTab]);
+
     // 페이지 진입 시 최상단으로 스크롤
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -51,7 +56,7 @@ const SearchHobby: React.FC = () => {
             ) : (
                 searchValue.trim() === ''
                     ? <ActiveSearchFriend />
-                    : <ActiveSearchResult />
+                    : <ActiveSearchResult searchValue={searchValue}/>
             )}
             
 
