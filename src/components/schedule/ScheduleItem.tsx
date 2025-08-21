@@ -15,15 +15,6 @@ export default function ScheduleItem({ schedule }: Props) {
         <div className="text-xs text-black-400">{schedule.place}</div>
         <div className="text-xs text-black-400">{schedule.date}</div>
       </div>
-      <div
-        className={`text-xs px-2 py-1 rounded-full ${
-          schedule.isConfirmed
-            ? 'bg-primary-700 text-white'
-            : 'border border-black-300 text-black-400'
-        }`}
-      >
-        {schedule.isConfirmed ? '확정' : '미확정'}
-      </div>
     </div>
   );
 }
