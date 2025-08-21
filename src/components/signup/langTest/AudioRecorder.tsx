@@ -76,6 +76,7 @@ const AudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorderPr
       setRecorderState("readyToSend");
     } catch (err) {
       console.error("음성 분석에 실패했습니다:", err);
+      alert("다시 시도해주세요.");
       setRecorderState("readyToSend");
     } finally {
       setIsSending(false);
