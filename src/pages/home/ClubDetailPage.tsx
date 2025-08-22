@@ -126,8 +126,8 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
 
         <ActionButton
           text="참여하기"
-          onClick={() => console.log("참여 클릭")}
           disabled={participants.length >= 10}
+          meetingId={club.id}
         />
       </main>
     </>
