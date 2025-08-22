@@ -1,13 +1,7 @@
-import * as React from "react";
+import SeoulMateLogo from "../../../assets/common/seoulmate-logo.svg"
 
-interface AppTitleProps {
-  title?: string;
-}
-
-export const AppTitle: React.FC<AppTitleProps> = ({ title = "서울메이트" }) => {
+export const AppTitle = () => {
   return (
-    <h1 className="mt-40 text-4xl font-yangjin text-red-500">
-      {title}
-    </h1>
+    <img src={SeoulMateLogo} alt="SeoulMate Logo" className="mt-40 w-[258px] h-12"/>
   );
 };
