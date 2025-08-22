@@ -54,6 +54,19 @@ export const CreateMeeting: React.FC = () => {
   }, []);
 
   const handleCreateMeeting = async () => {
+    // 제출 시 인원수 검증
+    if (meetingData.minParticipants == null || meetingData.minParticipants < 3) {
+      alert('최소 인원수는 3명 이상이어야 합니다.');
+      return;
+    }
+    if (meetingData.maxParticipants == null || meetingData.maxParticipants < 3) {
+      alert('최대 인원수는 3명 이상이어야 합니다.');
+      return;
+    }
+    if (meetingData.maxParticipants < meetingData.minParticipants) {
+      alert('최대 인원수는 최소 인원수보다 작을 수 없습니다.');
+      return;
+    }
     if (!isFormValid()) return;
 
     let imageUrl = '';
