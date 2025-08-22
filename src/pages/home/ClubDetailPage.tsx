@@ -51,12 +51,13 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const navigate = useNavigate();
   const { id } = useParams();
+  const userId = localStorage.getItem("userId");
 
   const getClub = async () => {
     try {
       // 모임 정보 가져오기
       const clubRes = await api.get(`/meetings/private/${id}`, {
-        headers: { userId: id },
+        headers: { userId: userId },
       });
 
       setClub(clubRes.data.data);
@@ -81,6 +82,8 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
   useEffect(() => {
     getClub();
   }, [id]);
+
+  const isJoined = participants.some((p) => p.id === userId);
 
   if (!club) {
     return (
@@ -119,15 +122,19 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
         <div className="top-[580px] w-full px-4">
           <ParticipantsList
             participants={participants}
-            maxParticipants={10}
+            maxParticipants={club.max_participants}
+            minParticipants={club.min_participants}
             type="club"
           />
         </div>
 
         <ActionButton
           text="참여하기"
-          onClick={() => console.log("참여 클릭")}
-          disabled={participants.length >= 10}
+          disabled={isJoined || participants.length >= club.max_participants}
+          meetingId={club.id}
+          type="club"
+          participants={participants}
+          club={club}
         />
       </main>
     </>

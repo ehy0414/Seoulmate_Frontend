@@ -52,6 +52,7 @@ function Friends({ requestId }: FriendsProps) {
   const [friendData, setFriendData] = useState<FriendDetail | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     const fetchFriend = async () => {
@@ -81,6 +82,11 @@ function Friends({ requestId }: FriendsProps) {
   }
 
   const handleSendMessage = async () => {
+    if(userId === String(friendData.userId)) {
+      alert("자신에게는 메시지를 보낼 수 없습니다.");
+      return;
+    };
+
     try {
       const res = await api.post<ApiResponse<ChatRoom>>(
         "/chat/room/onetoone",
@@ -93,6 +99,8 @@ function Friends({ requestId }: FriendsProps) {
       alert("채팅방 생성에 실패했습니다. 다시 시도해주세요.");
     }
   };
+
+  const isMe = Number(userId) === friendData.userId;
 
   return (
     <main className="flex flex-col justify-end items-start w-full max-w-[clamp(360px,100vw,430px)]">
@@ -125,7 +133,7 @@ function Friends({ requestId }: FriendsProps) {
           friendRequestText={friendRequestText}
           sendMessageText="메시지 보내기"
           isFriend={friendData.relation === "FRIEND"}
-          isDisabled={isDisabled}
+          isDisabled={isDisabled || isMe}
         />
       </div>
 

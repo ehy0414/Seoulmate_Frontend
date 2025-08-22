@@ -38,6 +38,7 @@ export const ClassDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const navigate = useNavigate();
   const { id } = useParams();
+  const userId = localStorage.getItem("userId");
 
   const getClub = async () => {
     try {
@@ -74,6 +75,8 @@ export const ClassDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
     );
   }
 
+  const isJoined = participants.some((p) => p.id === userId);
+
   return (
     <>
       <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
@@ -93,15 +96,17 @@ export const ClassDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
         <div className="top-[580px] w-full px-4">
           <ParticipantsList
             participants={participants}
-            maxParticipants={10}
+            maxParticipants={club.max_participants}
+            minParticipants={0}
             type="class"
           />
         </div>
 
         <ActionButton
           text="참여하기"
-          onClick={() => console.log("참여 클릭")}
-          disabled={participants.length >= 10}
+          disabled={isJoined || participants.length >= club.max_participants}
+          meetingId={club.id}
+          type="class"
         />
       </main>
     </>

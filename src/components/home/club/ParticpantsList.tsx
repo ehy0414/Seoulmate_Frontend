@@ -12,6 +12,7 @@ interface ParticipantsListProps {
   participants: Participant[];
   title?: string;
   maxParticipants: number;
+  minParticipants: number;
   type: "club" | "class";
 }
 
@@ -40,6 +41,7 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({
   participants,
   title = "참여하는 사람",
   maxParticipants,
+  minParticipants,
   type
 }) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -98,7 +100,7 @@ export const ParticipantsList: React.FC<ParticipantsListProps> = ({
       {/* 🔹 클럽일 때만 표시 */}
       {type === "club" && (
         <p className="text-xs font-bold text-primary-700">
-          8명 이상 참여해야 모임이 열려요.
+          {minParticipants}명 이상 참여해야 모임이 열려요.
         </p>
       )}
 
