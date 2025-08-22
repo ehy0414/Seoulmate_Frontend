@@ -75,24 +75,28 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 
               if (type === "club") {
                 // 5. 최소 참여 인원 충족 시 그룹 채팅방 생성
-                if (participants.length === club.min_participants) {
-                  // 최소 인원 딱 충족 → 방 생성
+                if (type === "club") {
+                //그룹채팅방 생성
+                const totalCount = participants.length + 1; // 현재 결제 성공한 나까지 포함
+                if (totalCount === club.min_participants) {
+                  // 최소 참여 인원 처음 충족 → 그룹 채팅방 생성
                   await api.post("/chat/room/group", {
                     meetingId: club.id,
                     memberUserIds: [
-                      club.host.id,
-                      ...participants.map((p) => Number(p.id)),
+                      ...participants.map(p => Number(p.id)), // 기존 참여자
+                      Number(localStorage.getItem("userId")), // 현재 유저
                     ],
                   });
                   console.log("그룹 채팅방 최초 생성 완료");
-                } else if (participants.length > club.min_participants) {
-                // 이미 방이 존재하므로 join API 호출
-                await api.post("/chat/group/join", {
-                  meetingId: club.id,
-                });
-                console.log("그룹 채팅방에 새 참여자 합류 완료");
+                } else if (totalCount > club.min_participants) {
+                  // 이미 방 존재 → join
+                  await api.post("/chat/group/join", {
+                    meetingId: club.id,
+                  });
+                  console.log("그룹 채팅방에 새 참여자 합류 완료");
+                }
               }
-              }
+            }
 
               alert("결제가 완료되었습니다.");
               navigate("/home");
