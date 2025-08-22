@@ -20,9 +20,9 @@ interface LanguageDropdownProps {
 const languages = [
   "한국어",
   "영어",
-  "일본어",
-  "중국어",
-  "베트남어"
+  // "일본어",
+  // "중국어",
+  // "베트남어"
 ];
 
 export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
@@ -34,17 +34,16 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleSelect = (language: string) => {
+    // 하나만 선택되게 변경
     const currentValues = value || [];
-    let newValues;
-    
+    let newValues: string[];
     if (currentValues.includes(language)) {
-      // 이미 선택된 경우 제거
-      newValues = currentValues.filter(item => item !== language);
+      // 이미 선택된 경우 선택 해제
+      newValues = [];
     } else {
-      // 선택되지 않은 경우 추가
-      newValues = [...currentValues, language];
+      // 선택되지 않은 경우 해당 언어만 선택
+      newValues = [language];
     }
-    
     onChange?.(newValues);
   };
 
