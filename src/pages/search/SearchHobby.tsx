@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 const SearchHobby: React.FC = () => {
     const [activeTab, setActiveTab] = useState('모임');
     const [searchValue, setSearchValue] = useState('');
+    // 검색 트리거: 버튼 클릭 시 증가시켜 즉시 검색
+    const [searchTrigger, setSearchTrigger] = useState(0);
     const navigate = useNavigate();
     const handleFirstTabClick = () => setActiveTab('모임');
     const handleSecondTabClick = () => setActiveTab('친구');
@@ -37,11 +39,11 @@ const SearchHobby: React.FC = () => {
                     placeholder="찾고싶은 모임, 유저를 검색하세요"
                     className="font-[500] w-full bg-black-100 border border-black-700 rounded-[8px] px-4 py-[13px] text-black-700 text-sm outline-none placeholder:text-black-300"
                 />
-                <SearchIcon fill='#1a1a1a' className='w-6 h-6 flex-shrink-0' />
+                <SearchIcon fill='#1a1a1a' className='w-6 h-6 flex-shrink-0 cursor-pointer' onClick={() => setSearchTrigger(t => t + 1)} />
             </div>
 
             {/* 메뉴바 */}
-            <div className={`${searchValue.trim() !== '' ? 'sticky top-[67.6px] z-10 bg-white' : ''}`}>
+            <div className={`${searchValue.trim() !== '' ? 'sticky top-[67.6px] z-10 bg-white' : ''}`}> 
                 <TabMenu
                     firstTabText="모임"
                     secondTabText="친구"
@@ -52,14 +54,12 @@ const SearchHobby: React.FC = () => {
             </div>
 
             {activeTab === '모임' ? (
-                <ActiveSearchClub searchValue={searchValue} />
+                <ActiveSearchClub searchValue={searchValue} searchTrigger={searchTrigger} />
             ) : (
                 searchValue.trim() === ''
                     ? <ActiveSearchFriend />
-                    : <ActiveSearchResult searchValue={searchValue}/>
+                    : <ActiveSearchResult searchValue={searchValue} searchTrigger={searchTrigger}/>
             )}
-            
-
 
             {/* 하단 네비게이션바 */}
             <BottomNavBar menu="search"/>
