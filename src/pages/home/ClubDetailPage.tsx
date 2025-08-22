@@ -57,7 +57,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
     try {
       // 모임 정보 가져오기
       const clubRes = await api.get(`/meetings/private/${id}`, {
-        headers: { userId: id },
+        headers: { userId: userId },
       });
 
       setClub(clubRes.data.data);
