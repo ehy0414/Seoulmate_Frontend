@@ -22,12 +22,22 @@ interface ClubCard {
     meeting_day: string;
     image: string;
 }
-
+interface SearchPayload {
+  hobbyCategory: string;
+  keyword: string;
+  koMinLevel: number;
+  koMaxLevel: number;
+  enMinLevel: number;
+  enMaxLevel: number;
+  page: number;
+  size: number;
+  language?: string | string[] | null;
+}
 interface ActiveSearchClubProps {
     searchValue?: string;
 }
 
-const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
+const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
     const location = useLocation();
     const navigate = useNavigate();
     const filter = useAtomValue(filterAtom);
@@ -65,31 +75,37 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
         // 카테고리 바뀌면 리스트와 페이지 초기화
         setClubs([]);
         setPage(0);
-        setHasMore(true);
     }, [selectedCategory]);
 
     // API 호출: selectedCategory, searchValue, filter 변경 시
     useEffect(() => {
         const fetchClubs = async () => {
             // filterAtom에서 최솟값, 최댓값 추출
-            const koMinLevel = filter.koreanLevel[0];
-            const koMaxLevel = filter.koreanLevel[1];
-            const enMinLevel =  filter.englishLevel[0];
-            const enMaxLevel =  filter.englishLevel[1];
-            const language = '한국어';
+                        const koMinLevel = filter.koreanLevel[0];
+                        const koMaxLevel = filter.koreanLevel[1];
+                        const enMinLevel =  filter.englishLevel[0];
+                        const enMaxLevel =  filter.englishLevel[1];
+                        // 필터가 기본값이 아니면 점수가 있는 언어를 language에 넣음
+                        let language: string | null = null;
+                        const langs: string[] = [];
+                        if (koMinLevel !== 0 || koMaxLevel !== 100) langs.push('한국어');
+                        if (enMinLevel !== 0 || enMaxLevel !== 100) langs.push('영어');
+                        if (langs.length > 0) language = langs.join(', ');
 
             try {
-                const res = await api.post('/meetings/search', {
+                const payload: SearchPayload = {
                     hobbyCategory: selectedCategory,
                     keyword: searchValue,
-                    language,
                     koMinLevel,
                     koMaxLevel,
                     enMinLevel,
                     enMaxLevel,
                     page,
                     size: 20
-                });
+                };
+                if (language !== null) payload.language = language;
+                console.log("내가 보내는 데이터",payload);
+                const res = await api.post('/meetings/search', payload);
                 if (res.data.success) {
                     const newClubs = res.data.data;
                     setClubs(prev => page === 0 ? newClubs : [...prev, ...newClubs]);
@@ -213,7 +229,11 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ duration: 0.5 }}
-                                className="bg-white border-b-[0.5px] border-black-400 p-[18px] flex space-x-4"
+                                className="bg-white border-b-[0.5px] border-black-400 p-[18px] flex space-x-4 cursor-pointer"
+                                onClick={() => {
+                                    if (club.type === 'PRIVATE') navigate(`/club/${club.id}`);
+                                    else if (club.type === 'OFFICIAL') navigate(`/class/${club.id}`);
+                                }}
                             >
                                 {/* 이미지 */}
                                 <div 
