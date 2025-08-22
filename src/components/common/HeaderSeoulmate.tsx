@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import SeoulMate from '../../assets/common/seoulmate-logo.svg?react';
 interface TopBarProps {
   title: string;
   alarm: boolean;
@@ -9,14 +9,16 @@ interface TopBarProps {
 export const HeaderSeoulmate: React.FC<TopBarProps> = ({ title, alarm }) => {
   const navigate = useNavigate();
 
+  const handleLogoClick = () => {
+    navigate('/home');
+  };
+
   const handleAlarmClick = () => {
     navigate('/alarm');
   };
   return (
     <header className="fixed top-0 px-[18px] flex justify-between items-center bg-white border-b border-solid border-b-black-300 h-[60px] w-full max-w-[clamp(360px,100vw,430px)]">
-      <h1 className="text-2xl font-yangjin text-primary-700 cursor-pointer">
-        {title}
-      </h1>
+      <SeoulMate onClick={handleLogoClick} className='cursor-pointer'/>
       <div>
         {alarm ? <div
           onClick={handleAlarmClick}
