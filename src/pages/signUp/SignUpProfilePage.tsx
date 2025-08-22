@@ -33,7 +33,7 @@ export const SignUpProfilePage: React.FC = () => {
         // 2. 회원가입 시작된 사용자만 in-progress 확인
         const inProgressRes = await api.get("/signup/in-progress");
         const inProgressData = inProgressRes.data.data;
-        console.log(inProgressData);
+        // console.log(inProgressData);
 
 
         if (inProgressData.univVerification === "SUBMITTED") {
