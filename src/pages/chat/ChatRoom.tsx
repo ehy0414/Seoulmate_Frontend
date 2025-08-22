@@ -18,7 +18,7 @@ export interface Message {
   text: string;
   time: string;                 // HH:mm
   date: string;                 // YYYY년 MM월 DD일
-  name?: string;                // ✅ 표시용 이름(그룹일 때 사용)
+  name?: string;                // 표시용 이름(그룹일 때 사용)
   profileImg?: string;
   pending?: boolean;
   error?: boolean;
@@ -44,7 +44,7 @@ type WsChatItem = {
   roomId: number;
   senderId: number;
   senderName: string;
-  senderProfileUrl?: string;     // ✅ WS 전용 키
+  senderProfileUrl?: string;     // WS 전용 키
   type: 'TEXT';
   content: string;
   createdAt: string;             // "YYYY-MM-DD HH:mm:ss" 또는 ISO
@@ -59,7 +59,7 @@ type ChatListResponse = {
     items: ChatItem[];
     nextCursor: number | null;
     hasMore: boolean;
-    myUserId: number;            // ✅ 초기 응답에 myUserId 포함
+    myUserId: number;            // 초기 응답에 myUserId 포함
   };
 };
 
@@ -120,8 +120,8 @@ const ChatRoom = () => {
 
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [myUserId, setMyUserId] = useState<number | null>(null); // ✅ 내 유저 ID
-  const [isGroup, setIsGroup] = useState<boolean>(false);        // ✅ 그룹 채팅 여부
+  const [myUserId, setMyUserId] = useState<number | null>(null); // 내 유저 ID
+  const [isGroup, setIsGroup] = useState<boolean>(false);        // 그룹 채팅 여부
 
   const containerRef = useRef<HTMLDivElement>(null);
   const pinnedRef = useRef(true);
@@ -235,7 +235,6 @@ const ChatRoom = () => {
         console.error('초기 메시지 불러오기 실패:', e);
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId, mapFromRest]);
 
   /** ----- 스크롤 핀 상태 업데이트 ----- */
@@ -438,7 +437,7 @@ const ChatRoom = () => {
                   key={`${date}-${msg.time}-${keyBase}`}
                   message={msg}
                   marginTop={marginTop}
-                  isGroup={isGroup}          // ✅ 그룹 여부 전달
+                  isGroup={isGroup}          // 그룹 여부 전달
                 />
               );
             })}
