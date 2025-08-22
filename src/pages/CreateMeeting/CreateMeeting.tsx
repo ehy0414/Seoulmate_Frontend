@@ -22,7 +22,7 @@ interface MeetingData {
   title: string;
   photo: File | null;
   description: string;
-  category: string;
+  primaryHobbyName: string;
   time: string;
   date: string;
   location: string;
@@ -38,7 +38,7 @@ export const CreateMeeting: React.FC = () => {
     title: '',
     photo: null,
     description: '',
-    category: '',
+    primaryHobbyName: '',
     time: '',
     date: '',
     location: '',
@@ -56,31 +56,47 @@ export const CreateMeeting: React.FC = () => {
   const handleCreateMeeting = async () => {
     if (!isFormValid()) return;
 
-    // 데이터 매핑 (백엔드 형식에 맞춤)
-    const formData = new FormData();
-    formData.append('title', meetingData.title);
+    let imageUrl = '';
+    // 1. 이미지 먼저 업로드
     if (meetingData.photo) {
-      formData.append('image', meetingData.photo); // 백엔드가 파일 처리 후 URL 저장 가정
+      const imageForm = new FormData();
+      imageForm.append('file', meetingData.photo);
+      try {
+        const res = await api.post('/s3/upload/meeting', imageForm, {
+        });
+        imageUrl = res.data?.url ?? '';
+      } catch {
+        alert('이미지 업로드 실패');
+        return;
+      }
     }
-    formData.append('host_message', meetingData.description);
-    formData.append('category', meetingData.category);
-    formData.append('start_time', meetingData.time); // HH:MM 가정
-    formData.append('meeting_day', formatDate(meetingData.date)); // YYYY-MM-DD -> DD/MM/YYYY
-    formData.append('location', meetingData.location);
-    formData.append('language', meetingData.language[0] || ''); // array 첫 번째 사용, 필요시 join
-    formData.append('price', String(meetingData.charge ?? 0));
-    formData.append('min_participants', String(meetingData.minParticipants ?? 0));
-    formData.append('max_participants', String(meetingData.maxParticipants ?? 0));
-    const logObj: { [key: string]:string | File } = {};
-    formData.forEach((value, key) => {
-      logObj[key] = value;
+
+    // 2. 나머지 정보 + 이미지 url을 JSON으로 전송
+    const payload = {
+      title: meetingData.title,
+      image: imageUrl, // S3에서 받은 url
+      host_message: meetingData.description,
+      primaryHobbyName: meetingData.primaryHobbyName,
+      start_time: meetingData.time,
+      meeting_day: formatDate(meetingData.date),
+      location: meetingData.location,
+      language: meetingData.language.join(',') || '',
+      price: String(meetingData.charge ?? 0),
+      min_participants: String(meetingData.minParticipants ?? 0),
+      max_participants: String(meetingData.maxParticipants ?? 0),
+    };
+    console.log('전송 데이터:', payload);
+    Object.entries(payload).forEach(([key, value]) => {
+      console.log(`${key}:`, value, '| type:', typeof value);
     });
-    console.log('전송 데이터:', logObj);
     try {
-      await api.post('/meetings/private?userId=11', formData);
-      navigate('/success'); // 성공 시 리다이렉트, 필요시 변경
+      await api.post('/meetings/private', payload, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+      navigate(-1);
     } catch (error) {
       console.error('모임 생성 실패:', error);
+      alert("모임 생성 실패 다시 시도해주세요")
       // 에러 처리 (예: alert)
     }
   };
@@ -95,7 +111,7 @@ export const CreateMeeting: React.FC = () => {
     return (
       meetingData.title.trim() !== '' &&
       meetingData.description.trim() !== '' &&
-      meetingData.category !== '' &&
+      meetingData.primaryHobbyName !== '' &&
       meetingData.time !== '' &&
       meetingData.date !== '' &&
       meetingData.location.trim() !== '' &&
@@ -129,8 +145,8 @@ export const CreateMeeting: React.FC = () => {
         />
 
         <CategoryDropdown
-          value={meetingData.category}
-          onChange={(value) => setMeetingData(prev => ({ ...prev, category: value }))}
+          value={meetingData.primaryHobbyName}
+          onChange={(value) => setMeetingData(prev => ({ ...prev, primaryHobbyName: value }))}
         />
 
         <DateField
