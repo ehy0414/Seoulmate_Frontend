@@ -48,6 +48,7 @@ export const ClassDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
       // 참여자 정보 가져오기
       const participantsRes = await api.get(`/meetings/${id}/participants`);
       const participantsData = participantsRes.data.data.participants;
+      console.log(participantsData);
 
       // ParticipantsList 에 맞게 변환
       const mapped = participantsData.map((p: any) => ({
