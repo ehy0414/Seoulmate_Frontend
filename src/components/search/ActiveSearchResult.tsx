@@ -9,7 +9,12 @@ interface User {
   profileImage: string;
 }
 
-const ActiveSearchResult = ({ searchValue }: { searchValue: string }) => {
+export interface ActiveSearchResultProps {
+  searchValue: string;
+  searchTrigger?: number;
+}
+
+const ActiveSearchResult = ({ searchValue }: ActiveSearchResultProps) => {
   // 모달 상태 및 선택된 userId
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);

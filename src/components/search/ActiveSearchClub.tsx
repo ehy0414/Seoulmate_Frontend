@@ -33,8 +33,9 @@ interface SearchPayload {
   size: number;
   language?: string | string[] | null;
 }
-interface ActiveSearchClubProps {
+export interface ActiveSearchClubProps {
     searchValue?: string;
+    searchTrigger?: number;
 }
 
 const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
@@ -77,52 +78,61 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
         setPage(0);
     }, [selectedCategory]);
 
-    // API 호출: selectedCategory, searchValue, filter 변경 시
-    useEffect(() => {
-        const fetchClubs = async () => {
-            // filterAtom에서 최솟값, 최댓값 추출
-                        const koMinLevel = filter.koreanLevel[0];
-                        const koMaxLevel = filter.koreanLevel[1];
-                        const enMinLevel =  filter.englishLevel[0];
-                        const enMaxLevel =  filter.englishLevel[1];
-                        // 필터가 기본값이 아니면 점수가 있는 언어를 language에 넣음
-                        let language: string | null = null;
-                        const langs: string[] = [];
-                        if (koMinLevel !== 0 || koMaxLevel !== 100) langs.push('한국어');
-                        if (enMinLevel !== 0 || enMaxLevel !== 100) langs.push('영어');
-                        if (langs.length > 0) language = langs.join(', ');
+    // API 요청 함수
+    const fetchClubs = async (keyword: string) => {
+        const koMinLevel = filter.koreanLevel[0];
+        const koMaxLevel = filter.koreanLevel[1];
+        const enMinLevel =  filter.englishLevel[0];
+        const enMaxLevel =  filter.englishLevel[1];
+        let language: string | null = null;
+        const langs: string[] = [];
+        if (koMinLevel !== 0 || koMaxLevel !== 100) langs.push('한국어');
+        if (enMinLevel !== 0 || enMaxLevel !== 100) langs.push('영어');
+        if (langs.length > 0) language = langs.join(', ');
 
-            try {
-                const payload: SearchPayload = {
-                    hobbyCategory: selectedCategory,
-                    keyword: searchValue,
-                    koMinLevel,
-                    koMaxLevel,
-                    enMinLevel,
-                    enMaxLevel,
-                    page,
-                    size: 20
-                };
-                if (language !== null) payload.language = language;
-                console.log("내가 보내는 데이터",payload);
-                const res = await api.post('/meetings/search', payload);
-                if (res.data.success) {
-                    const newClubs = res.data.data;
-                    setClubs(prev => page === 0 ? newClubs : [...prev, ...newClubs]);
-                    setHasMore(newClubs.length === 20); // 더 가져올 데이터가 있으면 true
-                    console.log("가져온 데이터 개수", res.data.data);
-                } else {
-                    console.error(res.data.message);
-                    setClubs([]);
-                }
-            } catch (error) {
-                console.error(error);
-                alert("모임 정보를 가져오는 중 오류 발생");
+        try {
+            const payload: SearchPayload = {
+                hobbyCategory: selectedCategory,
+                keyword,
+                koMinLevel,
+                koMaxLevel,
+                enMinLevel,
+                enMaxLevel,
+                page,
+                size: 20
+            };
+            if (language !== null) payload.language = language;
+            console.log("내가 보내는 데이터",payload);
+            const res = await api.post('/meetings/search', payload);
+            if (res.data.success) {
+                const newClubs = res.data.data;
+                setClubs(prev => page === 0 ? newClubs : [...prev, ...newClubs]);
+                setHasMore(newClubs.length === 20); // 더 가져올 데이터가 있으면 true
+                console.log("가져온 데이터 개수", res.data);
+            } else {
+                console.error(res.data.message);
                 setClubs([]);
             }
-        };
-        fetchClubs();
-    }, [selectedCategory, searchValue, filter, page]);
+        } catch (error) {
+            console.error(error);
+            alert("모임 정보를 가져오는 중 오류 발생");
+            setClubs([]);
+        }
+    };
+
+    // 카테고리/필터/page 변경 시 즉시 요청
+    useEffect(() => {
+        fetchClubs(searchValue);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedCategory, filter, page]);
+
+    // 검색어 변경 시 1초 후에만 요청 (debounce)
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            fetchClubs(searchValue);
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, [searchValue]);
     useEffect(() => {
         const observer = new IntersectionObserver(([entry]) => {
           if (entry.isIntersecting && hasMore) {
