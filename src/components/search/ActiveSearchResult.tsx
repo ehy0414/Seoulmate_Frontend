@@ -21,6 +21,7 @@ const ActiveSearchResult = ({ searchValue }: { searchValue: string }) => {
   const closeModal = () => setModalVisible(false);
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,8 +36,13 @@ const ActiveSearchResult = ({ searchValue }: { searchValue: string }) => {
           let newUsers = response.data.data.content;
           if (!Array.isArray(newUsers)) newUsers = [];
           setUsers((prev) => (page === 1 ? newUsers : [...prev, ...newUsers]));
+          // 마지막 페이지 여부 판단 (20개 미만이면 마지막)
+          setHasMore(newUsers.length === 20);
         })
-        .catch(() => setUsers([]));
+        .catch(() => {
+          setUsers([]);
+          setHasMore(false);
+        });
     }, 1000); // 1초 후 요청
 
     return () => clearTimeout(timer); // 입력이 바뀌면 이전 타이머 제거
@@ -53,13 +59,13 @@ const ActiveSearchResult = ({ searchValue }: { searchValue: string }) => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
+      if (entry.isIntersecting && hasMore) {
         setPage((prev) => prev + 1);
       }
     });
     if (bottomRef.current) observer.observe(bottomRef.current);
     return () => observer.disconnect();
-  }, []);
+  }, [hasMore]);
 
   return (
     <div className="w-full flex flex-col items-center">
