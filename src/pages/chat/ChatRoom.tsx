@@ -32,8 +32,21 @@ type ChatItem = {
   senderProfileImageUrl: string;
   type: string;
   content: string;
-  createdAt: string;            // ISO
-  mine: boolean;                // 서버 기준 송수신 여부
+  createdAt: string;            // "YYYY-MM-DD HH:mm:ss" 또는 ISO
+  mine: boolean;                // 서버 기준 송수신 여부(REST에만 존재)
+  clientMessageId?: string | null;
+};
+
+// WS 수신 payload (mine 없음 / 프로필 키 이름 다름)
+type WsChatItem = {
+  messageId: number;
+  roomId: number;
+  senderId: number;
+  senderName: string;
+  senderProfileUrl?: string;     // ✅ WS 전용 키
+  type: 'TEXT';
+  content: string;
+  createdAt: string;             // "YYYY-MM-DD HH:mm:ss" 또는 ISO
   clientMessageId?: string | null;
 };
 
@@ -48,6 +61,26 @@ type ChatListResponse = {
   };
 };
 
+type RoomMetaResponse = {
+  success: boolean;
+  code: string;
+  message: string;
+  data: {
+    roomId: number;
+    title: string;
+    roomImageUrl: string;
+    type: string;
+    myUserId: number; // 내 유저 ID
+    participants: Array<{
+      userId: number;
+      name: string;
+      profileImageUrl: string;
+      role: string;
+      me: boolean;
+    }>;
+  };
+};
+
 /** =========================
  * Utils
  * ======================= */
@@ -56,6 +89,11 @@ const getFormattedDate = (date: Date) =>
 
 const getFormattedTime = (date: Date) =>
   `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+const toDate = (value: string) => {
+  // "YYYY-MM-DD HH:mm:ss"도 Date로 파싱 가능하도록 보정
+  return new Date(value.includes('T') ? value : value.replace(' ', 'T'));
+};
 
 const scrollToBottom = (el: HTMLDivElement | null) => {
   if (!el) return;
@@ -80,6 +118,7 @@ const ChatRoom = () => {
 
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const [myUserId, setMyUserId] = useState<number | null>(null); // ✅ 내 유저 ID
 
   const containerRef = useRef<HTMLDivElement>(null);
   const pinnedRef = useRef(true);
@@ -105,9 +144,24 @@ const ChatRoom = () => {
     })();
   }, [roomId]);
 
+  /** ----- 방 메타에서 myUserId 확보 (가능 시) ----- */
+  useEffect(() => {
+    if (!roomId || Number.isNaN(roomId)) return;
+    (async () => {
+      try {
+        const res = await api.get<RoomMetaResponse>(`/chat/rooms/${roomId}`);
+        const id = res?.data?.data?.myUserId;
+        if (typeof id === 'number') setMyUserId(id);
+      } catch (e) {
+        // 없어도 동작은 하도록 (WS 기본 'friend' 정책)
+        console.warn('방 메타 조회 실패(내 ID 미확보):', e);
+      }
+    })();
+  }, [roomId]);
+
   /** ----- REST: ChatItem → Message (mine을 그대로 반영) ----- */
   const mapFromRest = useCallback((it: ChatItem): Message => {
-    const d = new Date(it.createdAt);
+    const d = toDate(it.createdAt);
     const isMine = Boolean(it.mine);
     return {
       id: it.messageId,
@@ -115,24 +169,29 @@ const ChatRoom = () => {
       text: it.content,
       time: getFormattedTime(d),
       date: getFormattedDate(d),
+      // 내 메시지면 보통 좌/우 정렬상 프로필 미노출 → 필요 시 유지
       profileImg: isMine ? undefined : it.senderProfileImageUrl,
       _clientMessageId: it.clientMessageId ?? undefined,
     };
   }, []);
 
-  /** ----- STOMP: 신규 수신(내 입력 제외 전부 친구로 처리) ----- */
-  const mapFromStompNew = useCallback((it: ChatItem): Message => {
-    const d = new Date(it.createdAt);
-    return {
-      id: it.messageId,
-      sender: 'friend', // 실시간 수신은 내 낙관적 메시지 교체를 제외하고 전부 친구로 표기
-      text: it.content,
-      time: getFormattedTime(d),
-      date: getFormattedDate(d),
-      profileImg: it.senderProfileImageUrl,
-      _clientMessageId: it.clientMessageId ?? undefined,
-    };
-  }, []);
+  /** ----- WS: WsChatItem → Message (myUserId 있으면 정확 판정, 없으면 기본 'friend') ----- */
+  const mapFromWs = useCallback(
+    (it: WsChatItem): Message => {
+      const d = toDate(it.createdAt);
+      const iAmSender = myUserId != null && it.senderId === myUserId;
+      return {
+        id: it.messageId,
+        sender: iAmSender ? 'me' : 'friend',
+        text: it.content,
+        time: getFormattedTime(d),
+        date: getFormattedDate(d),
+        profileImg: iAmSender ? undefined : it.senderProfileUrl, // ✅ WS 프로필 키 적용
+        _clientMessageId: it.clientMessageId ?? undefined,
+      };
+    },
+    [myUserId]
+  );
 
   /** ----- 초기 로딩 (REST) ----- */
   useEffect(() => {
@@ -141,9 +200,7 @@ const ChatRoom = () => {
       try {
         const res = await api.get<ChatListResponse>(`/chat/rooms/${roomId}/messages`, { params: { size: 30 } });
         const items = res.data?.data?.items ?? [];
-        items.sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
+        items.sort((a, b) => toDate(a.createdAt).getTime() - toDate(b.createdAt).getTime());
 
         const mapped = items.map((it) => {
           if (it.messageId != null) seenServerIdsRef.current.add(it.messageId);
@@ -181,7 +238,7 @@ const ChatRoom = () => {
         const destination = `/topic/room.${roomId}`;
         subRef.current = client.subscribe(destination, (frame: IMessage) => {
           try {
-            const payload: ChatItem = JSON.parse(frame.body);
+            const payload: WsChatItem = JSON.parse(frame.body);
             console.log('[STOMP] <<< MESSAGE', payload);
 
             // 1) 서버 id 중복 방지
@@ -205,9 +262,11 @@ const ChatRoom = () => {
                   replaced = true;
                   if (payload.messageId != null) seenServerIdsRef.current.add(payload.messageId);
                   if (payload.clientMessageId) seenClientIdsRef.current.add(payload.clientMessageId);
-                  // 교체 시에는 REST 규칙과 동일하게 mine 반영 → 보통 내 메시지면 'me'
+
+                  // ✅ WS 구조에 맞춰 echo로 교체 (내 메시지이면 'me'가 되도록 myUserId로 판정)
+                  const echo = mapFromWs(payload);
                   return {
-                    ...mapFromRest(payload),
+                    ...echo,
                     pending: false,
                     error: false,
                   };
@@ -216,10 +275,10 @@ const ChatRoom = () => {
               });
 
               if (!replaced) {
-                // 3) 신규 메시지 추가 (실시간 수신은 전부 친구로 표기)
+                // 3) 신규 메시지 추가
                 if (payload.messageId != null) seenServerIdsRef.current.add(payload.messageId);
                 if (payload.clientMessageId) seenClientIdsRef.current.add(payload.clientMessageId);
-                next.push(mapFromStompNew(payload));
+                next.push(mapFromWs(payload));
               }
 
               return next;
@@ -253,7 +312,7 @@ const ChatRoom = () => {
 
       console.log('[STOMP] deactivated');
     };
-  }, [roomId, mapFromRest, mapFromStompNew]);
+  }, [roomId, mapFromWs]);
 
   /** ----- 메시지 추가 시 바닥 고정 ----- */
   useEffect(() => {
