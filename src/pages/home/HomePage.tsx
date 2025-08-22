@@ -30,6 +30,7 @@ export const HomePage = () => {
     try {
       const response = await api.get("/home");
       const data = response.data.data;
+      localStorage.setItem("userId", data.userId);
 
       // 추천 모임
       setRecommendedClubs(
