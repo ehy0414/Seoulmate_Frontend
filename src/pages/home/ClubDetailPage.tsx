@@ -82,6 +82,8 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
     getClub();
   }, [id]);
 
+  console.log(club);
+
   if (!club) {
     return (
       <main className="flex items-center justify-center min-h-screen">
@@ -119,15 +121,19 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
         <div className="top-[580px] w-full px-4">
           <ParticipantsList
             participants={participants}
-            maxParticipants={10}
+            maxParticipants={club.max_participants}
+            minParticipants={club.min_participants}
             type="club"
           />
         </div>
 
         <ActionButton
           text="참여하기"
-          disabled={participants.length >= 10}
+          disabled={participants.length >= club.max_participants}
           meetingId={club.id}
+          type="club"
+          participants={participants}
+          club={club}
         />
       </main>
     </>

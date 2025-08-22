@@ -48,7 +48,6 @@ export const ClassDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
       // 참여자 정보 가져오기
       const participantsRes = await api.get(`/meetings/${id}/participants`);
       const participantsData = participantsRes.data.data.participants;
-      console.log(participantsData);
 
       // ParticipantsList 에 맞게 변환
       const mapped = participantsData.map((p: any) => ({
@@ -75,6 +74,8 @@ export const ClassDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
     );
   }
 
+    console.log(club);
+
   return (
     <>
       <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
@@ -94,15 +95,17 @@ export const ClassDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
         <div className="top-[580px] w-full px-4">
           <ParticipantsList
             participants={participants}
-            maxParticipants={10}
+            maxParticipants={club.max_participants}
+            minParticipants={0}
             type="class"
           />
         </div>
 
         <ActionButton
           text="참여하기"
-          disabled={participants.length >= 10}
+          disabled={participants.length >= club.max_participants}
           meetingId={club.id}
+          type="class"
         />
       </main>
     </>
