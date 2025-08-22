@@ -26,18 +26,22 @@ const ProfileSection: React.FC = () => {
   // 파일 선택 시 API 요청 및 atom 최신화
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file || !userProfile) return;
+    const prevImageUrl = userProfile.profileImageUrl;
+    const tempUrl = URL.createObjectURL(file);
+    setUserProfile({ ...userProfile, profileImageUrl: tempUrl }); // 즉시 preview
+
     const formData = new FormData();
     formData.append('profileImage', file);
     try {
       await api.put('/my-page/update-profile-image', formData);
-      // 이미지 변경 성공 시 최신 정보로 atom 업데이트
-      const profileRes = await api.get('/my-page');
-      if (profileRes.data?.data) {
-        setUserProfile(profileRes.data.data);
-      }
-    } catch (error) {
-      console.log("이미지 변경 중 오류", error);
+      const profileRes = await api.get('/my-page'); // 백그라운드 full fetch
+      setUserProfile(profileRes.data.data); // 실제 업데이트
+    } catch {
+      setUserProfile({ ...userProfile, profileImageUrl: prevImageUrl }); // 실패 시 이전 이미지 복구
+      alert("이미지 변경 오류 발생 다시 시도해주세요.");
+    } finally {
+      URL.revokeObjectURL(tempUrl);
     }
   };
 
