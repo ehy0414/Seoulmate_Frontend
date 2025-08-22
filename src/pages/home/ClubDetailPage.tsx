@@ -51,6 +51,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const navigate = useNavigate();
   const { id } = useParams();
+  const userId = localStorage.getItem("userId");
 
   const getClub = async () => {
     try {
@@ -82,7 +83,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
     getClub();
   }, [id]);
 
-  console.log(club);
+  const isJoined = participants.some((p) => p.id === userId);
 
   if (!club) {
     return (
@@ -129,7 +130,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
 
         <ActionButton
           text="참여하기"
-          disabled={participants.length >= club.max_participants}
+          disabled={isJoined || participants.length >= club.max_participants}
           meetingId={club.id}
           type="club"
           participants={participants}
