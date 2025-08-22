@@ -15,6 +15,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
   isFriend = false,
   isDisabled = false,
 }) => {
+  const userId = localStorage.getItem("userId");
   return (
     <div className="flex gap-2 items-center w-full px-1">
       <button
@@ -32,7 +33,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({
       </button>
       <button
         onClick={onSendMessage}
-        className="flex shrink-0 justify-center items-center rounded-lg border hover:bg-primary-100 border-primary-700 border-solid bg-zinc-50 h-[38px] w-1/2"
+        className={`flex shrink-0 justify-center items-center rounded-lg border hover:bg-primary-100 border-primary-700 border-solid bg-zinc-50 h-[38px] w-1/2`}
       >
         <span className="text-xs font-bold text-primary-700 ">
           {sendMessageText}
