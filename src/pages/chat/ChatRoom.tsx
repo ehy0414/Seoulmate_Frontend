@@ -18,6 +18,7 @@ export interface Message {
   text: string;
   time: string;                 // HH:mm
   date: string;                 // YYYY년 MM월 DD일
+  name?: string;                // ✅ 표시용 이름(그룹일 때 사용)
   profileImg?: string;
   pending?: boolean;
   error?: boolean;
@@ -58,6 +59,7 @@ type ChatListResponse = {
     items: ChatItem[];
     nextCursor: number | null;
     hasMore: boolean;
+    myUserId: number;            // ✅ 초기 응답에 myUserId 포함
   };
 };
 
@@ -70,7 +72,7 @@ type RoomMetaResponse = {
     title: string;
     roomImageUrl: string;
     type: string;
-    myUserId: number; // 내 유저 ID
+    myUserId: number;
     participants: Array<{
       userId: number;
       name: string;
@@ -119,6 +121,7 @@ const ChatRoom = () => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [myUserId, setMyUserId] = useState<number | null>(null); // ✅ 내 유저 ID
+  const [isGroup, setIsGroup] = useState<boolean>(false);        // ✅ 그룹 채팅 여부
 
   const containerRef = useRef<HTMLDivElement>(null);
   const pinnedRef = useRef(true);
@@ -144,69 +147,86 @@ const ChatRoom = () => {
     })();
   }, [roomId]);
 
-  /** ----- 방 메타에서 myUserId 확보 (가능 시) ----- */
+  /** ----- 방 메타(선택)로 그룹 여부 파악 ----- */
   useEffect(() => {
     if (!roomId || Number.isNaN(roomId)) return;
     (async () => {
       try {
         const res = await api.get<RoomMetaResponse>(`/chat/rooms/${roomId}`);
+        const participants = res?.data?.data?.participants ?? [];
+        setIsGroup(participants.length > 2);
+        // 메타에도 myUserId가 있다면 보조로 사용
         const id = res?.data?.data?.myUserId;
-        if (typeof id === 'number') setMyUserId(id);
+        if (typeof id === 'number') setMyUserId((prev) => (prev ?? id));
       } catch (e) {
-        // 없어도 동작은 하도록 (WS 기본 'friend' 정책)
-        console.warn('방 메타 조회 실패(내 ID 미확보):', e);
+        // 메타가 없어도 동작하도록
+        console.warn('방 메타 조회 실패(그룹 여부 미확보 가능):', e);
       }
     })();
   }, [roomId]);
 
-  /** ----- REST: ChatItem → Message (mine을 그대로 반영) ----- */
-  const mapFromRest = useCallback((it: ChatItem): Message => {
-    const d = toDate(it.createdAt);
-    const isMine = Boolean(it.mine);
-    return {
-      id: it.messageId,
-      sender: isMine ? 'me' : 'friend',
-      text: it.content,
-      time: getFormattedTime(d),
-      date: getFormattedDate(d),
-      // 내 메시지면 보통 좌/우 정렬상 프로필 미노출 → 필요 시 유지
-      profileImg: isMine ? undefined : it.senderProfileImageUrl,
-      _clientMessageId: it.clientMessageId ?? undefined,
-    };
-  }, []);
-
-  /** ----- WS: WsChatItem → Message (myUserId 있으면 정확 판정, 없으면 기본 'friend') ----- */
-  const mapFromWs = useCallback(
-    (it: WsChatItem): Message => {
+  /** ----- REST: ChatItem → Message (isMe는 mine 대신 myUserId 우선) ----- */
+  const mapFromRest = useCallback(
+    (it: ChatItem, myId: number | null): Message => {
       const d = toDate(it.createdAt);
-      const iAmSender = myUserId != null && it.senderId === myUserId;
+      const isMine = myId != null ? it.senderId === myId : Boolean(it.mine);
+      return {
+        id: it.messageId,
+        sender: isMine ? 'me' : 'friend',
+        text: it.content,
+        time: getFormattedTime(d),
+        date: getFormattedDate(d),
+        name: it.senderName,
+        profileImg: isMine ? undefined : it.senderProfileImageUrl,
+        _clientMessageId: it.clientMessageId ?? undefined,
+      };
+    },
+    []
+  );
+
+  /** ----- WS: WsChatItem → Message (myUserId로 정확 판정) ----- */
+  const mapFromWs = useCallback(
+    (it: WsChatItem, myId: number | null): Message => {
+      const d = toDate(it.createdAt);
+      const iAmSender = myId != null && it.senderId === myId;
       return {
         id: it.messageId,
         sender: iAmSender ? 'me' : 'friend',
         text: it.content,
         time: getFormattedTime(d),
         date: getFormattedDate(d),
-        profileImg: iAmSender ? undefined : it.senderProfileUrl, // ✅ WS 프로필 키 적용
+        name: it.senderName,
+        profileImg: iAmSender ? undefined : it.senderProfileUrl,
         _clientMessageId: it.clientMessageId ?? undefined,
       };
     },
-    [myUserId]
+    []
   );
 
-  /** ----- 초기 로딩 (REST) ----- */
+  /** ----- 초기 로딩 (REST) : myUserId 저장 + 메시지 매핑 ----- */
   useEffect(() => {
     if (!roomId || Number.isNaN(roomId)) return;
     (async () => {
       try {
         const res = await api.get<ChatListResponse>(`/chat/rooms/${roomId}/messages`, { params: { size: 30 } });
-        const items = res.data?.data?.items ?? [];
+        const data = res.data?.data;
+        const items = data?.items ?? [];
+        const myIdFromApi = typeof data?.myUserId === 'number' ? data!.myUserId : null;
+        if (myIdFromApi != null) setMyUserId(myIdFromApi);
+
         items.sort((a, b) => toDate(a.createdAt).getTime() - toDate(b.createdAt).getTime());
 
         const mapped = items.map((it) => {
           if (it.messageId != null) seenServerIdsRef.current.add(it.messageId);
           if (it.clientMessageId) seenClientIdsRef.current.add(it.clientMessageId);
-          return mapFromRest(it);
+          return mapFromRest(it, myIdFromApi);
         });
+
+        // 초기 데이터만으로도 그룹 여부 추정(참가자 3명 이상이면 true)
+        if (mapped.length > 0 && !isGroup) {
+          const uniqueSenders = new Set(items.map((i) => i.senderId));
+          setIsGroup((prev) => prev || uniqueSenders.size > 2);
+        }
 
         setMessages(mapped);
         // 최초 로딩 시 바닥으로
@@ -215,6 +235,7 @@ const ChatRoom = () => {
         console.error('초기 메시지 불러오기 실패:', e);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId, mapFromRest]);
 
   /** ----- 스크롤 핀 상태 업데이트 ----- */
@@ -263,8 +284,7 @@ const ChatRoom = () => {
                   if (payload.messageId != null) seenServerIdsRef.current.add(payload.messageId);
                   if (payload.clientMessageId) seenClientIdsRef.current.add(payload.clientMessageId);
 
-                  // ✅ WS 구조에 맞춰 echo로 교체 (내 메시지이면 'me'가 되도록 myUserId로 판정)
-                  const echo = mapFromWs(payload);
+                  const echo = mapFromWs(payload, myUserId);
                   return {
                     ...echo,
                     pending: false,
@@ -278,7 +298,7 @@ const ChatRoom = () => {
                 // 3) 신규 메시지 추가
                 if (payload.messageId != null) seenServerIdsRef.current.add(payload.messageId);
                 if (payload.clientMessageId) seenClientIdsRef.current.add(payload.clientMessageId);
-                next.push(mapFromWs(payload));
+                next.push(mapFromWs(payload, myUserId));
               }
 
               return next;
@@ -312,7 +332,7 @@ const ChatRoom = () => {
 
       console.log('[STOMP] deactivated');
     };
-  }, [roomId, mapFromWs]);
+  }, [roomId, myUserId, mapFromWs]);
 
   /** ----- 메시지 추가 시 바닥 고정 ----- */
   useEffect(() => {
@@ -418,6 +438,7 @@ const ChatRoom = () => {
                   key={`${date}-${msg.time}-${keyBase}`}
                   message={msg}
                   marginTop={marginTop}
+                  isGroup={isGroup}          // ✅ 그룹 여부 전달
                 />
               );
             })}
