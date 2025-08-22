@@ -12,12 +12,14 @@ import FoodIcon from '../../assets/category/category-food.svg?react';
 import MusicIcon from '../../assets/category/category-music.svg?react';
 import { filterAtom } from '../../store/filterAtom';
 import { isDefaultFilter, generateFilterText } from '../../utils/filterUtils';
+import api from '../../services/axios';
 
 interface ClubCard {
     id: number;
+    type: string;
     title: string;
-    place: string;
-    date: string;
+    start_time: string;
+    meeting_day: string;
     image: string;
 }
 
@@ -34,8 +36,12 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
     
     const initialCategory = location.state?.category || '스포츠';
     const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+    const [page, setPage] = useState(0);
+    const [clubs, setClubs] = useState<ClubCard[]>([]);
+    const [hasMore, setHasMore] = useState(true);
     const categoryRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
     const hasProcessedLocationState = useRef(false);
+    const bottomRef = useRef<HTMLDivElement>(null);
 
     // location.state가 변경되면 카테고리 업데이트 (초기 로딩 시에만)
     useEffect(() => {
@@ -46,7 +52,7 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
         }
     }, [location.state]);
 
-    // 선택된 카테고리가 변경되면 해당 카테고리로 스크롤
+    // 선택된 카테고리가 변경되면 해당 카테고리로 스크롤 및 리스트/페이지 초기화
     useEffect(() => {
         const selectedButton = categoryRefs.current[selectedCategory];
         if (selectedButton) {
@@ -56,8 +62,60 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                 inline: 'center'
             });
         }
+        // 카테고리 바뀌면 리스트와 페이지 초기화
+        setClubs([]);
+        setPage(0);
+        setHasMore(true);
     }, [selectedCategory]);
 
+    // API 호출: selectedCategory, searchValue, filter 변경 시
+    useEffect(() => {
+        const fetchClubs = async () => {
+            // filterAtom에서 최솟값, 최댓값 추출
+            const koMinLevel = filter.koreanLevel[0];
+            const koMaxLevel = filter.koreanLevel[1];
+            const enMinLevel =  filter.englishLevel[0];
+            const enMaxLevel =  filter.englishLevel[1];
+            const language = '한국어';
+
+            try {
+                const res = await api.post('/meetings/search', {
+                    hobbyCategory: selectedCategory,
+                    keyword: searchValue,
+                    language,
+                    koMinLevel,
+                    koMaxLevel,
+                    enMinLevel,
+                    enMaxLevel,
+                    page,
+                    size: 20
+                });
+                if (res.data.success) {
+                    const newClubs = res.data.data;
+                    setClubs(prev => page === 0 ? newClubs : [...prev, ...newClubs]);
+                    setHasMore(newClubs.length === 20); // 더 가져올 데이터가 있으면 true
+                    console.log("가져온 데이터 개수", res.data.data);
+                } else {
+                    console.error(res.data.message);
+                    setClubs([]);
+                }
+            } catch (error) {
+                console.error(error);
+                alert("모임 정보를 가져오는 중 오류 발생");
+                setClubs([]);
+            }
+        };
+        fetchClubs();
+    }, [selectedCategory, searchValue, filter, page]);
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+          if (entry.isIntersecting && hasMore) {
+            setPage((prev) => prev + 1);
+          }
+        });
+        if (bottomRef.current) observer.observe(bottomRef.current);
+        return () => observer.disconnect();
+      }, [hasMore]);
     const categories = [
         { name: '스포츠', icon: SportsIcon },
         { name: '파티', icon: PartyIcon },
@@ -65,53 +123,8 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
         { name: '액티비티', icon: ActivityIcon },
         { name: '문화/예술', icon: ArtIcon },
         { name: '취미', icon: HobbyIcon },
-        { name: '음식', icon: FoodIcon },
+        { name: '음식/드링크', icon: FoodIcon },
         { name: '음악', icon: MusicIcon },
-    ];
-
-    const clubData: ClubCard[] = [
-        {
-            id: 1,
-            title: '숭실대 테니스',
-            place: '숭실고등학교 체육관',
-            date: '7/23 18:00',
-            image: '/api/placeholder/80/80'
-        },
-        {
-            id: 2,
-            title: '수요일 해 떨어지면 축구',
-            place: '숭실대학교 운동장',
-            date: '7/23 20:00',
-            image: '/api/placeholder/80/80'
-        },
-        {
-            id: 3,
-            title: '스키',
-            place: '강원도 비발디파크',
-            date: '12/30 8:00',
-            image: '/api/placeholder/80/80'
-        },
-        {
-            id: 4,
-            title: '점심 공강 때 농구',
-            place: '숭실대학교 운동장',
-            date: '9/2 13:00',
-            image: '/api/placeholder/80/80'
-        },
-        {
-            id: 5,
-            title: '헬스장 메이트 구함',
-            place: '교내 헬스장',
-            date: '7/28 15:00',
-            image: '/api/placeholder/80/80'
-        },
-        {
-            id: 6,
-            title: '스케이트 보드 입문',
-            place: '학교 뒤 공터',
-            date: '8/3 18:00',
-            image: '/api/placeholder/80/80'
-        }
     ];
 
     return (
@@ -194,7 +207,7 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                     className='pb-[65px]'
                 >
                     <div className="flex flex-col">
-                        {clubData.map((club) => (
+                        {clubs.map((club) => (
                             <motion.div
                                 key={club.id}
                                 initial={{ opacity: 0 }}
@@ -203,7 +216,10 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                                 className="bg-white border-b-[0.5px] border-black-400 p-[18px] flex space-x-4"
                             >
                                 {/* 이미지 */}
-                                <div className="w-20 h-20 bg-gray-300 rounded-[8px] flex-shrink-0"></div>
+                                <div 
+                                    className="w-20 h-20 rounded-[8px] flex-shrink-0"
+                                    style={{ backgroundImage: `url(${club.image})`, backgroundSize: 'cover' }}
+                                ></div>
 
                                 {/* 콘텐츠 */}
                                 <div className="flex-1 py-[5px]">
@@ -211,13 +227,14 @@ const ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                                         {club.title}
                                     </div>
                                     <div className="space-y-1">
-                                        <p className="text-sm font-[500] text-black-400 leading-[19px]">{club.place}</p>
-                                        <p className="text-sm font-[500] text-black-400 leading-[19px]">{club.date}</p>
+                                        <p className="text-sm font-[500] text-black-400 leading-[19px]">{club.meeting_day}</p>
+                                        <p className="text-sm font-[500] text-black-400 leading-[19px]">{club.start_time}</p>
                                     </div>
                                 </div>
                             </motion.div>
                         ))}
                     </div>
+                    <div ref={bottomRef}></div>
                 </motion.div>
             </AnimatePresence>
         </div>
