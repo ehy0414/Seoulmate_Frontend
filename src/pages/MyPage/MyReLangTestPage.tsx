@@ -25,7 +25,6 @@ const MyReLangTestPage = () => {
         
         // 문자열이면 boolean으로 변환, 없으면 false
         setIsKorean(stateIsKorean === true || stateIsKorean === "true");
-        console.log("isKorean:", stateIsKorean);
     }, [location.state]);
 
     const handleNext = () => {
