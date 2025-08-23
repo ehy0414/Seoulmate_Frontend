@@ -14,8 +14,6 @@ export function SchoolVerifyPage() {
   const navigate:NavigateFunction = useNavigate();
 
   const handleNext = async () => {
-    console.log("Selected school:", selectedSchool);
-    console.log("Selected file:", selectedFile);
 
     if (!selectedSchool || !selectedFile) {
       alert("모두 입력해주세요.");

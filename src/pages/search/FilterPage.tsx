@@ -25,17 +25,20 @@ const FilterPage: React.FC = () => {
     navigate(-1);
   };
 
+  // 하나만 선택 가능: 한 슬라이더를 조정하면 다른 슬라이더는 전체로 초기화
   const handleKoreanLevelChange = (level: [number, number]) => {
     setFilter(prev => ({
       ...prev,
-      koreanLevel: level
+      koreanLevel: level,
+      englishLevel: [0, 100]
     }));
   };
 
   const handleEnglishLevelChange = (level: [number, number]) => {
     setFilter(prev => ({
       ...prev,
-      englishLevel: level
+      englishLevel: level,
+      koreanLevel: [0, 100]
     }));
   };
 
@@ -59,7 +62,6 @@ const FilterPage: React.FC = () => {
           onChange={handleEnglishLevelChange}
         />
       </div>
-      
       {/* 적용하기 버튼 영역 */}
       <div className={`px-[18px] py-[16px] bg-white flex ${!isDefaultFilter(filter) ? 'gap-[17px]' : ''} w-full`}>
         <AnimatePresence mode="wait">

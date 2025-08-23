@@ -10,7 +10,6 @@ export const SchoolVerificationPage = () => {
   const univVerificate = async () => {
     try {
       const response = await api.get("/signup/in-progress");
-      console.log("학교 인증 상태:", response.data);
       if(response.data.data.univVerification === "VERIFIED") {
         navigate("/home");
       } else if (response.data.data.univVerification === "NOT_SUBMITTED") {

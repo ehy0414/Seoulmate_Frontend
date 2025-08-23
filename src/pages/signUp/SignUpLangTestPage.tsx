@@ -31,7 +31,6 @@ const SignUpLangTestPage = () => {
 
     const handleNext = async () => {
         if (score === null) return alert("녹음을 완료하고 점수를 받아야 합니다.");
-        console.log(score);
 
         // 언어 이름 기반으로 객체 생성
         const languageKey = isKorean ? "영어" : "한국어";

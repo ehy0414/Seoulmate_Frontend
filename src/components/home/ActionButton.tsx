@@ -126,6 +126,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
               //그룹채팅방 생성
               if (type === "club") {
                 // 5. 최소 참여 인원 충족 시 그룹 채팅방 생성
+
                 const totalCount = participants.length + 1; // 현재 결제 성공한 나까지 포함
                 if (club.min_participants !== undefined) {
                   if (totalCount === 3) {
@@ -137,13 +138,11 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
                         Number(localStorage.getItem("userId")), // 현재 유저
                       ],
                     });
-                    console.log("그룹 채팅방 최초 생성 완료");
                   } else if (totalCount > 3) {
                     // 이미 방 존재 → join
                     await api.post("/chat/group/join", {
                       meetingId: club.id,
                     });
-                    console.log("그룹 채팅방에 새 참여자 합류 완료");
                   }
               }
             }
