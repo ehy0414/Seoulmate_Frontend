@@ -107,6 +107,7 @@ export const ClassDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
           disabled={isJoined || participants.length >= club.max_participants}
           meetingId={club.id}
           type="class"
+          club={club}
         />
       </main>
     </>
