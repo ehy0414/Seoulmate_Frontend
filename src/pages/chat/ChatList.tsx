@@ -15,7 +15,7 @@ type ChatRoom = {
     lastMessageType: string;
     lastMessage: string;
     lastMessageAt: string;
-    unreadCount: number; 
+    unreadCount: number;
 };
 
 const ChatList = () => {

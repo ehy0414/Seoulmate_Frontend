@@ -8,7 +8,7 @@ export default function ScheduleItem({ schedule }: Props) {
   return (
     <div className="flex items-center gap-3 p-3 border border-black-200 rounded-lg shadow-sm">
       <div className="w-12 h-12 flex items-center justify-center text-2xl bg-black-100 rounded-md">
-        {schedule.img}
+        <img src={schedule.img} alt={schedule.title} className="w-full h-full object-cover rounded-md" />
       </div>
       <div className="flex-1">
         <div className="font-semibold text-sm">{schedule.title}</div>
