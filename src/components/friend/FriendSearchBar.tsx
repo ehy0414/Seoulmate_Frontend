@@ -11,7 +11,6 @@ const FriendSearchBar = ({ onSearch }: Props) => {
   const [keyword, setKeyword] = useState("");
 
   const handleSearch = () => {
-    console.log("검색 실행:", keyword);
     onSearch(keyword);
   };
 
