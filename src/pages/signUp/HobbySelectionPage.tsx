@@ -48,13 +48,11 @@ export const HobbySelectionPage: React.FC = () => {
   };
 
   const handlePrevious = () => {
-    console.log('Previous clicked');
     navigate(-1);
   };
 
   const handleNext = async() => {
     if (selectedItems.size >= 3 && selectedItems.size <= 10) {
-      console.log('Next clicked with items:', Array.from(selectedItems));
       const data = {
         hobbies: Array.from(selectedItems)
       }
