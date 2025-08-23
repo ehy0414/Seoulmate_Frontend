@@ -1,22 +1,29 @@
 import React from 'react';
 
 interface EachAlarmComponentProps {
-  title?: string;
-  subtitle?: string;
-  timestamp?: string;
-  isUnread?: boolean;
-  profileImage?: string;
+  title: string;
+  subtitle: string;
+  timestamp: string;
+  isUnread: boolean;
+  profileImage: string;
+  link: string;
+  linkTargetType: 'MEETING' | 'FRIEND';
+  onClick?: () => void;
 }
 
 const EachAlarmComponent: React.FC<EachAlarmComponentProps> = ({
-  title = "친구 신청이 왔습니다!",
-  subtitle = "민지 님이 친구 신청을 걸었습니다.",
-  timestamp = "2시간 전",
-  isUnread = true,
-  profileImage
+  title,
+  subtitle,
+  timestamp,
+  isUnread,
+  profileImage,
+  onClick
 }) => {
   return (
-    <div className="flex w-full px-[18px] py-4 items-start justify-between border-b-[0.5px] border-black-400 ">
+    <div
+      className="flex w-full px-[18px] py-4 items-start justify-between border-b-[0.5px] border-black-400 cursor-pointer"
+      onClick={onClick}
+    >
       {/* Profile Avatar */}
       <div className="w-[50px] h-[50px] flex-shrink-0  bg-black-200 rounded-full flex items-center justify-center">
         {profileImage ? (
