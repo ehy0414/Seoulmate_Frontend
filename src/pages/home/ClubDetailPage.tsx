@@ -34,7 +34,7 @@ interface Club {
     id: number;
     name: string;
     profile_image: string;
-    score: number;
+    language_level: number;
   };
 }
 
@@ -109,7 +109,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
           imageUrls={[club.image]}
           type="club"
           language={club.language}
-          score={club.host.score}
+          score={club.host.language_level}
           extraContent={
             <Info 
               hostName={club.host.name}
