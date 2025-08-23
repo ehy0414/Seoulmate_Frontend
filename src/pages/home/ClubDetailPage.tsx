@@ -34,7 +34,7 @@ interface Club {
     id: number;
     name: string;
     profile_image: string;
-    score: number;
+    language_level: number;
   };
 }
 
@@ -109,7 +109,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
           imageUrls={[club.image]}
           type="club"
           language={club.language}
-          score={club.host.score}
+          score={club.host.language_level}
           extraContent={
             <Info 
               hostName={club.host.name}
@@ -131,7 +131,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
 
         <ActionButton
           text={isJoined ? "이미 참여중" : "참여하기"}
-          disabled={isJoined || participants.length >= club.max_participants || isMe}
+          disabled={isJoined || participants.length >= club.max_participants}
           meetingId={club.id}
           type="club"
           participants={participants}
