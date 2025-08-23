@@ -17,21 +17,27 @@ export const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
 
   const handleSelect = (category: string) => {
     let newCategories = [...selectedCategories];
-    
     if (newCategories.includes(category)) {
       // 이미 선택된 경우 제거
       newCategories = newCategories.filter(item => item !== category);
-    } else if (newCategories.length < 5) {
-      // 최대 5개까지만 추가
+    } else if (newCategories.length === 0) {
+      // 하나만 선택 가능
       newCategories.push(category);
-    }else{
+    } else {
+      alert('카테고리는 하나만 선택할 수 있습니다.');
       return;
     }
-    
     // 쉼표로 연결하여 문자열로 변환
     const newValue = newCategories.join(', ');
     onChange?.(newValue);
   };
+    // 기존 5개까지 선택 가능한 코드 (주석)
+    // else if (newCategories.length < 5) {
+    //   // 최대 5개까지만 추가
+    //   newCategories.push(category);
+    // } else {
+    //   return;
+    // }
 
   return (
     <>
@@ -45,7 +51,7 @@ export const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
           className="flex justify-between items-center h-[45px] px-4 mt-2 w-full rounded-[8px] border bg-black-100 border-black-700 text-black-300"
         >
           <span className={`self-stretch my-auto ${value ? "text-black-700" : "text-stone-300"}`}>
-            {value || "모임에 맞는 카테고리를 선택하세요. (최대 5개)"}
+            {value || "모임에 맞는 카테고리를 선택하세요."}
           </span>
           <img
             src={DropVector}

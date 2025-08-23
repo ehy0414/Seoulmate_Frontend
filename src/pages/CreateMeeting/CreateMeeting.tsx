@@ -47,6 +47,7 @@ export const CreateMeeting: React.FC = () => {
     minParticipants: null,
     maxParticipants: null,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 페이지 로드 시 스크롤을 맨 위로 이동
   useEffect(() => {
@@ -54,7 +55,28 @@ export const CreateMeeting: React.FC = () => {
   }, []);
 
   const handleCreateMeeting = async () => {
-    if (!isFormValid()) return;
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    // 제출 시 인원수 검증
+    if (meetingData.minParticipants == null || meetingData.minParticipants < 3) {
+      alert('최소 인원수는 3명 이상이어야 합니다.');
+      setIsSubmitting(false);
+      return;
+    }
+    if (meetingData.maxParticipants == null || meetingData.maxParticipants < 3) {
+      alert('최대 인원수는 3명 이상이어야 합니다.');
+      setIsSubmitting(false);
+      return;
+    }
+    if (meetingData.maxParticipants < meetingData.minParticipants) {
+      alert('최대 인원수는 최소 인원수보다 작을 수 없습니다.');
+      setIsSubmitting(false);
+      return;
+    }
+    if (!isFormValid()) {
+      setIsSubmitting(false);
+      return;
+    }
 
     let imageUrl = '';
     // 1. 이미지 먼저 업로드
@@ -67,6 +89,7 @@ export const CreateMeeting: React.FC = () => {
         imageUrl = res.data?.url ?? '';
       } catch {
         alert('이미지 업로드 실패');
+        setIsSubmitting(false);
         return;
       }
     }
@@ -85,10 +108,7 @@ export const CreateMeeting: React.FC = () => {
       min_participants: String(meetingData.minParticipants ?? 0),
       max_participants: String(meetingData.maxParticipants ?? 0),
     };
-    console.log('전송 데이터:', payload);
-    Object.entries(payload).forEach(([key, value]) => {
-      console.log(`${key}:`, value, '| type:', typeof value);
-    });
+    
     try {
       await api.post('/meetings/private', payload, {
         headers: { 'Content-Type': 'application/json' }
@@ -98,6 +118,8 @@ export const CreateMeeting: React.FC = () => {
       console.error('모임 생성 실패:', error);
       alert("모임 생성 실패 다시 시도해주세요")
       // 에러 처리 (예: alert)
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -186,7 +208,7 @@ export const CreateMeeting: React.FC = () => {
       {/* Submit button */}
       <CreateMeetingButton
         onClick={handleCreateMeeting}
-        disabled={!isFormValid()}
+        disabled={!isFormValid() || isSubmitting}
       />
     </div>
   );

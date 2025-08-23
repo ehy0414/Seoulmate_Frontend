@@ -73,9 +73,7 @@ const ReAudioRecorder = ({ onScoreReady, setIsSending, isKorean }: AudioRecorder
       if(response.data.success === true) {
         // 최신 점수 가져와서 atom 업데이트
         const getRes = await api.get("/my-page");
-        console.log("내정보", getRes.data);
         const languages = getRes.data.data.languages;
-        console.log("languages", languages);
         setUserProfile(prev => prev
           ? { ...prev, languages: { ...prev.languages, ...languages } }
           : { profileImageUrl: "", name: "", email: "", bio: "", hobbies: [], university: "", age: 0, languages }

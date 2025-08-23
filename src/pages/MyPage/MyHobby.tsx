@@ -77,12 +77,10 @@ const MyHobby: React.FC = () => {
       setShowToast(true);
       setTimeout(() => setShowToast(false), 2000);
     }
-    console.log(selectedHobbies.length);
   };
 
   const handleSave = async () => {
     if (!isChanged) return;
-    console.log("수정된 카테고리", selectedHobbies);
     try {
       await api.put('/my-page/update-hobby', {
         hobbies: selectedHobbies

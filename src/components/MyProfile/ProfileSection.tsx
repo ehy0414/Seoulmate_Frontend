@@ -75,12 +75,15 @@ const ProfileSection: React.FC = () => {
       {/* Profile Image with Camera Icon */}
       <div className="relative w-20 h-20">
         {profileImage && profileImage !== '' ? (
-          <img
-            className="w-20 h-20 flex-shrink-0 rounded-[50px] cursor-pointer"
-            src={profileImage}
-            alt="프로필 이미지"
-            onClick={handleImageClick}
-          />
+          <>
+            <img
+              className="w-20 h-20 flex-shrink-0 rounded-[50px] cursor-pointer"
+              src={profileImage}
+              alt="프로필 이미지"
+              onClick={handleImageClick}
+              style={{ objectFit: 'cover' }}
+            />
+          </>
         ) : null}
         <input
           type="file"
