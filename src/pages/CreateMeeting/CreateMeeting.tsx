@@ -108,10 +108,7 @@ export const CreateMeeting: React.FC = () => {
       min_participants: String(meetingData.minParticipants ?? 0),
       max_participants: String(meetingData.maxParticipants ?? 0),
     };
-    console.log('전송 데이터:', payload);
-    Object.entries(payload).forEach(([key, value]) => {
-      console.log(`${key}:`, value, '| type:', typeof value);
-    });
+    
     try {
       await api.post('/meetings/private', payload, {
         headers: { 'Content-Type': 'application/json' }
