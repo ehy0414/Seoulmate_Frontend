@@ -16,10 +16,10 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
   const dragBarRef = useRef<HTMLDivElement>(null);
   const startY = useRef<number | null>(null);
-  const startHeight = useRef<number>(60);
+  const startHeight = useRef<number>(70);
   const dragging = useRef(false);
 
-  const [height, setHeight] = useState(90);
+  const [height, setHeight] = useState(70);
 
   // (이하 로직은 변경 없음)
   // ... (드래그, useEffect 등 기존 로직) ...

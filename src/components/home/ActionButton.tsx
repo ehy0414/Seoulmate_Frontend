@@ -7,7 +7,11 @@ interface ActionButtonProps {
   text: string;
   disabled?: boolean;
   meetingId?: number;
-  club?: { id: number; min_participants: number; host: { id: number } };
+  club?: { 
+    id: number; 
+    min_participants?: number; 
+    host?: { id: number } 
+  };
   participants?: { id: string }[];
   type: "club" | "class";
 }
@@ -46,7 +50,53 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 
       // 1. 서버에서 주문 생성
       const res = await api.post(`/orders/${meetingId}`);
-      const { merchantUid, amount } = res.data.data;
+      const { merchantUid, amount, orderUid } = res.data.data;
+      console.log("주문 생성 응답:", res.data);
+
+      // 금액이 0원인 경우 → 아임포트 결제 대신 서버 처리
+      if (amount === 0) {
+        try {
+          await api.post(`/payment/free/${orderUid}`, {
+            orderUid: orderUid,
+          });
+
+        // 사설모임 로직 실행
+        if (type === "club") {
+          const totalCount = participants.length + 1;
+          //console.log(totalCount);
+          // 최소 참여 인원 충족 시 그룹 채팅방 생성로직
+          if (club.min_participants !== undefined) {
+            if (totalCount === 3) {
+              // 최소 참여 인원 처음 충족 → 그룹 채팅방 생성
+              await api.post("/chat/room/group", {
+                meetingId: club.id,
+                memberUserIds: [
+                  ...participants.map((p) => Number(p.id)),
+                  Number(localStorage.getItem("userId")),
+                ],
+              });
+              console.log("그룹 채팅방 최초 생성 완료");
+            } else if (totalCount > 3) {
+              await api.post("/chat/group/join", {
+                meetingId: club.id,
+              });
+              console.log("그룹 채팅방에 새 참여자 합류 완료");
+            }
+          }
+        }
+
+        alert("결제가 완료되었습니다.");
+        navigate(`/club/${club.id}`);
+        window.location.reload();
+        return;
+      } catch (err) {
+        console.error("결제 처리 실패:", err);
+        alert("무료 참여 처리 중 오류가 발생했습니다.");
+        return;
+      } finally {
+        setLoading(false);
+      }
+    }
 
       // 2. IMP 초기화
       const { IMP } = window;
@@ -73,27 +123,33 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
                 impUid: rsp.imp_uid,
               });
 
+              //그룹채팅방 생성
               if (type === "club") {
                 // 5. 최소 참여 인원 충족 시 그룹 채팅방 생성
-                if (participants.length === club.min_participants) {
-                  // 최소 인원 딱 충족 → 방 생성
-                  await api.post("/chat/room/group", {
-                    meetingId: club.id,
-                    memberUserIds: [
-                      club.host.id,
-                      ...participants.map((p) => Number(p.id)),
-                    ],
-                  });
-                } else if (participants.length > club.min_participants) {
-                // 이미 방이 존재하므로 join API 호출
-                await api.post("/chat/group/join", {
-                  meetingId: club.id,
-                });
+
+                const totalCount = participants.length + 1; // 현재 결제 성공한 나까지 포함
+                if (club.min_participants !== undefined) {
+                  if (totalCount === 3) {
+                    // 최소 참여 인원 처음 충족 → 그룹 채팅방 생성
+                    await api.post("/chat/room/group", {
+                      meetingId: club.id,
+                      memberUserIds: [
+                        ...participants.map(p => Number(p.id)), // 기존 참여자
+                        Number(localStorage.getItem("userId")), // 현재 유저
+                      ],
+                    });
+                  } else if (totalCount > 3) {
+                    // 이미 방 존재 → join
+                    await api.post("/chat/group/join", {
+                      meetingId: club.id,
+                    });
+                  }
               }
-              }
+            }
 
               alert("결제가 완료되었습니다.");
-              navigate("/home");
+              navigate(`/club/${club.id}`);
+              window.location.reload();
             } catch (err) {
               console.error("결제 검증 또는 그룹채팅 생성 실패:", err);
               alert("결제는 완료되었지만 처리 중 오류가 발생했습니다.");
