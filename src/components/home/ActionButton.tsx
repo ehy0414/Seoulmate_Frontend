@@ -84,13 +84,11 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
                       ...participants.map((p) => Number(p.id)),
                     ],
                   });
-                  console.log("그룹 채팅방 최초 생성 완료");
                 } else if (participants.length > club.min_participants) {
                 // 이미 방이 존재하므로 join API 호출
                 await api.post("/chat/group/join", {
                   meetingId: club.id,
                 });
-                console.log("그룹 채팅방에 새 참여자 합류 완료");
               }
               }
 
