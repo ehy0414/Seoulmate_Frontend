@@ -16,7 +16,6 @@ const MyPage: React.FC = () => {
       const fetchUserProfile = async () => {
         try {
           const response = await api.get('/my-page');
-          console.log("사용자 데이터", response);
           if (response.data?.data) {
             setUserProfile(response.data.data);
           }
