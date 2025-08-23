@@ -13,6 +13,8 @@ import MusicIcon from '../../assets/category/category-music.svg?react';
 import { filterAtom } from '../../store/filterAtom';
 import { isDefaultFilter, generateFilterText } from '../../utils/filterUtils';
 import api from '../../services/axios';
+import Spinner from '../signup/langTest/Spinner';
+import NoFriend from '../../assets/search/nofriend.svg';
 
 interface ClubCard {
     id: number;
@@ -49,10 +51,12 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
     const [selectedCategory, setSelectedCategory] = useState(initialCategory);
     const [page, setPage] = useState(0);
     const [clubs, setClubs] = useState<ClubCard[]>([]);
+    const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const categoryRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
     const hasProcessedLocationState = useRef(false);
     const bottomRef = useRef<HTMLDivElement>(null);
+    const isFirstRender = useRef(true);
 
     // location.state가 변경되면 카테고리 업데이트 (초기 로딩 시에만)
     useEffect(() => {
@@ -80,6 +84,7 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
 
     // API 요청 함수
     const fetchClubs = async (keyword: string) => {
+        setLoading(true);
         const koMinLevel = filter.koreanLevel[0];
         const koMaxLevel = filter.koreanLevel[1];
         const enMinLevel =  filter.englishLevel[0];
@@ -90,7 +95,7 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
         if (enMinLevel !== 0 || enMaxLevel !== 100) langs.push('영어');
         if (langs.length > 0) language = langs.join(', ');
 
-        try {
+    try {
             const payload: SearchPayload = {
                 hobbyCategory: selectedCategory,
                 keyword,
@@ -102,21 +107,22 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                 size: 20
             };
             if (language !== null) payload.language = language;
-            console.log("내가 보내는 데이터",payload);
             const res = await api.post('/meetings/search', payload);
             if (res.data.success) {
                 const newClubs = res.data.data;
                 setClubs(prev => page === 0 ? newClubs : [...prev, ...newClubs]);
                 setHasMore(newClubs.length === 20); // 더 가져올 데이터가 있으면 true
-                console.log("가져온 데이터 개수", res.data);
+                setLoading(false);
             } else {
                 console.error(res.data.message);
                 setClubs([]);
+                setLoading(false);
             }
         } catch (error) {
             console.error(error);
             alert("모임 정보를 가져오는 중 오류 발생");
             setClubs([]);
+            setLoading(false);
         }
     };
 
@@ -128,10 +134,14 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
 
     // 검색어 변경 시 1초 후에만 요청 (debounce)
     useEffect(() => {
-        const timer = setTimeout(() => {
-            fetchClubs(searchValue);
-        }, 1000);
-        return () => clearTimeout(timer);
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        return; // 마운트 시점에는 실행하지 않음
+      }
+      const timer = setTimeout(() => {
+        fetchClubs(searchValue);
+      }, 1000);
+      return () => clearTimeout(timer);
     }, [searchValue]);
     useEffect(() => {
         const observer = new IntersectionObserver(([entry]) => {
@@ -221,52 +231,63 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                     </div>
                 </div>
             </div>
-            
-            {/* 모임 리스트 */}
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={selectedCategory}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.2 }}
-                    className='pb-[65px]'
-                >
-                    <div className="flex flex-col">
-                        {clubs.map((club) => (
-                            <motion.div
-                                key={club.id}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.5 }}
-                                className="bg-white border-b-[0.5px] border-black-400 p-[18px] flex space-x-4 cursor-pointer"
-                                onClick={() => {
-                                    if (club.type === 'PRIVATE') navigate(`/club/${club.id}`);
-                                    else if (club.type === 'OFFICIAL') navigate(`/class/${club.id}`);
-                                }}
-                            >
-                                {/* 이미지 */}
-                                <div 
-                                    className="w-20 h-20 rounded-[8px] flex-shrink-0"
-                                    style={{ backgroundImage: `url(${club.image})`, backgroundSize: 'cover' }}
-                                ></div>
 
-                                {/* 콘텐츠 */}
-                                <div className="flex-1 py-[5px]">
-                                    <div className="text-base font-medium text-black-700 leading-[19px] mb-[6px]">
-                                        {club.title}
+            {/* 모임 리스트 */}
+            {loading ? (
+                <div className="flex justify-center items-center pt-[150px]">
+                    <Spinner text="모임을 가져오는 중입니다" />
+                </div>
+            ) : clubs.length === 0 ? (
+                <div className="w-full flex flex-col items-center justify-center gap-6 pt-[211px]">
+                    <img src={NoFriend} alt="" />
+                    <span className="text-2xl text-[#000] font-[600]">검색 결과가 없습니다</span>
+                </div>
+            ) : (
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={selectedCategory}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.2 }}
+                        className="pb-[65px]"
+                    >
+                        <div className="flex flex-col">
+                            {clubs.map((club) => (
+                                <motion.div
+                                    key={club.id}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 0.5 }}
+                                    className="bg-white border-b-[0.5px] border-black-400 p-[18px] flex space-x-4 cursor-pointer"
+                                    onClick={() => {
+                                        if (club.type === 'PRIVATE') navigate(`/club/${club.id}`);
+                                        else if (club.type === 'OFFICIAL') navigate(`/class/${club.id}`);
+                                    }}
+                                >
+                                    {/* 이미지 */}
+                                    <div 
+                                        className="w-20 h-20 rounded-[8px] flex-shrink-0"
+                                        style={{ backgroundImage: `url(${club.image})`, backgroundSize: 'cover' }}
+                                    ></div>
+
+                                    {/* 콘텐츠 */}
+                                    <div className="flex-1 py-[5px]">
+                                        <div className="text-base font-medium text-black-700 leading-[19px] mb-[6px]">
+                                            {club.title}
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-sm font-[500] text-black-400 leading-[19px]">{club.meeting_day}</p>
+                                            <p className="text-sm font-[500] text-black-400 leading-[19px]">{club.start_time}</p>
+                                        </div>
                                     </div>
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-[500] text-black-400 leading-[19px]">{club.meeting_day}</p>
-                                        <p className="text-sm font-[500] text-black-400 leading-[19px]">{club.start_time}</p>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                    <div ref={bottomRef}></div>
-                </motion.div>
-            </AnimatePresence>
+                                </motion.div>
+                            ))}
+                        </div>
+                        <div ref={bottomRef}></div>
+                    </motion.div>
+                </AnimatePresence>
+            )}
         </div>
     );
 };
