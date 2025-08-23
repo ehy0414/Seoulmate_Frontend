@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/axios";
+import Spinner from "../../components/signup/langTest/Spinner";
 
 export default function AuthRedirect() {
   const navigate = useNavigate();
@@ -27,5 +28,5 @@ export default function AuthRedirect() {
     checkAuth();
     }, [navigate]);
 
-  return <p>로그인 처리 중...</p>;
+  return <div className="flex justify-center pt-[300px]"><Spinner text="로그인 중입니다."/></div>;
 }
