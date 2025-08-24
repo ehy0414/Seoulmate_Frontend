@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/axios";
 import { useEffect, useState } from "react";
 import Info from "../../components/home/class/Info";
+import Spinner from "../../components/signup/langTest/Spinner";
 
 interface MeetingDetailPageProps {
   onBackClick?: () => void;
@@ -52,9 +53,11 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const userId = localStorage.getItem("userId");
+  const [loading, setLoading] = useState(false);
 
   const getClub = async () => {
     try {
+      setLoading(true);
       // 모임 정보 가져오기
       const clubRes = await api.get(`/meetings/private/${id}`, {
         headers: { userId: userId },
@@ -76,6 +79,8 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
       setParticipants(mapped);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,7 +89,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
   }, [id]);
 
   const isJoined = participants.some((p) => p.id === userId);
-  const isMe = club?.host.id === Number(userId);
+  //const isMe = club?.host.id === Number(userId);
 
   if (!club) {
     return (
@@ -96,6 +101,15 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
 
   return (
     <>
+    {loading ? (
+            <div className="flex justify-center items-center pt-[200px]">
+                <Spinner text="모임을 가져오는 중입니다" />
+            </div>
+        ) : !club ? (
+            <div className="w-full flex flex-col items-center justify-center gap-6 pt-[211px]">
+                <span className="text-2xl text-[#000] font-[600]">존재하지 않는 모임입니다.</span>
+            </div>
+        ) : (
       <main className="flex flex-col items-center mt-14 mb-16 mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
         <HeaderDetail title={club.title} onBackClick={() => navigate(-1)} />
 
@@ -138,6 +152,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
           club={club}
         />
       </main>
+      )}
     </>
   );
 };
