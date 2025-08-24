@@ -5,9 +5,7 @@ interface EachAlarmComponentProps {
   subtitle: string;
   timestamp: string;
   isUnread: boolean;
-  profileImage: string;
-  link: string;
-  linkTargetType: 'MEETING' | 'FRIEND';
+  profileImage: string | undefined;
   onClick?: () => void;
 }
 
