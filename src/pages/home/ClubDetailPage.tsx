@@ -89,15 +89,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
   }, [id]);
 
   const isJoined = participants.some((p) => p.id === userId);
-  //const isMe = club?.host.id === Number(userId);
-
-  if (!club) {
-    return (
-      <main className="flex items-center justify-center min-h-screen">
-        <p className="text-gray-500">존재하지 않는 클럽입니다.</p>
-      </main>
-    );
-  }
+  const isMe = club?.host.id === Number(userId);
 
   return (
     <>
@@ -144,7 +136,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
         </div>
 
         <ActionButton
-          text={isJoined ? "이미 참여중" : "참여하기"}
+          text={isMe ? "방장입니다" : isJoined ? "이미 참여중" : "참여하기"}
           disabled={isJoined || participants.length >= club.max_participants}
           meetingId={club.id}
           type="club"
