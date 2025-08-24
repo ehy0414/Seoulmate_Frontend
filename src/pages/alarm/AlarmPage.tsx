@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useAtom } from 'jotai';
+import { userProfileAtom } from '../../store/userProfileAtom';
 import { useNavigate } from 'react-router-dom';
 import TabMenu from '../../components/common/TabMenu';
 import EachAlarmComponent from '../../components/alarm/EachAlarmComponent';
@@ -6,6 +8,7 @@ import { HeaderDetail } from '../../components/common/HeaderDetail';
 import api from '../../services/axios';
 import Spinner from '../../components/signup/langTest/Spinner';
 import NoFriend from '../../assets/search/nofriend.svg';
+import { ClipLoader } from 'react-spinners';
 
 // 화면에 표시할 알람 타입
 interface DisplayAlarm {
@@ -20,16 +23,6 @@ interface DisplayAlarm {
 }
 
 // API 응답 타입 선언
-interface AlarmApiResponse {
-    id: number;
-    title: string;
-    message: string;
-    link: string;
-    linkTargetType: 'MEETING' | 'FRIEND';
-    targetId: number;
-    createdAt: number[]; // 배열로 수정
-    read: boolean;
-}
 
 // createdAt 배열을 사람이 읽을 수 있는 시간 문자열로 변환
 function formatCreatedAtFromArray(arr: number[]): string {
@@ -56,10 +49,13 @@ const AlarmPage = () => {
     const [alarms, setAlarms] = useState<DisplayAlarm[]>([]);
     // 모임 알람의 프로필 이미지를 캐싱하기 위한 state
     const [meetingProfileCache, setMeetingProfileCache] = useState<{[meetingId: string]: string}>({});
-    const [loading, setLoading] = useState(true); // 초기 true로 설정하여 플래시 방지
+    const [loading, setLoading] = useState(true); // 첫 로딩
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
+    const [showSpinner, setShowSpinner] = useState(false); // 페이징 하단 스피너
     const bottomRef = React.useRef<HTMLDivElement>(null);
+    const [userProfile, setUserProfile] = useAtom(userProfileAtom);
+    const myName = userProfile?.name || '';
 
     // useEffect(() => {
     //     // SSE 연결 설정 (activeTab에 따라 다르게 연결하거나, 하나의 스트림으로 모든 타입 받기)
@@ -112,10 +108,23 @@ const AlarmPage = () => {
     //       console.log('SSE 연결 종료');
     //     };
     //   }, []); 
-
     useEffect(() => {
+        if (!userProfile) {
+            api.get('/my-page').then(res => {
+                if (res.data.success && res.data.data) {
+                    setUserProfile(res.data.data);
+                }
+            }).catch(() => {});
+        }
+    }, [userProfile, setUserProfile]);
+    useEffect(() => {
+    // 마이페이지에서 내 이름 받아오기
+    
         const fetchAlarms = async () => {
+            if (page > 0) setShowSpinner(true); // 페이징 시 하단 스피너 노출
+            setLoading(true);
             try {
+                const startTime = Date.now();
                 const type = activeTab === '모임' ? 'MEETING' : 'FRIEND';
                 const res = await api.get('/notifications/me', {
                     params: {
@@ -159,19 +168,27 @@ const AlarmPage = () => {
                             id: item.id,
                         };
                     });
-                    const mapped = await Promise.all(mappedPromises); // 여기서 await 추가하여 then 대신 동기화
+                    const mapped = await Promise.all(mappedPromises);
+                    // 페이징 시 최소 1초 스피너 표시
+                    if (page > 0) {
+                        const elapsed = Date.now() - startTime;
+                        const remaining = 1000 - elapsed;
+                        if (remaining > 0) {
+                            await new Promise(resolve => setTimeout(resolve, remaining));
+                        }
+                        setShowSpinner(false);
+                    }
                     setAlarms(prev => page === 0 ? mapped : [...prev, ...mapped]);
-                    setHasMore(mapped.length === 20);
-                    setLoading(false); // 데이터 처리 후 로딩 종료
+                    setHasMore(mapped.length === 10);
                 } else {
                     if (page === 0) setAlarms([]);
                     setHasMore(false);
-                    setLoading(false); // else 경우 로딩 종료
                 }
             } catch {
                 if (page === 0) setAlarms([]);
                 setHasMore(false);
-                setLoading(false); // 에러 시 로딩 종료
+            } finally {
+                setLoading(false);
             }
         };
         fetchAlarms();
@@ -181,20 +198,19 @@ const AlarmPage = () => {
     useEffect(() => {
         setPage(0);
         setAlarms([]);
-        setHasMore(true);
         setLoading(true); // 탭 변경 시 로딩 상태 재설정
     }, [activeTab]);
 
     // 하단 감지용 IntersectionObserver로 페이징
     useEffect(() => {
-        const observer = new window.IntersectionObserver(([entry]) => {
-            if (entry.isIntersecting && hasMore && !loading) {
-                setPage(prev => prev + 1);
-            }
+        const observer = new IntersectionObserver(([entry]) => {
+          if (entry.isIntersecting && hasMore) {
+            setPage((prev) => prev + 1);
+          }
         });
         if (bottomRef.current) observer.observe(bottomRef.current);
         return () => observer.disconnect();
-    }, [hasMore, loading]);
+      }, [hasMore]);
 
     const handleNotificationClick = () => {
         // 알람 페이지에서는 알람 버튼 클릭 시 아무 동작 안 함
@@ -219,7 +235,17 @@ const AlarmPage = () => {
     };
 
     // 필터링된 알람을 렌더링 시 계산 (state 제거로 최적화)
-    const filteredAlarms = alarms.filter(alarm => activeTab === '모임' ? alarm.linkTargetType === 'MEETING' : alarm.linkTargetType === 'FRIEND');
+    // subtitle이 '** 님이 내 모임에 참여했습니다'이고, ** 부분이 내 이름과 일치하면 제외
+    const filteredAlarms = alarms.filter(alarm => {
+        const isMeeting = activeTab === '모임';
+        if (!isMeeting) return false;
+        // subtitle 예시: '홍길동 님이 내 모임에 참여했습니다'
+        if (alarm.subtitle && alarm.subtitle.endsWith('님이 내 모임에 참여했습니다.')) {
+            const namePart = alarm.subtitle.replace(' 님이 내 모임에 참여했습니다.', '');
+            if (myName.includes(namePart)) return false;
+        }
+        return true;
+    });
 
     return (
         <div className='flex flex-col h-screen bg-white'>
@@ -262,10 +288,11 @@ const AlarmPage = () => {
                             />
                         ))}
                         {/* 페이징용 하단 감지 div */}
-                        <div ref={bottomRef} style={{ height: '1px' }}></div>
-                        {loading && page > 0 && (
+                        <div ref={bottomRef} className='h-[10px]'></div>
+                        {page > 0 && showSpinner && (
                             <div className='flex justify-center py-4'>
-                                <Spinner text='더 불러오는 중...'/>
+                                {/* Club과 동일하게 react-spinners ClipLoader 사용 */}
+                                <ClipLoader color="#F45F3A" size={32} />
                             </div>
                         )}
                     </div>
