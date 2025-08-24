@@ -137,7 +137,7 @@ export const ClubDetailPage: React.FC<MeetingDetailPageProps> = ({}) => {
 
         <ActionButton
           text={isMe ? "방장입니다" : isJoined ? "이미 참여중" : "참여하기"}
-          disabled={isJoined || participants.length >= club.max_participants}
+          disabled={isMe || isJoined || participants.length >= club.max_participants}
           meetingId={club.id}
           type="club"
           participants={participants}
