@@ -56,65 +56,65 @@ const AlarmPage = () => {
     const [alarms, setAlarms] = useState<DisplayAlarm[]>([]);
     // 모임 알람의 프로필 이미지를 캐싱하기 위한 state
     const [meetingProfileCache, setMeetingProfileCache] = useState<{[meetingId: string]: string}>({});
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true); // 초기 true로 설정하여 플래시 방지
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const bottomRef = React.useRef<HTMLDivElement>(null);
 
-//   useEffect(() => {
-//     // SSE 연결 설정 (activeTab에 따라 다르게 연결하거나, 하나의 스트림으로 모든 타입 받기)
-//     const eventSource = new EventSource(`${import.meta.env.VITE_BACKEND_URL}/notifications/stream`, {
-//       withCredentials: true, 
-//     });
+    // useEffect(() => {
+    //     // SSE 연결 설정 (activeTab에 따라 다르게 연결하거나, 하나의 스트림으로 모든 타입 받기)
+    //     const eventSource = new EventSource(`${import.meta.env.VITE_BACKEND_URL}/notifications/stream`, {
+    //       withCredentials: true, 
+    //     });
 
-//     eventSource.onopen = () => {
-//       console.log('SSE 연결 성공');
-//     };
+    //     eventSource.onopen = () => {
+    //       console.log('SSE 연결 성공');
+    //     };
 
-//     eventSource.onmessage = (event) => {
-//       console.log("보내주는 event",event);
-//       if (event.data === 'timeout' || !event.data) {
-//         // "timeout" 무시 (연결 유지용)
-//         return;
-//       }
-//       try {
-//         const newAlarm: AlarmApiResponse = JSON.parse(event.data);
-//         console.log('새 알람 푸시:', newAlarm);
-        
-//         // DisplayAlarm으로 매핑
-//         const mappedAlarm: DisplayAlarm = {
-//           title: newAlarm.title,
-//           subtitle: newAlarm.message,
-//           timestamp: formatCreatedAtFromArray(newAlarm.createdAt),
-//           isUnread: !newAlarm.read,
-//           profileImage: undefined,
-//           linkTargetType: newAlarm.linkTargetType,
-//           link: newAlarm.link,
-//           id: newAlarm.id,
-//         };
+    //     eventSource.onmessage = (event) => {
+    //       console.log("보내주는 event",event);
+    //       if (event.data === 'timeout' || !event.data) {
+    //         // "timeout" 무시 (연결 유지용)
+    //         return;
+    //       }
+    //       try {
+    //         const newAlarm: AlarmApiResponse = JSON.parse(event.data);
+    //         console.log('새 알람 푸시:', newAlarm);
+            
+    //         // DisplayAlarm으로 매핑
+    //         const mappedAlarm: DisplayAlarm = {
+    //           title: newAlarm.title,
+    //           subtitle: newAlarm.message,
+    //           timestamp: formatCreatedAtFromArray(newAlarm.createdAt),
+    //           isUnread: !newAlarm.read,
+    //           profileImage: undefined,
+    //           linkTargetType: newAlarm.linkTargetType,
+    //           link: newAlarm.link,
+    //           id: newAlarm.id,
+    //         };
 
-//         // 상태 업데이트 (기존 alarms에 추가)
-//         setAlarms((prev) => [mappedAlarm, ...prev]);
-//       } catch (e) {
-//         console.error('SSE 데이터 파싱 오류:', e);
-//       }
-//     };
+    //         // 상태 업데이트 (기존 alarms에 추가)
+    //         setAlarms((prev) => [mappedAlarm, ...prev]);
+    //       } catch (e) {
+    //         console.error('SSE 데이터 파싱 오류:', e);
+    //       }
+    //     };
 
-//     eventSource.onerror = (error) => {
-//       console.error('SSE 오류:', error);
-//       // 재연결 로직: EventSource는 자동 재연결 시도하지만, 필요 시 close 후 재시작
-//       eventSource.close();
-//       // setTimeout으로 재시도 로직 추가 가능
-//     };
+    //     eventSource.onerror = (error) => {
+    //       console.error('SSE 오류:', error);
+    //       // 재연결 로직: EventSource는 자동 재연결 시도하지만, 필요 시 close 후 재시작
+    //       eventSource.close();
+    //       // setTimeout으로 재시도 로직 추가 가능
+    //     };
 
-//     return () => {
-//       eventSource.close(); // cleanup
-//       console.log('SSE 연결 종료');
-//     };
-//   }, []); 
+    //     return () => {
+    //       eventSource.close(); // cleanup
+    //       console.log('SSE 연결 종료');
+    //     };
+    //   }, []); 
+
     useEffect(() => {
         const fetchAlarms = async () => {
-            setLoading(true);
             try {
                 const type = activeTab === '모임' ? 'MEETING' : 'FRIEND';
                 const res = await api.get('/notifications/me', {
@@ -159,29 +159,30 @@ const AlarmPage = () => {
                             id: item.id,
                         };
                     });
-                    Promise.all(mappedPromises).then(mapped => {
-                        setAlarms(prev => page === 0 ? mapped : [...prev, ...mapped]);
-                        setHasMore(mapped.length === 20);
-                    });
+                    const mapped = await Promise.all(mappedPromises); // 여기서 await 추가하여 then 대신 동기화
+                    setAlarms(prev => page === 0 ? mapped : [...prev, ...mapped]);
+                    setHasMore(mapped.length === 20);
+                    setLoading(false); // 데이터 처리 후 로딩 종료
                 } else {
                     if (page === 0) setAlarms([]);
                     setHasMore(false);
+                    setLoading(false); // else 경우 로딩 종료
                 }
             } catch {
                 if (page === 0) setAlarms([]);
                 setHasMore(false);
-            } finally {
-                setLoading(false);
+                setLoading(false); // 에러 시 로딩 종료
             }
         };
         fetchAlarms();
     }, [activeTab, page]);
 
-    // 탭 변경 시 페이지/리스트 초기화
+    // 탭 변경 시 페이지/리스트 초기화 및 로딩 재시작
     useEffect(() => {
         setPage(0);
         setAlarms([]);
         setHasMore(true);
+        setLoading(true); // 탭 변경 시 로딩 상태 재설정
     }, [activeTab]);
 
     // 하단 감지용 IntersectionObserver로 페이징
@@ -198,10 +199,6 @@ const AlarmPage = () => {
     const handleNotificationClick = () => {
         // 알람 페이지에서는 알람 버튼 클릭 시 아무 동작 안 함
     };
-
-    // 탭에 따라 알람 분류
-    const filteredAlarms = alarms
-        .filter(alarm => activeTab === '모임' ? alarm.linkTargetType === 'MEETING' : alarm.linkTargetType === 'FRIEND');
 
     const handleAlarmClick = async (alarm: DisplayAlarm) => {
         if (!alarm.id) return;
@@ -221,8 +218,11 @@ const AlarmPage = () => {
         }
     };
 
+    // 필터링된 알람을 렌더링 시 계산 (state 제거로 최적화)
+    const filteredAlarms = alarms.filter(alarm => activeTab === '모임' ? alarm.linkTargetType === 'MEETING' : alarm.linkTargetType === 'FRIEND');
+
     return (
-    <div className='flex flex-col h-screen bg-white'>
+        <div className='flex flex-col h-screen bg-white'>
             <HeaderDetail
                 title='알람' 
                 showBorder={false}
