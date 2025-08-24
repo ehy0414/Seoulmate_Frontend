@@ -14,6 +14,7 @@ import { filterAtom } from '../../store/filterAtom';
 import { isDefaultFilter, generateFilterText } from '../../utils/filterUtils';
 import api from '../../services/axios';
 import Spinner from '../signup/langTest/Spinner';
+import { ClipLoader } from 'react-spinners';
 import NoFriend from '../../assets/search/nofriend.svg';
 
 interface ClubCard {
@@ -41,6 +42,8 @@ export interface ActiveSearchClubProps {
 }
 
 const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
+    // 스피너 최소 1초 표시용 state (페이징 시에만)
+    const [showSpinner, setShowSpinner] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
     const filter = useAtomValue(filterAtom);
@@ -85,6 +88,9 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
     // API 요청 함수
     const fetchClubs = async (keyword: string) => {
         setLoading(true);
+        if (page > 0) {
+            setShowSpinner(true);
+        }
         const koMinLevel = filter.koreanLevel[0];
         const koMaxLevel = filter.koreanLevel[1];
         const enMinLevel =  filter.englishLevel[0];
@@ -95,7 +101,8 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
         if (enMinLevel !== 0 || enMaxLevel !== 100) langs.push('영어');
         if (langs.length > 0) language = langs.join(', ');
 
-    try {
+        try {
+            const startTime = Date.now(); // 최소 로딩 시간 측정을 위한 시작 시간
             const payload: SearchPayload = {
                 hobbyCategory: selectedCategory,
                 keyword,
@@ -111,18 +118,28 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
             if (res.data.success) {
                 const newClubs = res.data.data;
                 console.log(newClubs);
+
+                // 페이징 시 (page > 0) 최소 1초 대기 후 데이터 업데이트 및 스피너 숨김
+                if (page > 0) {
+                    const elapsed = Date.now() - startTime;
+                    const remaining = 1000 - elapsed;
+                    if (remaining > 0) {
+                        await new Promise(resolve => setTimeout(resolve, remaining));
+                    }
+                    setShowSpinner(false);
+                }
+
                 setClubs(prev => page === 0 ? newClubs : [...prev, ...newClubs]);
                 setHasMore(newClubs.length === 20); // 더 가져올 데이터가 있으면 true
-                setLoading(false);
             } else {
                 console.error(res.data.message);
                 setClubs([]);
-                setLoading(false);
             }
         } catch (error) {
             console.error(error);
             alert("모임 정보를 가져오는 중 오류 발생");
             setClubs([]);
+        } finally {
             setLoading(false);
         }
     };
@@ -234,7 +251,7 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
             </div>
 
             {/* 모임 리스트 */}
-            {loading ? (
+            {loading && page===0 ? (
                 <div className="flex justify-center items-center pt-[150px]">
                     <Spinner text="모임을 가져오는 중입니다" />
                 </div>
@@ -285,7 +302,13 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                                 </motion.div>
                             ))}
                         </div>
+                        {/* 페이징용 하단 감지 div */}
                         <div ref={bottomRef}></div>
+                        {page > 0 && showSpinner && (
+                            <div className="flex justify-center py-4">
+                                <ClipLoader color="#F45F3A" size={32} />
+                            </div>
+                        )}
                     </motion.div>
                 </AnimatePresence>
             )}
