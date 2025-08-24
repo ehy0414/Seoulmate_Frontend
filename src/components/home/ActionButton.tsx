@@ -63,22 +63,24 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 
         // 사설모임 로직 실행
         if (type === "club") {
-          const totalCount = participants.length + 1;
+          //console.log(participants.length);
+          // 참여자 인원 수 계산
+          const totalCount = participants.length + 1; // 현재 결제 성공한 나까지 포함
           //console.log(totalCount);
-          // 최소 참여 인원 충족 시 그룹 채팅방 생성로직
           if (club.min_participants !== undefined) {
+            //console.log(club.min_participants);
+            // 최소 참여 인원 충족 시 그룹 채팅방 생성로직
             if (totalCount === club?.min_participants) {
               // 최소 참여 인원 처음 충족 → 그룹 채팅방 생성
               await api.post("/chat/room/group", {
                 meetingId: club.id,
                 memberUserIds: [
-                  Number(club.host?.id),
                   ...participants.map((p) => Number(p.id)),
                   Number(localStorage.getItem("userId")),
                 ],
               });
               //console.log("그룹 채팅방 최초 생성 완료");
-            } else if (totalCount > 3) {
+            } else if (totalCount > club?.min_participants) {
               await api.post("/chat/group/join", {
                 meetingId: club.id,
               });
@@ -128,7 +130,6 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
               //그룹채팅방 생성
               if (type === "club") {
                 // 5. 최소 참여 인원 충족 시 그룹 채팅방 생성
-
                 const totalCount = participants.length + 1; // 현재 결제 성공한 나까지 포함
                 if (club.min_participants !== undefined) {
                   if (totalCount === club?.min_participants) {
@@ -136,12 +137,11 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
                     await api.post("/chat/room/group", {
                       meetingId: club.id,
                       memberUserIds: [
-                        Number(club.host?.id),
                         ...participants.map(p => Number(p.id)), // 기존 참여자
                         Number(localStorage.getItem("userId")), // 현재 유저
                       ],
                     });
-                  } else if (totalCount > 3) {
+                  } else if (totalCount > club?.min_participants) {
                     // 이미 방 존재 → join
                     await api.post("/chat/group/join", {
                       meetingId: club.id,
