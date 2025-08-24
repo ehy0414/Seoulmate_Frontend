@@ -87,8 +87,9 @@ export const CreateMeeting: React.FC = () => {
         const res = await api.post('/s3/upload/meeting', imageForm, {
         });
         imageUrl = res.data?.url ?? '';
-      } catch {
-        alert('이미지 업로드 실패');
+      } catch(e) {
+        console.log("이미지 업로드 실패",e)
+        alert('이미지 업로드 실패 다시 시도해주세요.');
         setIsSubmitting(false);
         return;
       }
