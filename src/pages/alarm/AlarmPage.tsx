@@ -134,7 +134,6 @@ const AlarmPage = () => {
                 });
                 if (res.data.success && Array.isArray(res.data.data.content)) {
                     // 친구 알람은 actorImageUrl, 모임 알람은 meetingId로 profile_image 요청
-                    console.log("오는 알람 개수",res.data.data.content)
                     const mappedPromises = res.data.data.content.map(async (item: any) => {
                         let profileImage: string | undefined = undefined;
                         if (item.linkTargetType === 'FRIEND') {
@@ -180,7 +179,6 @@ const AlarmPage = () => {
                         setShowSpinner(false);
                     }
                     setAlarms(prev => page === 0 ? mapped : [...prev, ...mapped]);
-                    console.log(mapped.length);
                     setHasMore(mapped.length === 10);
                 } else {
                     if (page === 0) setAlarms([]);

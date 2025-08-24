@@ -117,8 +117,6 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
             const res = await api.post('/meetings/search', payload);
             if (res.data.success) {
                 const newClubs = res.data.data;
-                console.log(newClubs);
-
                 // 페이징 시 (page > 0) 최소 1초 대기 후 데이터 업데이트 및 스피너 숨김
                 if (page > 0) {
                     const elapsed = Date.now() - startTime;
