@@ -110,6 +110,7 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
             const res = await api.post('/meetings/search', payload);
             if (res.data.success) {
                 const newClubs = res.data.data;
+                console.log(newClubs);
                 setClubs(prev => page === 0 ? newClubs : [...prev, ...newClubs]);
                 setHasMore(newClubs.length === 20); // 더 가져올 데이터가 있으면 true
                 setLoading(false);
@@ -238,7 +239,7 @@ const  ActiveSearchClub = ({ searchValue = '' }: ActiveSearchClubProps) => {
                     <Spinner text="모임을 가져오는 중입니다" />
                 </div>
             ) : clubs.length === 0 ? (
-                <div className="w-full flex flex-col items-center justify-center gap-6 pt-[211px]">
+                <div className="flex flex-1 min-h-[calc(100vh-350px)] flex-col items-center justify-center gap-6">
                     <img src={NoFriend} alt="" />
                     <span className="text-2xl text-[#000] font-[600]">검색 결과가 없습니다</span>
                 </div>
