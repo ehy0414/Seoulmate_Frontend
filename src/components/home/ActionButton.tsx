@@ -32,7 +32,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  console.log(participants.length);
+  //console.log(participants.length);
 
   useEffect(() => {
     if (!document.querySelector('script[src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"]')) {
