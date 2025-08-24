@@ -28,7 +28,7 @@ const SearchHobby: React.FC = () => {
     }, []);
 
     return (
-        <div className=" w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white min-h-screen">
+        <div className="w-full max-w-[clamp(360px,100vw,430px)] mx-auto bg-white min-h-100dvh">
             {/* 검색창 */}
             <div className={`px-2.5 py-2.5 flex items-center gap-[16px] ${searchValue.trim() !== '' ? 'sticky top-0 z-20 bg-white' : ''}`}>
                 <img src={BackArrow} onClick={()=>navigate(-1)} />
