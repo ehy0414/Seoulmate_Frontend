@@ -26,6 +26,7 @@ export const SignUpProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [birthDate, setBirthDate] = useState<Date | null>(null);
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
     const checkInProgress = async () => {
@@ -46,6 +47,8 @@ export const SignUpProfilePage: React.FC = () => {
         }
       } catch (err) {
         console.error(err);
+      } finally {
+        setChecking(false);
       }
     };
 
@@ -142,6 +145,8 @@ export const SignUpProfilePage: React.FC = () => {
 
 
   const isFormValid = profileFile &&formData.lastName && formData.firstName && formData.DOB && formData.country;
+
+  if (checking) return null; // 또는 <Spinner />
 
   return (
     <main className="flex flex-col items-center px-6 pt-[100px] pb-[300px] mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
