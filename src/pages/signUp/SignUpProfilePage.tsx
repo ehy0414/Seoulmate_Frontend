@@ -12,6 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import api from "../../services/axios";
+import Spinner from "../../components/signup/langTest/Spinner";
 
 interface FormData {
   firstName: string;
@@ -146,7 +147,8 @@ export const SignUpProfilePage: React.FC = () => {
 
   const isFormValid = profileFile &&formData.lastName && formData.firstName && formData.DOB && formData.country;
 
-  if (checking) return null; // 또는 <Spinner />
+  if (checking) return <div className="flex justify-center pt-[300px]"><Spinner text="로그인 중입니다."/></div>;
+
 
   return (
     <main className="flex flex-col items-center px-6 pt-[100px] pb-[300px] mx-auto w-full min-h-screen bg-white max-w-[clamp(360px,100vw,430px)]">
