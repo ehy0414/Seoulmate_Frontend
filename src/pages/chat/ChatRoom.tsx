@@ -10,6 +10,23 @@ import NotFixedHeaderDetail from '../../components/common/NotFixedHeaderDetail';
 import api from '../../services/axios';
 
 /** =========================
+ * Debug utils
+ * ======================= */
+const DEBUG = true;
+const dts = () => new Date().toISOString().substring(11, 23); // HH:mm:ss.mmm
+
+function dbg(section: string, ...args: any[]) {
+  if (!DEBUG) return;
+  console.log(`[${dts()}] [${section}]`, ...args);
+}
+
+function group(title: string) {
+  if (!DEBUG) return { end: () => {} };
+  console.groupCollapsed(`%c${title}`, 'color:#555; font-weight:600;');
+  return { end: () => console.groupEnd() };
+}
+
+/** =========================
  * Types
  * ======================= */
 export interface Message {
@@ -203,15 +220,32 @@ const ChatRoom = () => {
     []
   );
 
-  /** ----- 초기 로딩 (REST) : myUserId 저장 + 메시지 매핑 ----- */
+  /** ----- 초기 로딩 (REST) : myUserId 저장 + 메시지 매핑 + 로깅 ----- */
   useEffect(() => {
     if (!roomId || Number.isNaN(roomId)) return;
     (async () => {
       try {
+        const g = group(`REST /chat/rooms/${roomId}/messages: fetch`);
+        dbg('REST', 'GET start', { roomId, params: { size: 30 } });
+
         const res = await api.get<ChatListResponse>(`/chat/rooms/${roomId}/messages`, { params: { size: 30 } });
         const data = res.data?.data;
         const items = data?.items ?? [];
         const myIdFromApi = typeof data?.myUserId === 'number' ? data!.myUserId : null;
+
+        // 응답 요약
+        dbg('REST', 'GET done', {
+          success: res.data?.success,
+          code: res.data?.code,
+          hasMore: data?.hasMore,
+          nextCursor: data?.nextCursor,
+          myUserId: myIdFromApi,
+          count: items.length,
+        });
+
+        // 샘플 3건 미리보기
+        dbg('REST', 'sample items(<=3)', items.slice(0, 3));
+
         if (myIdFromApi != null) setMyUserId(myIdFromApi);
 
         items.sort((a, b) => toDate(a.createdAt).getTime() - toDate(b.createdAt).getTime());
@@ -219,7 +253,26 @@ const ChatRoom = () => {
         const mapped = items.map((it) => {
           if (it.messageId != null) seenServerIdsRef.current.add(it.messageId);
           if (it.clientMessageId) seenClientIdsRef.current.add(it.clientMessageId);
-          return mapFromRest(it, myIdFromApi);
+
+          const m = mapFromRest(it, myIdFromApi);
+          // 개별 매핑 로그(과하면 주석 처리 가능)
+          dbg('REST→UI', {
+            messageId: it.messageId,
+            senderId: it.senderId,
+            mineField: it.mine,
+            decidedSender: m.sender,
+            createdAt: it.createdAt,
+            text: m.text,
+          });
+          return m;
+        });
+
+        // 매핑 결과 요약
+        dbg('REST', 'mapped summary', {
+          firstAt: mapped[0]?.time ? `${mapped[0].date} ${mapped[0].time}` : null,
+          lastAt: mapped[mapped.length - 1]?.time ? `${mapped[mapped.length - 1].date} ${mapped[mapped.length - 1].time}` : null,
+          meCount: mapped.filter(m => m.sender === 'me').length,
+          friendCount: mapped.filter(m => m.sender === 'friend').length,
         });
 
         // 초기 데이터만으로도 그룹 여부 추정(참가자 3명 이상이면 true)
@@ -231,43 +284,56 @@ const ChatRoom = () => {
         setMessages(mapped);
         // 최초 로딩 시 바닥으로
         requestAnimationFrame(() => scrollToBottom(containerRef.current));
+        g.end();
       } catch (e) {
         console.error('초기 메시지 불러오기 실패:', e);
       }
     })();
-  }, [roomId, mapFromRest]);
+  }, [roomId, mapFromRest, isGroup]);
 
   /** ----- 스크롤 핀 상태 업데이트 ----- */
   const handleScroll = useCallback(() => {
     pinnedRef.current = isNearBottom(containerRef.current);
   }, []);
 
-  /** ----- STOMP 연결/구독 ----- */
+  /** ----- STOMP 연결/구독(WS) + 로깅 ----- */
   useEffect(() => {
     if (!roomId || Number.isNaN(roomId)) return;
 
     const client = new Client({
       webSocketFactory: () => new SockJS('https://seoulmate7.shop/ws'),
       reconnectDelay: 5000,
-      debug: (msg) => console.log('[STOMP]', msg),
+      debug: (msg) => {
+        // STOMP 내부 로그
+        console.log('[STOMP]', msg);
+      },
 
       onConnect: () => {
         connectedRef.current = true;
-        console.log('[STOMP] connected');
+        dbg('WS', 'connected', { roomId, destination: `/topic/room.${roomId}` });
 
         const destination = `/topic/room.${roomId}`;
         subRef.current = client.subscribe(destination, (frame: IMessage) => {
+          const g = group(`WS MESSAGE room.${roomId}`);
           try {
-            const payload: WsChatItem = JSON.parse(frame.body);
-            console.log('[STOMP] <<< MESSAGE', payload);
+            dbg('WS', 'raw frame', {
+              headers: frame.headers,
+              bodyLen: frame.body?.length ?? 0,
+              bodyPreview: frame.body?.slice(0, 200),
+            });
 
-            // 1) 서버 id 중복 방지
+            const payload: WsChatItem = JSON.parse(frame.body);
+            dbg('WS', 'parsed payload', payload);
+
+            // 서버 id 중복 방지
             if (payload.messageId != null && seenServerIdsRef.current.has(payload.messageId)) {
+              dbg('WS', 'dup server messageId → drop', payload.messageId);
+              g.end();
               return;
             }
 
             setMessages((prev) => {
-              // 2) 낙관적 메시지 매칭 (clientMessageId 우선)
+              // 낙관적 메시지 매칭 여부
               let replaced = false;
               const next = prev.map((m) => {
                 const sameClientId =
@@ -280,10 +346,17 @@ const ChatRoom = () => {
 
                 if ((sameClientId || nearSameTextAndMine) && m.pending) {
                   replaced = true;
+
                   if (payload.messageId != null) seenServerIdsRef.current.add(payload.messageId);
                   if (payload.clientMessageId) seenClientIdsRef.current.add(payload.clientMessageId);
 
                   const echo = mapFromWs(payload, myUserId);
+                  dbg('WS', 'match optimistic → replace', {
+                    clientMessageId: payload.clientMessageId,
+                    messageId: payload.messageId,
+                    decidedSender: echo.sender,
+                  });
+
                   return {
                     ...echo,
                     pending: false,
@@ -294,16 +367,28 @@ const ChatRoom = () => {
               });
 
               if (!replaced) {
-                // 3) 신규 메시지 추가
+                // 신규 메시지 추가
                 if (payload.messageId != null) seenServerIdsRef.current.add(payload.messageId);
                 if (payload.clientMessageId) seenClientIdsRef.current.add(payload.clientMessageId);
-                next.push(mapFromWs(payload, myUserId));
+
+                const mapped = mapFromWs(payload, myUserId);
+                dbg('WS', 'append new', {
+                  messageId: payload.messageId,
+                  clientMessageId: payload.clientMessageId,
+                  decidedSender: mapped.sender,
+                  createdAt: payload.createdAt,
+                  text: mapped.text,
+                });
+
+                next.push(mapped);
               }
 
               return next;
             });
           } catch (err) {
             console.error('수신 메시지 파싱 실패:', err);
+          } finally {
+            g.end();
           }
         });
       },
@@ -319,6 +404,7 @@ const ChatRoom = () => {
     });
 
     stompRef.current = client;
+    dbg('WS', 'activate');
     client.activate();
 
     return () => {
@@ -329,7 +415,7 @@ const ChatRoom = () => {
       stompRef.current = null;
       connectedRef.current = false;
 
-      console.log('[STOMP] deactivated');
+      dbg('WS', 'deactivated');
     };
   }, [roomId, myUserId, mapFromWs]);
 
@@ -338,7 +424,7 @@ const ChatRoom = () => {
     if (pinnedRef.current) scrollToBottom(containerRef.current);
   }, [messages]);
 
-  /** ----- 전송 ----- */
+  /** ----- 전송(클라이언트 → 서버) + 로깅 ----- */
   const handleSend = useCallback(async () => {
     if (!input.trim() || !roomId) return;
 
@@ -371,7 +457,7 @@ const ChatRoom = () => {
         clientMessageId, // 서버가 에코에 포함해주면 매칭 정확도 상승
       };
 
-      console.log('[STOMP] >>> SEND', `/app/rooms/${roomId}/send`, payload);
+      dbg('WS→SERVER', 'SEND', { destination: `/app/rooms/${roomId}/send`, payload });
 
       client.publish({
         destination: `/app/rooms/${roomId}/send`,
@@ -384,7 +470,7 @@ const ChatRoom = () => {
         setMessages((prev) =>
           prev.map((m) =>
             m._clientMessageId === clientMessageId && m.pending
-              ? { ...m, pending: false, error: true }
+              ? (dbg('WS', 'echo timeout → mark error', { clientMessageId }), { ...m, pending: false, error: true })
               : m
           )
         );

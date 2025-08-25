@@ -99,10 +99,10 @@ export default function Schedule() {
   };
 
   // 선택된 날짜(YYYY-MM-DD)와 일치하는 일정만 리스트로 표시
-  const selectedDateStr = useMemo(
-    () => selectedDate.toISOString().split('T')[0],
-    [selectedDate]
-  );
+  const selectedDateStr = useMemo(() => {
+    return selectedDate.toLocaleDateString('sv-SE'); 
+  }, [selectedDate]);
+  
   const filteredSchedules = useMemo(
     () => schedules.filter((s) => s.date === selectedDateStr),
     [schedules, selectedDateStr]
