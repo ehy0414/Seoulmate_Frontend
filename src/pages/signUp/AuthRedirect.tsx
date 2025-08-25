@@ -10,8 +10,6 @@ export default function AuthRedirect() {
     const checkAuth = async () => {
         try {
         const profileRes = await api.get("/auth/profile-info");
-        const profileData = profileRes.data.data;
-        localStorage.setItem("sessionId", profileData.sessionId);
 
         // 1. 회원가입 안 된 경우
         if (profileRes.data.code === "SIGNUP 200") {
