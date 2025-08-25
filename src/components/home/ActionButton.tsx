@@ -151,7 +151,7 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
             }
 
               alert("결제가 완료되었습니다.");
-              navigate(`/club/${club.id}`);
+              navigate(`/club/${club.id}`,{replace:true});
               window.location.reload();
             } catch (err) {
               console.error("결제 검증 또는 그룹채팅 생성 실패:", err);
