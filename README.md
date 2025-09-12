@@ -40,3 +40,13 @@
 
 <img width="1068" height="591" alt="image" src="https://github.com/user-attachments/assets/1e070e20-e70b-42af-968d-695fc897410a" />
 
+![1번 사진 (회원가입 화면)](https://github.com/user-attachments/assets/c5db6824-3754-4c04-a513-7e817560bc18)
+![2번 사진 (메인화면 사진)](https://github.com/user-attachments/assets/da64f1dc-1d32-48cf-8a36-cf1668e410dd)
+![3번 사진 (상세 페이지)](https://github.com/user-attachments/assets/05665089-8d75-4dcf-a5c1-9bcd827a7199)
+![4번 사진(필터 페이지)](https://github.com/user-attachments/assets/8e932fb5-9619-46c4-9487-8681ff98d505)
+![5번 사진(결제 페이지)](https://github.com/user-attachments/assets/1f87ec39-01f8-4e83-9fb3-87196e5607cd)
+![6번 사진(알림 페이지)](https://github.com/user-attachments/assets/2183473a-548d-4b99-ab3a-70c116f08cde)
+![7번 사진(친구 페이지)](https://github.com/user-attachments/assets/0c7cd8d5-d53c-454f-975c-8f9f8b0a6528)
+![8번 사진(채팅 페이지)](https://github.com/user-attachments/assets/1cb2ab2e-07ac-44d6-9dd4-7f576a8ec826)
+![9번 사진(캘린더 페이지)](https://github.com/user-attachments/assets/487fd280-0346-48b7-a5bd-dfe5dea78801)
+![10번 사진(마이페이지)](https://github.com/user-attachments/assets/09e875f2-af7b-4732-a18b-0c1443af4674)
