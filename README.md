@@ -23,12 +23,6 @@
 
 ![12번 사진(백엔드 기술스택)](https://github.com/user-attachments/assets/2ad6b70b-4842-4889-8aba-57cf6d7eab9f)
 
-
-### 인증 & 배포
-
-- OAuth2 (Google 로그인)
-- AWS, Vercel
-
 <img width="1106" height="614" alt="image" src="https://github.com/user-attachments/assets/74b20430-029c-4d75-8147-331a1b8b032f" />
 
 
