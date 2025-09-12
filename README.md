@@ -4,7 +4,6 @@
 
 <img width="1194" height="674" alt="image" src="https://github.com/user-attachments/assets/6a167f5b-6d1e-4e87-b323-76ebfa3a37be" />
 
----
 
 ## 👥 팀 구성
 
@@ -15,9 +14,6 @@
 | **FE** | 김규태, 김민지, 엄현용 |
 | **BE** | 노영서, 정다운, 장효원 |
 
----
-
-## 🛠 기술 스택
 
 ![11번 사진(프론트 기술 스택)](https://github.com/user-attachments/assets/2afe9745-bd55-46d7-a917-2405004d3323)
 
