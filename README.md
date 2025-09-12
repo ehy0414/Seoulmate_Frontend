@@ -19,19 +19,10 @@
 
 ## 🛠 기술 스택
 
-### Frontend
+![11번 사진(프론트 기술 스택)](https://github.com/user-attachments/assets/2afe9745-bd55-46d7-a917-2405004d3323)
 
-- React.js
-- TypeScript
-- Tailwind CSS
+![12번 사진(백엔드 기술스택)](https://github.com/user-attachments/assets/2ad6b70b-4842-4889-8aba-57cf6d7eab9f)
 
-### Backend
-
-- Spring Boot
-- JPA
-- MySQL
-- Redis
-- Docker
 
 ### 인증 & 배포
 
